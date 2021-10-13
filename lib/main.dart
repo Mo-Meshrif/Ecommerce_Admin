@@ -1,3 +1,4 @@
+import 'views/mainViews/authView.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -12,17 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ecommerce Admin',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Ecommerce Admin'),
-        ),
-        body: Center(
-          child: Text('Ecommerce Admin Home Page'),
-        ),
-      ),
+      home: AuthView(),
     );
   }
 }
