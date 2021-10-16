@@ -1,5 +1,5 @@
+import 'views/controlView.dart';
 import 'helper/binds.dart';
-import 'views/mainViews/authView.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Ecommerce Admin',
       initialBinding: Binds(),
-      home: AuthView(),
+      home:ControlView(),
     );
   }
 }

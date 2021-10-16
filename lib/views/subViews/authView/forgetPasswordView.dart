@@ -25,7 +25,7 @@ class ForgetPasswordView extends StatelessWidget {
                 height: 20,
               ),
               CustomTextField(
-                onChanged: (val) => null,
+                onChanged: (val) => authController.email = val,
                 valid: (val) {
                   if (val.trim().isEmpty) {
                     return 'Enter your email !';
@@ -42,22 +42,33 @@ class ForgetPasswordView extends StatelessWidget {
               SizedBox(
                 height: 40,
               ),
-              Container(
-                width: size.width,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.indigo,
-                    padding: EdgeInsets.all(15),
-                  ),
-                  onPressed: () => null,
-                  child: CustomText(
-                    txt: "SUBMET",
-                    fSize: 22,
-                    txtColor: Colors.white,
-                    fWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              authController.loading.value
+                  ? CustomText(
+                      txt: 'Loading',
+                      fSize: 18,
+                      txtColor: Colors.indigo,
+                    )
+                  : Container(
+                      width: size.width,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.indigo,
+                          padding: EdgeInsets.all(15),
+                        ),
+                        onPressed: () {
+                          _key.currentState.save();
+                          if (_key.currentState.validate()) {
+                            authController.forgetPassword();
+                          }
+                        },
+                        child: CustomText(
+                          txt: "SUBMET",
+                          fSize: 22,
+                          txtColor: Colors.white,
+                          fWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
               SizedBox(
                 height: 20,
               ),
