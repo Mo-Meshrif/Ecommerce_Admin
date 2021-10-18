@@ -23,7 +23,7 @@ class AuthViewModel extends GetxController {
   List<UserModel> _users = [];
   List<UserModel> get users => _users;
   Rxn<User> _user = Rxn<User>();
-  String get user=>_user.value?.email;
+  String get user => _user.value?.email;
   @override
   void onInit() {
     _user.bindStream(_auth.authStateChanges());
@@ -36,8 +36,8 @@ class AuthViewModel extends GetxController {
     update();
   }
 
-  bool isAdmin(String uid) {
-    return _users.firstWhere((element) => element.id == uid).isAdmin;
+  bool isAdmin(String loginEmail) {
+    return _users.firstWhere((element) => element.email == loginEmail).isAdmin;
   }
 
   Future<void> getUsers() async {
@@ -88,22 +88,28 @@ class AuthViewModel extends GetxController {
   signIn() async {
     _loading.value = true;
     update();
-    await _auth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .onError((error, stackTrace) {
+    if (isAdmin(email)) {
+      await _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .onError((error, stackTrace) {
+        _loading.value = false;
+        update();
+        return handleAuthErrors(error.toString());
+      }).then((user) {
+        _loading.value = false;
+        if (user != null) {
+          FireStoreUser().updateOnlineState(user.user.uid, true);
+          UserModel userData =
+              _users.firstWhere((element) => element.id == user.user.uid);
+          setUser(userData);
+        }
+        update();
+      });
+    } else {
       _loading.value = false;
       update();
-      return handleAuthErrors(error.toString());
-    }).then((user) {
-      _loading.value = false;
-      if (user != null) {
-        FireStoreUser().updateOnlineState(user.user.uid, true);
-        UserModel userData =
-            _users.firstWhere((element) => element.id == user.user.uid);
-        setUser(userData);
-      }
-      update();
-    });
+      handleAuthErrors('Entered account does not belong to admins !');
+    }
   }
 
   forgetPassword() async {
