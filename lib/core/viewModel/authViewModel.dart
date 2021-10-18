@@ -23,7 +23,7 @@ class AuthViewModel extends GetxController {
   List<UserModel> _users = [];
   List<UserModel> get users => _users;
   Rxn<User> _user = Rxn<User>();
-
+  String get user=>_user.value?.email;
   @override
   void onInit() {
     _user.bindStream(_auth.authStateChanges());
@@ -34,20 +34,6 @@ class AuthViewModel extends GetxController {
   getAuthIndex(val) {
     currentIndex = val;
     update();
-  }
-
-  bool isAuth() {
-    String uid = _user.value?.uid;
-    if (uid != null) {
-      if (currentIndex == 0) {
-        if (isAdmin(uid)) {
-          return true;
-        }
-        return false;
-      }
-      return true;
-    }
-    return false;
   }
 
   bool isAdmin(String uid) {
@@ -112,9 +98,6 @@ class AuthViewModel extends GetxController {
       _loading.value = false;
       if (user != null) {
         FireStoreUser().updateOnlineState(user.user.uid, true);
-        if (!isAdmin(user.user.uid)) {
-          handleAuthErrors('Entered account does not belong to admins !');
-        }
         UserModel userData =
             _users.firstWhere((element) => element.id == user.user.uid);
         setUser(userData);
