@@ -1,3 +1,4 @@
+import '/views/subViews/notificationsView.dart';
 import '../../const.dart';
 import '../../core/viewModel/homeViewModel.dart';
 import '../../core/viewModel/authViewModel.dart';
@@ -7,15 +8,16 @@ import 'package:get/get.dart';
 
 class HomeView extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: GetBuilder<HomeViewModel>(
-          init: HomeViewModel(),
-          builder: (homeController) {
-            int index = homeController.currentItem;
-            return Row(
+  Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
+        init: HomeViewModel(),
+        builder: (homeController) {
+          int index = homeController.currentItem;
+          bool isNotify = homeController.isNotify.value;
+          return Scaffold(
+            body: Row(
               children: [
                 Container(
-                  color: Colors.indigo,
+                  color: priColor,
                   width: 220,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +26,7 @@ class HomeView extends StatelessWidget {
                         padding: const EdgeInsets.all(20),
                         child: CustomText(
                           txt: 'Ecommerce App',
-                          txtColor: Colors.white,
+                          txtColor: swatchColor,
                           fSize: 20,
                           fWeight: FontWeight.bold,
                         ),
@@ -34,19 +36,20 @@ class HomeView extends StatelessWidget {
                         itemCount: homeItems.length,
                         padding: EdgeInsets.only(left: 20),
                         itemBuilder: (context, i) {
-                          Color bodyColor = index == i && i != 6
-                              ? Colors.white
-                              : Colors.indigo;
-                          Color iconColor =
-                              index == i && i != 6 ? null : Colors.white;
+                          Color bodyColor = index == i && i != 6 && !isNotify
+                              ? swatchColor
+                              : priColor;
+                          Color iconColor = index == i && i != 6 && !isNotify
+                              ? null
+                              : swatchColor;
                           BorderRadiusGeometry borderR = index == i && i != 6
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(5),
                                   bottomLeft: Radius.circular(5))
                               : null;
-                          Color contentColor = index == i && i != 6
-                              ? Colors.indigo
-                              : Colors.white;
+                          Color contentColor = index == i && i != 6 && !isNotify
+                              ? priColor
+                              : swatchColor;
                           return GestureDetector(
                             onTap: () {
                               homeController.changeItemsIndex(i);
@@ -84,18 +87,27 @@ class HomeView extends StatelessWidget {
                 Expanded(
                   child: Container(
                     color: Colors.white,
-                    child: index != 6
-                        ? homeViews[index]
-                        : Center(
-                            child: CustomText(
-                              txt: 'Good bye !',
-                            ),
-                          ),
+                    child: isNotify
+                        ? NotificationsView()
+                        : index != 6
+                            ? homeViews[index]
+                            : Center(
+                                child: CustomText(
+                                  txt: 'Good bye !',
+                                ),
+                              ),
                   ),
                 ),
               ],
-            );
-          },
-        ),
+            ),
+            floatingActionButton: index != 6 && !isNotify
+                ? FloatingActionButton(
+                    backgroundColor: priColor,
+                    onPressed: () => homeController.changeNotifyState(),
+                    child: Icon(Icons.notifications),
+                  )
+                : null,
+          );
+        },
       );
 }

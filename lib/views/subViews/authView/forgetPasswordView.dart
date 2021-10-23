@@ -1,3 +1,4 @@
+import '/const.dart';
 import '../../../core/viewModel/authViewModel.dart';
 import '../../../widgets/customText.dart';
 import '../../../widgets/customTextField.dart';
@@ -46,13 +47,13 @@ class ForgetPasswordView extends StatelessWidget {
                   ? CustomText(
                       txt: 'Loading',
                       fSize: 18,
-                      txtColor: Colors.indigo,
+                      txtColor:priColor,
                     )
                   : Container(
                       width: size.width,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.indigo,
+                          primary: priColor,
                           padding: EdgeInsets.all(15),
                         ),
                         onPressed: () {
@@ -64,7 +65,7 @@ class ForgetPasswordView extends StatelessWidget {
                         child: CustomText(
                           txt: "SUBMET",
                           fSize: 22,
-                          txtColor: Colors.white,
+                          txtColor:swatchColor,
                           fWeight: FontWeight.bold,
                         ),
                       ),
@@ -79,7 +80,7 @@ class ForgetPasswordView extends StatelessWidget {
                   child: CustomText(
                     txt: "Log in here. ",
                     fSize: 16,
-                    txtColor: Colors.indigo,
+                    txtColor: priColor,
                   ),
                 ),
               ),

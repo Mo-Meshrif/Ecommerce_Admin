@@ -1,3 +1,4 @@
+import '/const.dart';
 import '../../../core/viewModel/authViewModel.dart';
 import '../../../widgets/customText.dart';
 import '../../../widgets/customTextField.dart';
@@ -80,13 +81,13 @@ class SignUpView extends StatelessWidget {
                   ? CustomText(
                       txt: 'Loading',
                       fSize: 18,
-                      txtColor: Colors.indigo,
+                      txtColor: priColor,
                     )
                   : Container(
                       width: size.width,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.indigo,
+                          primary: priColor,
                           padding: EdgeInsets.all(15),
                         ),
                         onPressed: () {
@@ -98,7 +99,7 @@ class SignUpView extends StatelessWidget {
                         child: CustomText(
                           txt: "SIGN UP",
                           fSize: 22,
-                          txtColor: Colors.white,
+                          txtColor: swatchColor,
                           fWeight: FontWeight.bold,
                         ),
                       ),
@@ -119,7 +120,7 @@ class SignUpView extends StatelessWidget {
                       child: CustomText(
                         txt: "Sign in here. ",
                         fSize: 16,
-                        txtColor: Colors.indigo,
+                        txtColor:priColor,
                       )),
                 ],
               ),

@@ -6,6 +6,8 @@ import 'views/subViews/homeView/productsView.dart';
 import 'views/subViews/homeView/settingsView.dart';
 import 'package:flutter/material.dart';
 
+const Color priColor = Colors.indigo;
+const Color swatchColor = Colors.white;
 List<Map<String, String>> homeItems = [
   {
     'title': 'Dashboard',
