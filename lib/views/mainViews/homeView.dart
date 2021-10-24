@@ -9,9 +9,14 @@ import 'package:get/get.dart';
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
-        init: HomeViewModel(),
         builder: (homeController) {
+          String userRole = homeController.savedUser.role;
+          List<Map<String, String>> homeItems =
+              userRole == 'Admin' ? adminItems : mangerItems;
+          List<Widget> homeViews =
+              userRole == 'Admin' ? adminViews : mangerViews;
           int index = homeController.currentItem;
+          int logoutIndex = homeItems.indexOf(homeItems.last);
           bool isNotify = homeController.isNotify.value;
           return Scaffold(
             body: Row(
@@ -36,24 +41,28 @@ class HomeView extends StatelessWidget {
                         itemCount: homeItems.length,
                         padding: EdgeInsets.only(left: 20),
                         itemBuilder: (context, i) {
-                          Color bodyColor = index == i && i != 6 && !isNotify
-                              ? swatchColor
-                              : priColor;
-                          Color iconColor = index == i && i != 6 && !isNotify
-                              ? null
-                              : swatchColor;
-                          BorderRadiusGeometry borderR = index == i && i != 6
-                              ? BorderRadius.only(
-                                  topLeft: Radius.circular(5),
-                                  bottomLeft: Radius.circular(5))
-                              : null;
-                          Color contentColor = index == i && i != 6 && !isNotify
-                              ? priColor
-                              : swatchColor;
+                          Color bodyColor =
+                              index == i && i != logoutIndex && !isNotify
+                                  ? swatchColor
+                                  : priColor;
+                          Color iconColor =
+                              index == i && i != logoutIndex && !isNotify
+                                  ? null
+                                  : swatchColor;
+                          BorderRadiusGeometry borderR =
+                              index == i && i != logoutIndex
+                                  ? BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      bottomLeft: Radius.circular(5))
+                                  : null;
+                          Color contentColor =
+                              index == i && i != logoutIndex && !isNotify
+                                  ? priColor
+                                  : swatchColor;
                           return GestureDetector(
                             onTap: () {
                               homeController.changeItemsIndex(i);
-                              if (i == 6) {
+                              if (i == logoutIndex) {
                                 Get.find<AuthViewModel>().logout();
                               }
                             },
@@ -89,7 +98,7 @@ class HomeView extends StatelessWidget {
                     color: Colors.white,
                     child: isNotify
                         ? NotificationsView()
-                        : index != 6
+                        : index != logoutIndex
                             ? homeViews[index]
                             : Center(
                                 child: CustomText(
@@ -100,7 +109,7 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            floatingActionButton: index != 6 && !isNotify
+            floatingActionButton: index != logoutIndex && !isNotify
                 ? FloatingActionButton(
                     backgroundColor: priColor,
                     onPressed: () => homeController.changeNotifyState(),

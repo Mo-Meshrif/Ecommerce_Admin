@@ -36,8 +36,8 @@ class AuthViewModel extends GetxController {
     update();
   }
 
-  bool isAdmin(String loginEmail) {
-    return _users.firstWhere((element) => element.email == loginEmail).isAdmin;
+  bool isNotCustomer(String loginEmail) {
+    return _users.firstWhere((element) => element.email == loginEmail).role!='Customer';
   }
 
   Future<void> getUsers() async {
@@ -76,7 +76,7 @@ class AuthViewModel extends GetxController {
             id: user.user.uid,
             userName: userName,
             email: email,
-            isAdmin: true,
+            role: 'Manger',
             isOnline: true);
         await FireStoreUser().addUserToFireStore(userModel);
         setUser(userModel);
@@ -88,7 +88,7 @@ class AuthViewModel extends GetxController {
   signIn() async {
     _loading.value = true;
     update();
-    if (isAdmin(email)) {
+    if (isNotCustomer(email)) {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
           .onError((error, stackTrace) {
@@ -108,7 +108,7 @@ class AuthViewModel extends GetxController {
     } else {
       _loading.value = false;
       update();
-      handleAuthErrors('Entered account does not belong to admins !');
+      handleAuthErrors('Customers are not allowed to enter !');
     }
   }
 
