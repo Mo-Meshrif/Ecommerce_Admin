@@ -35,6 +35,7 @@ dependencies:
   firebase_messaging: ^10.0.8
   shared_preferences: ^2.0.6
   hexcolor: ^2.0.3
+  responsive_table: ^0.1.1+8
 dev_dependencies:
   flutter_test:
     sdk: flutter

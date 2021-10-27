@@ -6,6 +6,7 @@ import 'views/subViews/homeView/messagesView.dart';
 import 'views/subViews/homeView/ordersView.dart';
 import 'views/subViews/homeView/productsView.dart';
 import 'views/subViews/homeView/settingsView.dart';
+import 'package:responsive_table/DatatableHeader.dart';
 import 'package:flutter/material.dart';
 
 const Color priColor = Colors.indigo;
@@ -75,4 +76,25 @@ List<Widget> mangerViews = [
   OrdersView(),
   ProductsView(),
   SettingsView(),
+];
+List<DatatableHeader> headers = [
+  DatatableHeader(
+      text: "ID",
+      value: "id",
+      show: true,
+      sortable: true,
+      textAlign: TextAlign.left),
+  DatatableHeader(
+      text: "Name",
+      value: "name",
+      show: true,
+      flex: 2,
+      sortable: true,
+      textAlign: TextAlign.left),
+  DatatableHeader(
+      text: "Email",
+      value: "email",
+      show: true,
+      sortable: true,
+      textAlign: TextAlign.left),
 ];
