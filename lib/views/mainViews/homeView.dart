@@ -1,3 +1,4 @@
+import '/core/viewModel/categoryViewModel.dart';
 import '/views/subViews/notificationsView.dart';
 import '../../const.dart';
 import '../../core/viewModel/homeViewModel.dart';
@@ -18,6 +19,7 @@ class HomeView extends StatelessWidget {
           int index = homeController.currentItem;
           int logoutIndex = homeItems.indexOf(homeItems.last);
           bool isNotify = homeController.isNotify.value;
+          Get.put(CategoryViewModel());
           return Scaffold(
             body: Row(
               children: [

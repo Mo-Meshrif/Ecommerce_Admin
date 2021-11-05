@@ -1,6 +1,6 @@
 import '../../helper/localStorageData.dart';
 import '../../model/userModel.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeViewModel extends GetxController {
@@ -35,7 +35,7 @@ class HomeViewModel extends GetxController {
   }
 
   //Customers_Logic
-  onSortCustomer(List<Map<String, dynamic>>customersList,val) {
+  onSortCustomer(List<Map<String, dynamic>> customersList, val) {
     sortCustomersColumn = val;
     sortCustomersAscending.value = !sortCustomersAscending.value;
     if (sortCustomersAscending.value) {
@@ -49,7 +49,7 @@ class HomeViewModel extends GetxController {
   }
 
   //Shops_Logic
-  onSortShops(List<Map<String, dynamic>>shopsList,val) {
+  onSortShops(List<Map<String, dynamic>> shopsList, val) {
     sortShopsColumn = val;
     sortShopsAscending.value = !sortShopsAscending.value;
     if (sortShopsAscending.value) {

@@ -1,4 +1,4 @@
-import 'views/subViews/homeView/categoriesView.dart';
+import 'views/subViews/homeView/categoriesView/categoriesView.dart';
 import 'views/subViews/homeView/shopsView.dart';
 import 'views/subViews/homeView/customersView.dart';
 import 'views/subViews/homeView/dashboardView.dart';

@@ -1,5 +1,6 @@
-import '../../model/categoryModel.dart';
-import 'customText.dart';
+import '/views/subViews/homeView/categoriesView/categoryView/editCategoryView.dart';
+import '../../../../../../model/categoryModel.dart';
+import '../../../../../widgets/customText.dart';
 import 'package:flutter/material.dart';
 
 class CategoryView extends StatelessWidget {
@@ -8,6 +9,7 @@ class CategoryView extends StatelessWidget {
   CategoryView({@required this.currentIndex, @required this.cats});
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     CategoryModel cat = cats[currentIndex];
     List<dynamic> subCat = [];
     for (var i = 0; i < cat.subCat['s'].length; i++) {
@@ -31,7 +33,28 @@ class CategoryView extends StatelessWidget {
                   txt: 'Category',
                 ),
                 GestureDetector(
-                  onTap: () => null,
+                  onTap: () => showDialog(
+                      builder: (ctx) => AlertDialog(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 24),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Edit Category"),
+                                CircleAvatar(
+                                  child: Icon(Icons.check),
+                                ),
+                              ],
+                            ),
+                            content: Container(
+                              width: (size.width - 220) * 0.6,
+                              child: EditCategoryView(),
+                            ),
+                          ),
+                      context: context),
                   child: CircleAvatar(
                     radius: 15,
                     child: Icon(
@@ -69,6 +92,7 @@ class CategoryView extends StatelessWidget {
               child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
+                    mainAxisExtent: 50,
                   ),
                   itemCount: subCatWithoutRepeated.length,
                   itemBuilder: (context, x) => Card(

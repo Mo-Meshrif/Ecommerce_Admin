@@ -7,6 +7,8 @@ class CustomTextField extends StatelessWidget {
   final bool obscure;
   final String hintTxt;
   final Icon icon;
+  final Widget prefix;
+  final Widget suffix;
 
   CustomTextField({
     @required this.bodyColor,
@@ -15,6 +17,8 @@ class CustomTextField extends StatelessWidget {
     @required this.valid,
     @required this.hintTxt,
     @required this.icon,
+    this.suffix,
+    this.prefix,
   });
   @override
   Widget build(BuildContext context) {
@@ -27,10 +31,11 @@ class CustomTextField extends StatelessWidget {
           validator: valid,
           obscureText: obscure,
           decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: hintTxt,
-            icon: icon,
-          ),
+              border: InputBorder.none,
+              hintText: hintTxt,
+              icon: icon,
+              prefixIcon: prefix,
+              suffixIcon: suffix),
         ),
       ),
     );
