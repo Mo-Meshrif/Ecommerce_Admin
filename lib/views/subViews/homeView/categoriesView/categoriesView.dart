@@ -1,5 +1,5 @@
 import '../../../../core/viewModel/categoryViewModel.dart';
-import 'categoryView/addCategoryView.dart';
+import 'categoryView/addEditCategoryView.dart';
 import '../../../../model/categoryModel.dart';
 import 'categoryView/categoryView.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,15 @@ class CategoriesView extends StatelessWidget {
           if (snapshot.hasData) {
             snapshot.data.docs as List<DocumentSnapshot>
               ..forEach((element) {
-                categories.add(CategoryModel.fromJson(element.data()));
+                var data = element.data() as Map;
+                categories.add(CategoryModel(
+                  id: element.id,
+                  createdAt: data['createdAt'],
+                  txt: data['txt'],
+                  imgUrl: data['imgUrl'],
+                  avatarCol: data['avatarCol'],
+                  subCat: data['sub-cat'],
+                ));
               });
           }
           return categories.isEmpty
@@ -37,73 +45,90 @@ class CategoriesView extends StatelessWidget {
                             cats: categories,
                             currentIndex: i != categories.length ? i : null,
                           )
-                        : GestureDetector(
-                            onTap: () => showDialog(
-                                builder: (ctx) => AlertDialog(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              vertical: 15, horizontal: 24),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Add Category"),
-                                          GetBuilder<CategoryViewModel>(
-                                              builder: (categoryController) {
-                                            GlobalKey<FormState> _key =
-                                                categoryController.addCategoryKey;
-                                            return GestureDetector(
-                                              onTap: () {
-                                                _key.currentState.save();
-                                                if (_key.currentState
-                                                    .validate()) {
-                                                  categoryController
-                                                      .addCategoryToFireStore(
-                                                    CategoryModel(
-                                                      txt: categoryController
-                                                          .catogoryTitle,
-                                                      avatarCol: '#' +
-                                                          categoryController
-                                                              .pickedColor.value
-                                                              .toRadixString(
-                                                                  16),
-                                                      subCat: categoryController
-                                                          .subCategories,
-                                                    ),
-                                                    categoryController.pickedImage,
-                                                    context,
-                                                  );
-                                                }
-                                              },
-                                              child: CircleAvatar(
-                                                child: Icon(Icons.add),
+                        : GetBuilder<CategoryViewModel>(
+                            builder: (categoryController) {
+                            GlobalKey<FormState> _key =
+                                categoryController.addCategoryKey;
+                            return GestureDetector(
+                              onTap: () async {
+                                categoryController.restCatParameters(
+                                    isEditDismiss: false);
+                                await showDialog(
+                                        builder: (ctx) => AlertDialog(
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 15,
+                                                      horizontal: 24),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
                                               ),
-                                            );
-                                          })
-                                        ],
-                                      ),
-                                      content: Container(
-                                        width: (size.width - 220) * 0.6,
-                                        child: AddCategoryView(),
-                                      ),
-                                    ),
-                                context: context),
-                            child: Card(
-                              color: Colors.grey[200],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.add,
-                                  size: 40,
+                                              title: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text("Add Category"),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      _key.currentState.save();
+                                                      if (_key.currentState
+                                                          .validate()) {
+                                                        categoryController
+                                                            .addEditCategoryToFireStore(
+                                                          true,
+                                                          CategoryModel(
+                                                            txt: categoryController
+                                                                .catogoryTitle,
+                                                            createdAt:
+                                                                Timestamp.now(),
+                                                            avatarCol: '#' +
+                                                                categoryController
+                                                                    .pickedColor
+                                                                    .value
+                                                                    .toRadixString(
+                                                                        16),
+                                                            subCat:
+                                                                categoryController
+                                                                    .subCategories,
+                                                          ),
+                                                          categoryController
+                                                              .pickedImage,
+                                                          context,
+                                                        );
+                                                      }
+                                                    },
+                                                    child: CircleAvatar(
+                                                      child: Icon(Icons.add),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              content: Container(
+                                                width: (size.width - 220) * 0.6,
+                                                child: AddEditCategoryView(
+                                                    oldCategory: null),
+                                              ),
+                                            ),
+                                        context: context)
+                                    .then((_) =>
+                                        categoryController.restCatParameters(
+                                            isEditDismiss: false));
+                              },
+                              child: Card(
+                                color: Colors.grey[200],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 40,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
+                          });
                   },
                 );
         });

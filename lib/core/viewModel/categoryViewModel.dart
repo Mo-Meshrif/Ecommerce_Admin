@@ -1,20 +1,36 @@
 import '/core/service/fireStore_Category.dart';
 import '/model/categoryModel.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryViewModel extends GetxController {
   GlobalKey<FormState> addCategoryKey = GlobalKey<FormState>();
+  GlobalKey<FormState> editCategoryKey = GlobalKey<FormState>();
   Uint8List pickedImage;
   Color pickedColor = Colors.white;
   String catogoryTitle;
   int mainSubCounter = 1;
   Map<String, List<int>> subCounter = {};
   Map<String, List<String>> subCategories = {'s': []};
-  ValueNotifier<bool> isAddCategory = ValueNotifier(false);
+  ValueNotifier<bool> loading = ValueNotifier(false);
+
+  getOldCategoryData(CategoryModel oldCategory) {
+    catogoryTitle = oldCategory.txt;
+    pickedColor = HexColor(oldCategory.avatarCol);
+    subCategories = oldCategory.subCat
+        .map((key, value) => MapEntry(key, List.castFrom(value)));
+    mainSubCounter = subCategories['s'].length;
+    for (int i = 0; i < subCategories['s'].length; i++) {
+      subCounter['s' + i.toString()] = subCategories['s' + i.toString()]
+          .map((e) => subCategories['s' + i.toString()].indexOf(e))
+          .toList();
+    }
+    update();
+  }
+
   getCatImage() async {
     Uint8List bytesFromPicker =
         await ImagePickerWeb.getImage(outputType: ImageType.bytes);
@@ -84,18 +100,49 @@ class CategoryViewModel extends GetxController {
     update();
   }
 
-  addCategoryToFireStore(
-      CategoryModel cato, Uint8List image, BuildContext ctx) {
-    if (image != null) {
-      isAddCategory.value = true;
-      update();
-      FireStoreCategory().uploadCatImage(image, cato.txt).then((imgUrl) {
-        if (imgUrl != null) {
+  addEditCategoryToFireStore(
+      bool isAdd, CategoryModel cato, Uint8List image, BuildContext ctx) {
+    loading.value = true;
+    update();
+    if (isAdd) {
+      if (image != null) {
+        FireStoreCategory().uploadCatImage(image, cato.txt).then((imgUrl) {
+          if (imgUrl != null) {
+            FireStoreCategory()
+                .addCategoryToFireStore(
+              CategoryModel(
+                createdAt: cato.createdAt,
+                txt: cato.txt,
+                imgUrl: imgUrl,
+                avatarCol: cato.avatarCol,
+                subCat: cato.subCat,
+              ),
+            )
+                .then((_) {
+              Navigator.of(ctx).pop();
+              restCatParameters(isEditDismiss: false);
+            });
+          }
+        });
+      } else {
+        Get.snackbar('Error', 'Upload Category image ,please!',
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            duration: Duration(seconds: 5));
+      }
+    } else {
+      if (image == null) {
+        FireStoreCategory().editCategoryfromFireStore(cato).then((_) {
+          Navigator.of(ctx).pop();
+          restCatParameters(isEditDismiss: false);
+        });
+      } else {
+        FireStoreCategory().uploadCatImage(image, cato.txt).then((imgUrl) {
           FireStoreCategory()
-              .addCategoryToFireStore(
+              .editCategoryfromFireStore(
             CategoryModel(
-              createdAt: Timestamp.now(),
               txt: cato.txt,
+              createdAt: cato.createdAt,
               imgUrl: imgUrl,
               avatarCol: cato.avatarCol,
               subCat: cato.subCat,
@@ -103,26 +150,25 @@ class CategoryViewModel extends GetxController {
           )
               .then((_) {
             Navigator.of(ctx).pop();
-            restCatParameters();
+            restCatParameters(isEditDismiss: false);
           });
-        }
-      });
-    } else {
-      Get.snackbar('Error', 'Upload Category image ,please!',
-          colorText: Colors.white,
-          snackPosition: SnackPosition.TOP,
-          duration: Duration(seconds: 5));
+        });
+      }
     }
   }
 
-  restCatParameters() {
-    catogoryTitle = null;
-    subCategories = {'s': []};
-    mainSubCounter = 1;
-    subCounter = {};
-    pickedColor = Colors.white;
-    pickedImage = null;
-    isAddCategory.value = false;
+  restCatParameters({@required bool isEditDismiss}) {
+    if (isEditDismiss) {
+      pickedImage = null;
+    } else {
+      catogoryTitle = null;
+      subCategories = {'s': []};
+      mainSubCounter = 1;
+      subCounter = {};
+      pickedColor = Colors.white;
+      pickedImage = null;
+      loading.value = false;
+    }
     update();
   }
 }

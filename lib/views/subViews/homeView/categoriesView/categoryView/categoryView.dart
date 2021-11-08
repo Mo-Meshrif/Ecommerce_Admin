@@ -1,6 +1,8 @@
-import '/views/subViews/homeView/categoriesView/categoryView/editCategoryView.dart';
+import '../../../../../core/viewModel/categoryViewModel.dart';
+import '/views/subViews/homeView/categoriesView/categoryView/addEditCategoryView.dart';
 import '../../../../../../model/categoryModel.dart';
 import '../../../../../widgets/customText.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class CategoryView extends StatelessWidget {
@@ -32,36 +34,78 @@ class CategoryView extends StatelessWidget {
                 CustomText(
                   txt: 'Category',
                 ),
-                GestureDetector(
-                  onTap: () => showDialog(
-                      builder: (ctx) => AlertDialog(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 24),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Edit Category"),
-                                CircleAvatar(
-                                  child: Icon(Icons.check),
-                                ),
-                              ],
-                            ),
-                            content: Container(
-                              width: (size.width - 220) * 0.6,
-                              child: EditCategoryView(),
-                            ),
-                          ),
-                      context: context),
-                  child: CircleAvatar(
-                    radius: 15,
-                    child: Icon(
-                      Icons.edit,
-                      size: 15,
-                    ),
-                  ),
+                GetBuilder<CategoryViewModel>(
+                  builder: (categoryController) {
+                    GlobalKey<FormState> _key =
+                        categoryController.editCategoryKey;
+                    return GestureDetector(
+                      onTap: () async {
+                        categoryController.getOldCategoryData(cat);
+                        await showDialog(
+                                builder: (ctx) => AlertDialog(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 24),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Edit Category"),
+                                          GestureDetector(
+                                            onTap: () {
+                                              _key.currentState.save();
+                                              if (_key.currentState
+                                                  .validate()) {
+                                                categoryController
+                                                    .addEditCategoryToFireStore(
+                                                  false,
+                                                  CategoryModel(
+                                                    id: cat.id,
+                                                    txt: categoryController
+                                                        .catogoryTitle,
+                                                    createdAt: cat.createdAt,
+                                                    imgUrl: cat.imgUrl,
+                                                    avatarCol: '#' +
+                                                        categoryController
+                                                            .pickedColor.value
+                                                            .toRadixString(16),
+                                                    subCat: categoryController
+                                                        .subCategories,
+                                                  ),
+                                                  categoryController
+                                                      .pickedImage,
+                                                  context,
+                                                );
+                                              }
+                                            },
+                                            child: CircleAvatar(
+                                              child: Icon(Icons.check),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      content: Container(
+                                        width: (size.width - 220) * 0.6,
+                                        child: AddEditCategoryView(
+                                            oldCategory: cat),
+                                      ),
+                                    ),
+                                context: context)
+                            .then((_) => categoryController.restCatParameters(
+                                isEditDismiss: true));
+                      },
+                      child: CircleAvatar(
+                        radius: 15,
+                        child: Icon(
+                          Icons.edit,
+                          size: 15,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

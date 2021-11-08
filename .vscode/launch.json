@@ -12,7 +12,9 @@
                 "-d",
                 "chrome",
                 "--web-port",
-                "8000"
+                "8000",
+                "--web-renderer",
+                "html"
             ],
         },
         {

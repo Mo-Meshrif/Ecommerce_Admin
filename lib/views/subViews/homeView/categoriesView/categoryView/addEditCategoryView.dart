@@ -1,3 +1,4 @@
+import '/model/categoryModel.dart';
 import '../../../../../core/viewModel/categoryViewModel.dart';
 import '../../../../../widgets/customText.dart';
 import '../../../../../widgets/customTextField.dart';
@@ -5,7 +6,9 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddCategoryView extends StatelessWidget {
+class AddEditCategoryView extends StatelessWidget {
+  final CategoryModel oldCategory;
+  AddEditCategoryView({@required this.oldCategory});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryViewModel>(
@@ -13,10 +16,18 @@ class AddCategoryView extends StatelessWidget {
         int mainSubCounter = categoryController.mainSubCounter;
         Map<String, List<int>> subCounterMap = categoryController.subCounter;
         List<String> mainSubCategories = categoryController.subCategories['s'];
-        return categoryController.isAddCategory.value
+        Color pickedColor = categoryController.pickedColor;
+        Color backgroundColor = pickedColor != Colors.white
+            ? pickedColor.computeLuminance() > 0.5
+                ? Colors.black
+                : Colors.white
+            : null;
+        return categoryController.loading.value
             ? Center(child: CircularProgressIndicator())
             : Form(
-                key: categoryController.addCategoryKey,
+                key: oldCategory == null
+                    ? categoryController.addCategoryKey
+                    : categoryController.editCategoryKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -25,15 +36,19 @@ class AddCategoryView extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 42,
+                            backgroundColor: backgroundColor,
                             child: CircleAvatar(
-                              backgroundColor: categoryController.pickedColor,
+                              backgroundColor: pickedColor,
                               radius: 40,
                               child: GestureDetector(
                                   onTap: () => categoryController.getCatImage(),
-                                  child: categoryController.pickedImage == null
-                                      ? Icon(Icons.upload)
-                                      : Image.memory(
-                                          categoryController.pickedImage)),
+                                  child: oldCategory != null &&
+                                          categoryController.pickedImage == null
+                                      ? Image.network(oldCategory.imgUrl)
+                                      : categoryController.pickedImage == null
+                                          ? Icon(Icons.upload)
+                                          : Image.memory(
+                                              categoryController.pickedImage)),
                             ),
                           ),
                           Positioned(
@@ -41,9 +56,10 @@ class AddCategoryView extends StatelessWidget {
                             right: 0,
                             child: CircleAvatar(
                               radius: 15,
+                              backgroundColor: backgroundColor,
                               child: CircleAvatar(
                                 radius: 13,
-                                backgroundColor: Colors.white,
+                                backgroundColor: pickedColor,
                                 child: GestureDetector(
                                     onTap: () => showDialog(
                                         context: context,
@@ -61,8 +77,8 @@ class AddCategoryView extends StatelessWidget {
                                               ),
                                               content: SingleChildScrollView(
                                                   child: ColorPicker(
-                                                pickerColor:
-                                                    categoryController.pickedColor,
+                                                pickerColor: categoryController
+                                                    .pickedColor,
                                                 onColorChanged: (color) =>
                                                     categoryController
                                                         .getPickedColor(color),
@@ -70,7 +86,10 @@ class AddCategoryView extends StatelessWidget {
                                                 pickerAreaHeightPercent: 0.8,
                                               )),
                                             )),
-                                    child: Icon(Icons.color_lens)),
+                                    child: Icon(
+                                      Icons.color_lens,
+                                      color: backgroundColor,
+                                    )),
                               ),
                             ),
                           )
@@ -83,6 +102,7 @@ class AddCategoryView extends StatelessWidget {
                     SizedBox(height: 10),
                     CustomTextField(
                       bodyColor: Colors.grey[200],
+                      initVal: oldCategory != null ? oldCategory.txt : null,
                       onChanged: (val) =>
                           categoryController.catogoryTitle = val.trim(),
                       valid: (val) {
@@ -122,6 +142,10 @@ class AddCategoryView extends StatelessWidget {
                                 Expanded(
                                   child: CustomTextField(
                                       bodyColor: Colors.grey[200],
+                                      initVal: oldCategory != null &&
+                                              mainSubCategories.isNotEmpty
+                                          ? mainSubCategories[i]
+                                          : null,
                                       onChanged: (val) => categoryController
                                           .addMainSubCategory(val, i),
                                       valid: (val) {
@@ -174,6 +198,7 @@ class AddCategoryView extends StatelessWidget {
                           )
                         : Expanded(
                             child: ListView.separated(
+                              controller: ScrollController(),
                               padding: EdgeInsets.symmetric(vertical: 10),
                               itemCount: mainSubCategories.length,
                               itemBuilder: (context, x) {
@@ -216,12 +241,14 @@ class AddCategoryView extends StatelessWidget {
                                                   child: CustomTextField(
                                                       bodyColor:
                                                           Colors.grey[200],
+                                                      initVal: oldCategory != null
+                                                          ? oldCategory.subCat['s' + x.toString()]
+                                                              [i]
+                                                          : null,
                                                       onChanged: (val) =>
                                                           categoryController
                                                               .addSubCategory(
-                                                                  mainCatoIndex,
-                                                                  val,
-                                                                  i),
+                                                                  mainCatoIndex, val, i),
                                                       valid: (val) {
                                                         if (val.isEmpty) {
                                                           return 'The Feild is empty';
@@ -233,14 +260,12 @@ class AddCategoryView extends StatelessWidget {
                                                       icon: null,
                                                       suffix: i == subCounter.length - 1
                                                           ? GestureDetector(
-                                                              onTap: () =>
-                                                                  categoryController
-                                                                      .changeSubCounter(
-                                                                          mainCatoIndex,
-                                                                          'add',
-                                                                          i),
-                                                              child: Icon(
-                                                                  Icons.add))
+                                                              onTap: () => categoryController
+                                                                  .changeSubCounter(
+                                                                      mainCatoIndex,
+                                                                      'add',
+                                                                      i),
+                                                              child: Icon(Icons.add))
                                                           : null),
                                                 ),
                                                 i == subCounter.length - 1 &&
@@ -276,7 +301,10 @@ class AddCategoryView extends StatelessWidget {
                                   ),
                                 );
                               },
-                              separatorBuilder: (ctx, i) => SizedBox(height: 5),
+                              separatorBuilder: (ctx, i) => Divider(
+                                thickness: 0.5,
+                                color: Colors.grey[400],
+                              ),
                             ),
                           )
                   ],

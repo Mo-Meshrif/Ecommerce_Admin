@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 class CategoryModel {
-  String imgUrl, txt, avatarCol;
+  String id, imgUrl, txt, avatarCol;
   Timestamp createdAt;
   Map<String, dynamic> subCat;
 
   CategoryModel({
+    this.id,
     this.createdAt,
     this.imgUrl,
     this.txt,
@@ -16,6 +17,7 @@ class CategoryModel {
     if (map.isEmpty) {
       return;
     }
+    id = map['id'];
     imgUrl = map['imgUrl'];
     txt = map['txt'];
     avatarCol = map['avatarCol'];

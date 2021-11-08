@@ -11,10 +11,17 @@ class FireStoreCategory {
     return await collectionCategory.add(category.toJson());
   }
 
-  Future<String> uploadCatImage(Uint8List pic,String catTitle) async {
+  Future<void> editCategoryfromFireStore(CategoryModel category) async {
+    return await collectionCategory.doc(category.id).update(category.toJson());
+  }
+
+  Future<String> uploadCatImage(Uint8List pic, String catTitle) async {
     String url;
-    Reference reference =
-        storageRef.ref().child('categories').child('$catTitle').child('$catTitle.png');
+    Reference reference = storageRef
+        .ref()
+        .child('categories')
+        .child('$catTitle')
+        .child('$catTitle.png');
     await reference.putData(pic).then((val) async {
       url = await val.ref.getDownloadURL();
     });
