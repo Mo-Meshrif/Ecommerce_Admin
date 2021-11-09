@@ -219,7 +219,7 @@ class AddEditCategoryView extends StatelessWidget {
                                       CircleAvatar(
                                         radius: 40,
                                         child: CustomText(
-                                          txt: mainSubCategories[x],
+                                          txt: 'Main S'+x.toString(),
                                         ),
                                       ),
                                       Expanded(
