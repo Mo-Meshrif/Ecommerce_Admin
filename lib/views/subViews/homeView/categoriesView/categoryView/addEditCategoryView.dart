@@ -22,6 +22,7 @@ class AddEditCategoryView extends StatelessWidget {
                 ? Colors.black
                 : Colors.white
             : null;
+        bool isEdit = oldCategory != null ? true : false;
         return categoryController.loading.value
             ? Center(child: CircularProgressIndicator())
             : Form(
@@ -147,7 +148,7 @@ class AddEditCategoryView extends StatelessWidget {
                                           ? mainSubCategories[i]
                                           : null,
                                       onChanged: (val) => categoryController
-                                          .addMainSubCategory(val, i),
+                                          .addMainSubCategory(isEdit, val, i),
                                       valid: (val) {
                                         if (val.isEmpty) {
                                           return 'The Feild is empty';
@@ -159,7 +160,8 @@ class AddEditCategoryView extends StatelessWidget {
                                       suffix: i == mainSubCounter - 1
                                           ? GestureDetector(
                                               onTap: () => categoryController
-                                                  .changeMainCounter('add', i),
+                                                  .changeMainCounter(
+                                                      isEdit, 'add', i),
                                               child: Icon(Icons.add))
                                           : null),
                                 ),
@@ -172,7 +174,8 @@ class AddEditCategoryView extends StatelessWidget {
                                               const EdgeInsets.only(bottom: 16),
                                           child: GestureDetector(
                                               onTap: () => categoryController
-                                                  .changeMainCounter('sub', i),
+                                                  .changeMainCounter(
+                                                      isEdit, 'sub', i),
                                               child: Icon(Icons.minimize)),
                                         ),
                                       )
@@ -221,6 +224,7 @@ class AddEditCategoryView extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: GridView.builder(
+                                          controller: ScrollController(),
                                           gridDelegate:
                                               SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
@@ -235,20 +239,27 @@ class AddEditCategoryView extends StatelessWidget {
                                                     (cato) =>
                                                         cato ==
                                                         mainSubCategories[x]);
+                                            List<String> subCats =
+                                                categoryController
+                                                        .subCategories[
+                                                    's' + x.toString()];
                                             return Row(
                                               children: [
                                                 Expanded(
                                                   child: CustomTextField(
                                                       bodyColor:
                                                           Colors.grey[200],
-                                                      initVal: oldCategory != null
-                                                          ? oldCategory.subCat['s' + x.toString()]
-                                                              [i]
-                                                          : null,
+                                                      initVal:
+                                                          oldCategory != null
+                                                              ? subCats[i]
+                                                              : null,
                                                       onChanged: (val) =>
                                                           categoryController
                                                               .addSubCategory(
-                                                                  mainCatoIndex, val, i),
+                                                                  isEdit,
+                                                                  mainCatoIndex,
+                                                                  val,
+                                                                  i),
                                                       valid: (val) {
                                                         if (val.isEmpty) {
                                                           return 'The Feild is empty';
@@ -262,10 +273,12 @@ class AddEditCategoryView extends StatelessWidget {
                                                           ? GestureDetector(
                                                               onTap: () => categoryController
                                                                   .changeSubCounter(
+                                                                      isEdit,
                                                                       mainCatoIndex,
                                                                       'add',
                                                                       i),
-                                                              child: Icon(Icons.add))
+                                                              child:
+                                                                  Icon(Icons.add))
                                                           : null),
                                                 ),
                                                 i == subCounter.length - 1 &&
@@ -279,12 +292,12 @@ class AddEditCategoryView extends StatelessWidget {
                                                                       .only(
                                                                   bottom: 16),
                                                           child: GestureDetector(
-                                                              onTap: () =>
-                                                                  categoryController
-                                                                      .changeSubCounter(
-                                                                          mainCatoIndex,
-                                                                          'sub',
-                                                                          i),
+                                                              onTap: () => categoryController
+                                                                  .changeSubCounter(
+                                                                      isEdit,
+                                                                      mainCatoIndex,
+                                                                      'sub',
+                                                                      i),
                                                               child: Icon(Icons
                                                                   .minimize)),
                                                         ),

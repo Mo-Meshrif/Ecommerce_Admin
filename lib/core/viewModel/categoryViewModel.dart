@@ -45,10 +45,11 @@ class CategoryViewModel extends GetxController {
     update();
   }
 
-  changeMainCounter(String tag, int index) {
+  changeMainCounter(bool isEdit, String tag, int index) {
     if (tag == 'add') {
       if (subCategories['s'][index] != null) {
         mainSubCounter += 1;
+        if (isEdit) subCategories['s'].add('');
       }
     } else {
       mainSubCounter -= 1;
@@ -59,10 +60,11 @@ class CategoryViewModel extends GetxController {
     update();
   }
 
-  changeSubCounter(int mainCatoIndex, String tag, int index) {
+  changeSubCounter(bool isEdit, int mainCatoIndex, String tag, int index) {
     if (tag == 'add') {
       if (subCategories['s' + mainCatoIndex.toString()][index] != null) {
         subCounter['s' + mainCatoIndex.toString()].add(1);
+        if (isEdit) subCategories['s' + mainCatoIndex.toString()].add('');
       }
     } else {
       subCounter['s' + mainCatoIndex.toString()].removeLast();
@@ -73,23 +75,28 @@ class CategoryViewModel extends GetxController {
     update();
   }
 
-  addMainSubCategory(String mainSub, int index) {
+  addMainSubCategory(bool isEdit, String mainSub, int index) {
     if (mainSub == '') {
       subCategories['s'].removeAt(index);
+      if (isEdit) subCategories['s'].insert(index, mainSub);
     } else {
       if (subCategories['s'].length - 1 >= index) {
         subCategories['s'].removeAt(index);
       }
       subCategories['s'].insert(index, mainSub);
-      subCategories['s' + index.toString()] = [];
-      subCounter['s' + index.toString()] = [1];
+      if (!isEdit) {
+        subCategories['s' + index.toString()] = [];
+        subCounter['s' + index.toString()] = [1];
+      }
     }
     update();
   }
 
-  addSubCategory(int mainCatoIndex, String sub, int subCatoIndex) {
+  addSubCategory(bool isEdit, int mainCatoIndex, String sub, int subCatoIndex) {
     if (sub == '') {
       subCategories['s' + mainCatoIndex.toString()].removeAt(subCatoIndex);
+      if (isEdit)
+        subCategories['s' + mainCatoIndex.toString()].insert(subCatoIndex, sub);
     } else {
       if (subCategories['s' + mainCatoIndex.toString()].length - 1 >=
           subCatoIndex) {
