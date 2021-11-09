@@ -1,3 +1,4 @@
+import '../../../../../widgets/deleteAlert.dart';
 import '../../../../../core/viewModel/categoryViewModel.dart';
 import '/views/subViews/homeView/categoriesView/categoryView/addEditCategoryView.dart';
 import '../../../../../../model/categoryModel.dart';
@@ -54,36 +55,81 @@ class CategoryView extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text("Edit Category"),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _key.currentState.save();
-                                              if (_key.currentState
-                                                  .validate()) {
-                                                categoryController
-                                                    .addEditCategoryToFireStore(
-                                                  false,
-                                                  CategoryModel(
-                                                    id: cat.id,
-                                                    txt: categoryController
-                                                        .catogoryTitle,
-                                                    createdAt: cat.createdAt,
-                                                    imgUrl: cat.imgUrl,
-                                                    avatarCol: '#' +
-                                                        categoryController
-                                                            .pickedColor.value
-                                                            .toRadixString(16),
-                                                    subCat: categoryController
-                                                        .subCategories,
-                                                  ),
-                                                  categoryController
-                                                      .pickedImage,
-                                                  context,
-                                                );
-                                              }
-                                            },
-                                            child: CircleAvatar(
-                                              child: Icon(Icons.check),
-                                            ),
+                                          Row(
+                                            children: [
+                                              (currentIndex == 0 ||
+                                                      currentIndex == 1 ||
+                                                      currentIndex == 2)
+                                                  ? Padding(
+                                                      padding: EdgeInsets.zero)
+                                                  : Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 5),
+                                                      child: GestureDetector(
+                                                          onTap:
+                                                              () => showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (ctx) =>
+                                                                            DeleteAlert(
+                                                                      title:
+                                                                          'Delete Catrgory',
+                                                                      messageContent:
+                                                                          'Are you sure to delete this category',
+                                                                      agree: () =>
+                                                                          categoryController.deleteCategory(
+                                                                              cat,
+                                                                              ctx),
+                                                                      notAgree: () =>
+                                                                          Navigator.of(ctx)
+                                                                              .pop(),
+                                                                      isLoading: categoryController
+                                                                          .loading
+                                                                          .value,
+                                                                    ),
+                                                                  ),
+                                                          child: CircleAvatar(
+                                                              child: Icon(Icons
+                                                                  .delete))),
+                                                    ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  _key.currentState.save();
+                                                  if (_key.currentState
+                                                      .validate()) {
+                                                    categoryController
+                                                        .addEditCategoryToFireStore(
+                                                      false,
+                                                      CategoryModel(
+                                                        id: cat.id,
+                                                        txt: categoryController
+                                                            .catogoryTitle,
+                                                        createdAt:
+                                                            cat.createdAt,
+                                                        imgUrl: cat.imgUrl,
+                                                        avatarCol: '#' +
+                                                            categoryController
+                                                                .pickedColor
+                                                                .value
+                                                                .toRadixString(
+                                                                    16),
+                                                        subCat:
+                                                            categoryController
+                                                                .subCategories,
+                                                      ),
+                                                      categoryController
+                                                          .pickedImage,
+                                                      context,
+                                                    );
+                                                  }
+                                                },
+                                                child: CircleAvatar(
+                                                  child: Icon(Icons.check),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ],
                                       ),

@@ -15,6 +15,10 @@ class FireStoreCategory {
     return await collectionCategory.doc(category.id).update(category.toJson());
   }
 
+  Future<void> deleteCategoryfromFireStore(CategoryModel category) async {
+    return await collectionCategory.doc(category.id).delete();
+  }
+
   Future<String> uploadCatImage(Uint8List pic, String catTitle) async {
     String url;
     Reference reference = storageRef

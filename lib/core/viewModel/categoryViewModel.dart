@@ -164,6 +164,15 @@ class CategoryViewModel extends GetxController {
     }
   }
 
+  deleteCategory(CategoryModel cato, BuildContext ctx) {
+    loading.value = true;
+    update();
+    FireStoreCategory().deleteCategoryfromFireStore(cato).then((_) {
+      Navigator.of(ctx).popUntil(ModalRoute.withName('/'));
+      restCatParameters(isEditDismiss: false);
+    });
+  }
+
   restCatParameters({@required bool isEditDismiss}) {
     if (isEditDismiss) {
       pickedImage = null;
