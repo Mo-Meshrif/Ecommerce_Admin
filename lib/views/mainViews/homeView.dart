@@ -111,13 +111,14 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            floatingActionButton: index != logoutIndex && !isNotify
-                ? FloatingActionButton(
-                    backgroundColor: priColor,
-                    onPressed: () => homeController.changeNotifyState(),
-                    child: Icon(Icons.notifications),
-                  )
-                : null,
+            floatingActionButton:
+                index != logoutIndex && index != 3 && !isNotify
+                    ? FloatingActionButton(
+                        backgroundColor: priColor,
+                        onPressed: () => homeController.changeNotifyState(),
+                        child: Icon(Icons.notifications),
+                      )
+                    : null,
           );
         },
       );

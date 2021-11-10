@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
+  final bool shapeIsCircular;
   final Color bodyColor;
   final String initVal;
   final void Function(String) onChanged;
@@ -21,11 +22,14 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
     this.prefix,
     this.initVal,
+    this.shapeIsCircular = false,
   });
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: bodyColor),
+      decoration: BoxDecoration(
+          color: bodyColor,
+          borderRadius: shapeIsCircular ? BorderRadius.circular(20) : null),
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: TextFormField(
