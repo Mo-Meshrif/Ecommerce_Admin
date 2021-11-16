@@ -11,6 +11,8 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
         builder: (homeController) {
+          AuthViewModel _auth=Get.find();
+          if(_auth.users.isEmpty) _auth.getUsers();
           String userRole = homeController.savedUser.role;
           List<Map<String, String>> homeItems =
               userRole == 'Admin' ? adminItems : mangerItems;
