@@ -1,3 +1,4 @@
+import '/core/viewModel/messageViewModel.dart';
 import '/core/viewModel/categoryViewModel.dart';
 import '/core/viewModel/homeViewModel.dart';
 import '/helper/localStorageData.dart';
@@ -11,5 +12,6 @@ class Binds extends Bindings {
     Get.lazyPut(() => LocalStorageData());
     Get.lazyPut(() => HomeViewModel());
     Get.lazyPut(() => CategoryViewModel());
+    Get.lazyPut(() => MessageViewModel());
   }
 }
