@@ -45,10 +45,10 @@ class _LowerBodyViewState extends State<LowerBodyView> {
               snapshot.hasData ? snapshot.data.docs : [];
           List messages = messageSnap
               .where((element) =>
-                  (element['from'] == widget.me.id ||
+                  ((element['from'] == widget.me.id ||
                       element['to'] == widget.me.id) &&
                   (element['from'] == widget.notMe.id ||
-                      element['to'] == widget.notMe.id))
+                      element['to'] == widget.notMe.id)))
               .toList();
           return Column(
             children: [

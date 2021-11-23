@@ -1,3 +1,4 @@
+import '/model/userModel.dart';
 import '/model/messageModel.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '../../../../widgets/customText.dart';
@@ -10,6 +11,7 @@ class MessagesHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MessageViewModel>(builder: (messageController) {
+      UserModel me = messageController.homeViewModel.savedUser;
       List<MessageModel> headerMesssage = messageController.headerMessages;
       return Column(
         children: [
@@ -52,11 +54,16 @@ class MessagesHeader extends StatelessWidget {
                       controller: ScrollController(),
                       itemCount: headerMesssage.length,
                       itemBuilder: (context, i) {
+                        bool isOpened = headerMesssage[i].isOpened ||
+                            headerMesssage[i].from.id ==
+                                messageController.homeViewModel.savedUser.id;
                         return GestureDetector(
                           onTap: () {
                             messageController.getIndexOfShownMessage(i);
-                            messageController
-                                .updateMessage(headerMesssage[i].id);
+                            if (me.id == headerMesssage[i].to.id) {
+                              messageController
+                                  .updateMessage(headerMesssage[i].id);
+                            }
                           },
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(horizontal: 5),
@@ -65,32 +72,35 @@ class MessagesHeader extends StatelessWidget {
                               radius: 30,
                             ),
                             title: CustomText(
-                              txt: headerMesssage[i].to.userName,
+                              txt: me.id == headerMesssage[i].from.id
+                                  ? headerMesssage[i].to.userName
+                                  : headerMesssage[i].from.userName,
                             ),
                             subtitle: CustomText(
                               txt: headerMesssage[i].lastMessage,
-                              txtColor: Colors.grey,
+                              txtColor: isOpened ? Colors.grey : null,
                             ),
-                            trailing: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CustomText(
-                                  txt: DateFormat('h:mm a').format(
-                                      headerMesssage[i].messageTime.toDate()),
-                                  fSize: 17,
-                                ),
-                                headerMesssage[i].isOpened ||
-                                        headerMesssage[i].from.id ==
-                                            messageController
-                                                .homeViewModel.savedUser.id
-                                    ? Padding(padding: EdgeInsets.zero)
-                                    : Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: CircleAvatar(
-                                          radius: 6,
-                                        ),
-                                      )
-                              ],
+                            trailing: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  CustomText(
+                                    txt: DateFormat('h:mm a').format(
+                                        headerMesssage[i].messageTime.toDate()),
+                                    fSize: 17,
+                                  ),
+                                  isOpened
+                                      ? Padding(padding: EdgeInsets.zero)
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: CircleAvatar(
+                                            radius: 6,
+                                          ),
+                                        )
+                                ],
+                              ),
                             ),
                           ),
                         );

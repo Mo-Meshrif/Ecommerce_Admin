@@ -39,7 +39,7 @@ class MessageBodyView extends StatelessWidget {
               )
             : to != null
                 ? LowerBodyView(
-                    notMe: me == to ? from : to,
+                    notMe: me.id == to.id ? from : to,
                     me: me,
                   )
                 : indexOfShownMessage==null
