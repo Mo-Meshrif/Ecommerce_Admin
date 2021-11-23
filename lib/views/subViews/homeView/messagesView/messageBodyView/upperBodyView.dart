@@ -127,7 +127,7 @@ class UpperBodyView extends StatelessWidget {
                                           title: RichText(
                                               text: TextSpan(children: [
                                             TextSpan(
-                                                text: spUsers[i].userName,
+                                                text: spUsers[i].userName.capitalizeFirst,
                                                 style: TextStyle(
                                                     color: Colors.black)),
                                             TextSpan(

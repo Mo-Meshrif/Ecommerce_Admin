@@ -73,8 +73,8 @@ class MessagesHeader extends StatelessWidget {
                             ),
                             title: CustomText(
                               txt: me.id == headerMesssage[i].from.id
-                                  ? headerMesssage[i].to.userName
-                                  : headerMesssage[i].from.userName,
+                                  ? headerMesssage[i].to.userName.capitalizeFirst
+                                  : headerMesssage[i].from.userName.capitalizeFirst,
                             ),
                             subtitle: CustomText(
                               txt: headerMesssage[i].lastMessage,
