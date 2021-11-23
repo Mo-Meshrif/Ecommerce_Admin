@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class UpperBodyView extends StatelessWidget {
+  final String myRole;
+  UpperBodyView({@required this.myRole});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -91,7 +93,7 @@ class UpperBodyView extends StatelessWidget {
                           child: StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('Users')
-                                  .where('role', isEqualTo: 'Manger')
+                                  .where('role', isNotEqualTo: myRole)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 List<DocumentSnapshot> userSnap =
@@ -122,9 +124,17 @@ class UpperBodyView extends StatelessWidget {
                                             radius: 30,
                                             child: Icon(Icons.person),
                                           ),
-                                          title: CustomText(
-                                            txt: spUsers[i].userName,
-                                          ),
+                                          title: RichText(
+                                              text: TextSpan(children: [
+                                            TextSpan(
+                                                text: spUsers[i].userName,
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                            TextSpan(
+                                                text: ' "${spUsers[i].role}"',
+                                                style: TextStyle(
+                                                    color: Colors.red)),
+                                          ])),
                                         ),
                                       );
                                     });

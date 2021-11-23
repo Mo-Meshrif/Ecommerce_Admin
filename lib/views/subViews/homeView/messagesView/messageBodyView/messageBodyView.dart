@@ -26,7 +26,7 @@ class MessageBodyView extends StatelessWidget {
         return messageController.isNewMessage.value
             ? Column(
                 children: [
-                  UpperBodyView(),
+                  UpperBodyView(myRole: me.role),
                   notMe != null
                       ? Expanded(
                           child: LowerBodyView(

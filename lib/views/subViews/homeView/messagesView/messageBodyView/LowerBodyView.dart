@@ -81,7 +81,7 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                                           ? Radius.circular(15)
                                           : Radius.zero,
                                   bottomLeft:
-                                      messages[i]['from'] == widget.notMe.id
+                                      messages[i]['to'] == widget.me.id
                                           ? Radius.circular(15)
                                           : Radius.zero)),
                           child: Padding(

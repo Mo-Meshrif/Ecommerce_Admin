@@ -72,9 +72,9 @@ List<Widget> adminViews = [
 ];
 List<Widget> mangerViews = [
   DashboardView(),
+  MessagesView(),
   OrdersView(),
   ProductsView(),
-  MessagesView(),
   SettingsView(),
 ];
 List<DatatableHeader> headers = [

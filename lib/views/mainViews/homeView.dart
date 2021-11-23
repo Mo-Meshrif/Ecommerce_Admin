@@ -19,6 +19,7 @@ class HomeView extends StatelessWidget {
           List<Widget> homeViews =
               userRole == 'Admin' ? adminViews : mangerViews;
           int index = homeController.currentItem;
+          int messagesIndex= userRole == 'Admin' ? 3:1;
           int logoutIndex = homeItems.indexOf(homeItems.last);
           bool isNotify = homeController.isNotify.value;
           Get.put(CategoryViewModel());
@@ -114,7 +115,7 @@ class HomeView extends StatelessWidget {
               ],
             ),
             floatingActionButton:
-                index != logoutIndex && index != 3 && !isNotify
+                index != logoutIndex && index != messagesIndex && !isNotify
                     ? FloatingActionButton(
                         backgroundColor: priColor,
                         onPressed: () => homeController.changeNotifyState(),
