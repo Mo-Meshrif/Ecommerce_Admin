@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
+  final double height;
   final bool shapeIsCircular;
   final Color bodyColor;
   final String initVal;
@@ -10,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final String Function(String) valid;
   final bool obscure;
   final String hintTxt;
+  final TextStyle hintStyle;
   final Icon icon;
   final Widget prefix;
   final Widget suffix;
@@ -27,10 +29,13 @@ class CustomTextField extends StatelessWidget {
     this.shapeIsCircular = false,
     this.onTaped,
     this.txtEditingController,
+    this.height,
+    this.hintStyle,
   });
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       decoration: BoxDecoration(
           color: bodyColor,
           borderRadius: shapeIsCircular ? BorderRadius.circular(20) : null),
@@ -45,6 +50,7 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: hintTxt,
+            hintStyle: hintStyle,
             icon: icon,
             prefixIcon: prefix,
             suffixIcon: suffix),
