@@ -7,6 +7,12 @@ class FireStoreCategory {
   final collectionCategory =
       FirebaseFirestore.instance.collection('Categories');
   final storageRef = FirebaseStorage.instance;
+
+  Future<List<QueryDocumentSnapshot>> getCategoriesFromFireStore() async {
+    var val = await collectionCategory.orderBy('createdAt').get();
+    return val.docs;
+  }
+
   Future<void> addCategoryToFireStore(CategoryModel category) async {
     return await collectionCategory.add(category.toJson());
   }
