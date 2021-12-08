@@ -47,9 +47,9 @@ class AuthViewModel extends GetxController {
         var index = _users.indexWhere((element) => element.id == data['id']);
         if (index >= 0) {
           _users.removeAt(index);
-          _users.add(UserModel.fromJson(data));
+          _users.add(UserModel.fromJson(false,element.id,data));
         } else {
-          _users.add(UserModel.fromJson(data));
+          _users.add(UserModel.fromJson(false,element.id,data));
         }
       });
       update();

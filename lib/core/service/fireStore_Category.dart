@@ -22,7 +22,11 @@ class FireStoreCategory {
   }
 
   Future<void> deleteCategoryfromFireStore(CategoryModel category) async {
-    return await collectionCategory.doc(category.id).delete();
+    return await collectionCategory.doc(category.id).delete().then((_) => storageRef
+        .ref()
+        .child('categories')
+        .child('${category.txt}')
+        .child('${category.txt}.png').delete());
   }
 
   Future<String> uploadCatImage(Uint8List pic, String catTitle) async {

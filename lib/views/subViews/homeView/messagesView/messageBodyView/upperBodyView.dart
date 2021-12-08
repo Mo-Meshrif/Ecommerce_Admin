@@ -100,7 +100,7 @@ class UpperBodyView extends StatelessWidget {
                                     snapshot.hasData ? snapshot.data.docs : [];
                                 List<UserModel> spUsers = userSnap
                                     .map(
-                                        (doc) => UserModel.fromJson(doc.data()))
+                                        (doc) => UserModel.fromJson(false,doc.id,doc.data()))
                                     .where((element) => messageVal != ''
                                         ? element.userName
                                             .startsWith(messageVal)

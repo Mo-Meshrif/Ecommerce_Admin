@@ -29,7 +29,6 @@ class ProductsHeader extends StatelessWidget {
             ? (categories[catIndex].subCat['s' + '$mainCatIndex'] as List)
                 .cast<String>()
             : [];
-        bool isTrend = productController.isTrend;
         List<String> colors = productController.colors;
         List<String> selectedColors = productController.selectedColors;
         Map<String, List<String>> sizesMap = productController.sizes;
@@ -104,7 +103,7 @@ class ProductsHeader extends StatelessWidget {
                 SizedBox(height: 10),
                 CustomPopupMenu(
                   title: productController.season,
-                  items: ['Summer', 'Winter'],
+                  items: ['Summer', 'Winter','Not defined'],
                   onSelect: (val) => productController.getSelectedSesson(val),
                 ),
                 SizedBox(height: 15),
@@ -114,7 +113,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
-                    onChanged: (val) => productController.prodName=val,
+                    onChanged: (val) => productController.prodName = val,
                     valid: (val) {
                       if (val.isEmpty) {
                         return 'The Feild is empty';
@@ -127,22 +126,27 @@ class ProductsHeader extends StatelessWidget {
                 SizedBox(height: 15),
                 CustomText(txt: 'Trending ?!'),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                        onPressed: () => productController.getTrendState(true),
-                        child: CustomText(
-                          txt: 'Yes',
-                          txtColor: isTrend ? priColor : null,
-                        )),
-                    TextButton(
-                        onPressed: () => productController.getTrendState(false),
-                        child: CustomText(
-                          txt: 'No',
-                          txtColor: !isTrend ? priColor : null,
-                        ))
-                  ],
+                GetBuilder<ProductViewModel>(
+                  id: 0,
+                  builder: (productController) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () =>
+                              productController.getTrendState(true),
+                          child: CustomText(
+                            txt: 'Yes',
+                            txtColor: productController.isTrend ? priColor : null,
+                          )),
+                      TextButton(
+                          onPressed: () =>
+                              productController.getTrendState(false),
+                          child: CustomText(
+                            txt: 'No',
+                            txtColor: !productController.isTrend ? priColor : null,
+                          ))
+                    ],
+                  ),
                 ),
                 SizedBox(height: 15),
                 CustomText(txt: 'Select Color(s)'),
@@ -214,7 +218,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
-                    onChanged: (val) => productController.brandName=val,
+                    onChanged: (val) => productController.brandName = val,
                     valid: (val) {
                       if (val.isEmpty) {
                         return 'The Feild is empty';
@@ -231,7 +235,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
-                    onChanged: (val) => productController.materialType=val,
+                    onChanged: (val) => productController.materialType = val,
                     valid: (val) {
                       if (val.isEmpty) {
                         return 'The Feild is empty';
@@ -248,7 +252,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
-                    onChanged: (val) => productController.prodCondition=val,
+                    onChanged: (val) => productController.prodCondition = val,
                     valid: (val) {
                       if (val.isEmpty) {
                         return 'The Feild is empty';
@@ -265,7 +269,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
-                    onChanged: (val) => productController.prodSku=val,
+                    onChanged: (val) => productController.prodSku = val,
                     valid: (val) {
                       if (val.isEmpty) {
                         return 'The Feild is empty';
@@ -282,7 +286,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
-                    onChanged: (val) => productController.prodPrice=val,
+                    onChanged: (val) => productController.prodPrice = val,
                     valid: (val) {
                       if (val.isEmpty) {
                         return 'The Feild is empty';
@@ -369,7 +373,7 @@ class ProductsHeader extends StatelessWidget {
                                 condition: productController.prodCondition,
                                 sku: productController.prodSku,
                                 material: productController.materialType,
-                                trending: isTrend,
+                                trending: productController.isTrend,
                               ),
                               cat,
                               productController.pickedImage);

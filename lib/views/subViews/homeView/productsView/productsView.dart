@@ -1,7 +1,7 @@
+import '/views/subViews/homeView/productsView/productsBody.dart';
 import '/core/viewModel/productViewModel.dart';
 import 'package:get/get.dart';
 import '/views/subViews/homeView/productsView/productsHeader.dart';
-import '../../../../widgets/customText.dart';
 import 'package:flutter/material.dart';
 
 class ProductsView extends StatelessWidget {
@@ -16,6 +16,7 @@ class ProductsView extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 )
               : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 250,
@@ -27,11 +28,8 @@ class ProductsView extends StatelessWidget {
                       thickness: 0.5,
                     ),
                     Expanded(
-                        child: Center(
-                      child: CustomText(
-                        txt: 'ProductsView',
-                      ),
-                    ))
+                      child: ProductBody(),
+                    )
                   ],
                 );
         });

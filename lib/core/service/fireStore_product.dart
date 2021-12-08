@@ -11,13 +11,19 @@ class FireStoreProduct {
   }
 
   Future<void> editProductfromFireStore(ProductModel prod) async {
-    return await collectionProduct
-        .doc(prod.id)
-        .update(prod.toJson());
+    return await collectionProduct.doc(prod.id).update(prod.toJson());
   }
 
-  Future<void> deleteProductfromFireStore(ProductModel prod) async {
-    return await collectionProduct.doc(prod.id).delete();
+  Future<void> deleteProductfromFireStore(String cat, ProductModel prod) async {
+    return await collectionProduct.doc(prod.id).delete().then((value) =>
+        storageRef
+            .ref()
+            .child('products')
+            .child('$cat')
+            .child('${prod.classification['category']}')
+            .child('${prod.classification['sub-cat']}')
+            .child('${prod.prodName}.png')
+            .delete());
   }
 
   Future<String> uploadProdImage(
