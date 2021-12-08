@@ -9,11 +9,11 @@ class UserModel {
     this.role,
     this.isOnline,
   });
-  UserModel.fromJson(Map<String, dynamic> map) {
+  UserModel.fromJson(bool fromLocal,String uid,Map<String, dynamic> map) {
     if (map.isEmpty) {
       return;
     }
-    id = map['id'];
+    id = fromLocal?map['id']:uid;
     userName = map['userName'];
     email = map['email'];
     pic = map['pic'];

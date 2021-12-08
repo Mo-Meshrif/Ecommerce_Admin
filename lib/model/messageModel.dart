@@ -22,11 +22,11 @@ class MessageModel {
     this.orderNumber,
     this.isOpened,
   });
-  MessageModel.fromJson(Map<String, dynamic> map) {
+  MessageModel.fromJson(String mid,Map<String, dynamic> map) {
     if (map == null) {
       return;
     }
-    id = map['id'];
+    id = mid;
     messageTime = map['messageTime'];
     vendorId = map['vendorId'];
     customerId = map['customerId'];

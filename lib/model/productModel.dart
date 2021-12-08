@@ -32,11 +32,11 @@ class ProductModel {
     this.classification,
     this.trending,
   });
-  ProductModel.fromJson(Map<String, dynamic> map) {
+  ProductModel.fromJson(String pid,Map<String, dynamic> map) {
     if (map == null) {
       return;
     }
-    id = map['id'];
+    id = pid;
     vendorId = map['vendorId'];
     prodName = map['prodName'];
     imgUrl = map['imgUrl'];

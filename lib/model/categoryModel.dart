@@ -13,11 +13,11 @@ class CategoryModel {
     this.subCat,
   });
 
-  CategoryModel.fromJson(Map<String, dynamic> map) {
+  CategoryModel.fromJson(String cid,Map<String, dynamic> map) {
     if (map.isEmpty) {
       return;
     }
-    id = map['id'];
+    id = cid;
     imgUrl = map['imgUrl'];
     txt = map['txt'];
     avatarCol = map['avatarCol'];
