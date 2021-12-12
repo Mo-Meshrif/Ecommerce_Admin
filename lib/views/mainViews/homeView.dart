@@ -1,3 +1,4 @@
+import '/core/service/fireStore_user.dart';
 import '/core/viewModel/categoryViewModel.dart';
 import '/views/subViews/notificationsView.dart';
 import '../../const.dart';
@@ -11,15 +12,15 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
         builder: (homeController) {
-          AuthViewModel _auth=Get.find();
-          if(_auth.users.isEmpty) _auth.getUsers();
+          AuthViewModel _auth = Get.find();
+          if (_auth.users.isEmpty) _auth.getUsers();
           String userRole = homeController.savedUser.role;
           List<Map<String, String>> homeItems =
               userRole == 'Admin' ? adminItems : mangerItems;
           List<Widget> homeViews =
               userRole == 'Admin' ? adminViews : mangerViews;
           int index = homeController.currentItem;
-          int messagesIndex= userRole == 'Admin' ? 3:1;
+          int messagesIndex = userRole == 'Admin' ? 3 : 1;
           int logoutIndex = homeItems.indexOf(homeItems.last);
           bool isNotify = homeController.isNotify.value;
           Get.put(CategoryViewModel());
@@ -68,6 +69,10 @@ class HomeView extends StatelessWidget {
                             onTap: () {
                               homeController.changeItemsIndex(i);
                               if (i == logoutIndex) {
+                                FireStoreUser().updateOnlineState(
+                                  homeController.savedUser.id,
+                                  false,
+                                );
                                 Get.find<AuthViewModel>().logout();
                               }
                             },
