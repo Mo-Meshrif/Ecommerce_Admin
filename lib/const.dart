@@ -3,7 +3,7 @@ import 'views/subViews/homeView/shopsView.dart';
 import 'views/subViews/homeView/customersView.dart';
 import 'views/subViews/homeView/dashboardView.dart';
 import 'views/subViews/homeView/messagesView/messagesView.dart';
-import 'views/subViews/homeView/ordersView.dart';
+import 'views/subViews/homeView/ordersView/ordersView.dart';
 import 'views/subViews/homeView/productsView/productsView.dart';
 import 'views/subViews/homeView/settingsView.dart';
 import 'package:responsive_table/DatatableHeader.dart';
