@@ -57,8 +57,8 @@ class OrdersView extends StatelessWidget {
                                       sendMessage: () {
                                         Navigator.of(ctx).pop();
                                         MessageViewModel _messageController =
-                                            Get.find();
-                                        _messageController.isNew();
+                                            Get.put(MessageViewModel());
+                                        _messageController.isNewMessage.value=true;
                                         _messageController.getOrderNumber(
                                             orderController
                                                 .selectedOrder.orderNumber);

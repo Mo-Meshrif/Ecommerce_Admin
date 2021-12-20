@@ -9,11 +9,11 @@ class MessagesView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GetBuilder<MessageViewModel>(
+        init: MessageViewModel(),
         builder: (messageController) =>
             messageController.headerMessages.isEmpty &&
                     messageController.isLoading.value
-                ? Center(
-                    child: CircularProgressIndicator())
+                ? Center(child: CircularProgressIndicator())
                 : Row(
                     children: [
                       Container(

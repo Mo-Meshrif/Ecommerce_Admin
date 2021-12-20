@@ -26,7 +26,6 @@ class HomeView extends StatelessWidget {
           int logoutIndex = homeItems.indexOf(homeItems.last);
           bool isNotify = homeController.isNotify.value;
           Get.put(CategoryViewModel());
-          Get.put(MessageViewModel());
           Get.put(OrderViewModel());
           return Scaffold(
             body: Row(
@@ -73,15 +72,13 @@ class HomeView extends StatelessWidget {
                           return GestureDetector(
                             onTap: () {
                               homeController.changeItemsIndex(i);
-                              MessageViewModel _messageController = Get.find();
                               if (i == logoutIndex) {
                                 FireStoreUser().updateOnlineState(
                                   homeController.savedUser.id,
                                   false,
                                 );
+                                Get.delete<MessageViewModel>();
                                 Get.find<AuthViewModel>().logout();
-                              } else if (i != 1) {
-                                _messageController.restParameters();
                               }
                             },
                             child: Container(

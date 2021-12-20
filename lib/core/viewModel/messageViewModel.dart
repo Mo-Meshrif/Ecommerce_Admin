@@ -172,15 +172,4 @@ class MessageViewModel extends GetxController {
         .updateIsOpenedParameter(id)
         .then((_) => getLastMessages());
   }
-
-  restParameters() {
-    restToUserValues();
-    isNewMessage.value = false;
-    isToBarClicked.value = false;
-    isLoading.value = false;
-    searchVal = '';
-    _searchdMessages = [];
-    orderNumber = null;
-    update();
-  }
 }
