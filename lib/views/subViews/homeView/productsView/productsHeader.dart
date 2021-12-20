@@ -103,7 +103,7 @@ class ProductsHeader extends StatelessWidget {
                 SizedBox(height: 10),
                 CustomPopupMenu(
                   title: productController.season,
-                  items: ['Summer', 'Winter','Not defined'],
+                  items: ['Summer', 'Winter', 'Not defined'],
                   onSelect: (val) => productController.getSelectedSesson(val),
                 ),
                 SizedBox(height: 15),
@@ -136,14 +136,16 @@ class ProductsHeader extends StatelessWidget {
                               productController.getTrendState(true),
                           child: CustomText(
                             txt: 'Yes',
-                            txtColor: productController.isTrend ? priColor : null,
+                            txtColor:
+                                productController.isTrend ? priColor : null,
                           )),
                       TextButton(
                           onPressed: () =>
                               productController.getTrendState(false),
                           child: CustomText(
                             txt: 'No',
-                            txtColor: !productController.isTrend ? priColor : null,
+                            txtColor:
+                                !productController.isTrend ? priColor : null,
                           ))
                     ],
                   ),
@@ -361,8 +363,6 @@ class ProductsHeader extends StatelessWidget {
                                   'category': productController.mainSubCat,
                                   'sub-cat': productController.subCat
                                 },
-                                vendorId: productController
-                                    .homeViewModel.savedUser.id,
                                 prodName: productController.prodName,
                                 season: productController.season,
                                 color: selectedColors,

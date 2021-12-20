@@ -42,15 +42,17 @@ class MessageBodyView extends StatelessWidget {
                     notMe: me.id == to.id ? from : to,
                     me: me,
                   )
-                : indexOfShownMessage==null
-                    ? Center(
-                      child: CustomText(
-                          txt:
-                              "Select your message from the left corner to see it's content !",
-                          maxLine: 2,
-                          fSize: 18,
-                        ),
-                    )
-                    : Padding(padding: EdgeInsets.zero);
+                : messageController.headerMessages.isEmpty
+                    ? Padding(padding: EdgeInsets.zero)
+                    : indexOfShownMessage == null
+                        ? Center(
+                            child: CustomText(
+                              txt:
+                                  "Select your message from the left corner to see it's content !",
+                              maxLine: 2,
+                              fSize: 18,
+                            ),
+                          )
+                        : Padding(padding: EdgeInsets.zero);
       });
 }

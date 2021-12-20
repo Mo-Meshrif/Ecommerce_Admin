@@ -1,3 +1,5 @@
+import '/core/viewModel/messageViewModel.dart';
+import '/core/viewModel/orderViewModel.dart';
 import '/core/service/fireStore_user.dart';
 import '/core/viewModel/categoryViewModel.dart';
 import '/views/subViews/notificationsView.dart';
@@ -24,8 +26,11 @@ class HomeView extends StatelessWidget {
           int logoutIndex = homeItems.indexOf(homeItems.last);
           bool isNotify = homeController.isNotify.value;
           Get.put(CategoryViewModel());
+          Get.put(MessageViewModel());
+          Get.put(OrderViewModel());
           return Scaffold(
             body: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   color: priColor,
@@ -68,12 +73,15 @@ class HomeView extends StatelessWidget {
                           return GestureDetector(
                             onTap: () {
                               homeController.changeItemsIndex(i);
+                              MessageViewModel _messageController = Get.find();
                               if (i == logoutIndex) {
                                 FireStoreUser().updateOnlineState(
                                   homeController.savedUser.id,
                                   false,
                                 );
                                 Get.find<AuthViewModel>().logout();
+                              } else if (i != 1) {
+                                _messageController.restParameters();
                               }
                             },
                             child: Container(

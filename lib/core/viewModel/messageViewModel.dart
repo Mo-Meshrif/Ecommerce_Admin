@@ -24,9 +24,16 @@ class MessageViewModel extends GetxController {
           ? _headerMessages
           : [];
   int indexOfShownMessage;
+  int orderNumber;
+
   onInit() {
     getLastMessages();
     super.onInit();
+  }
+
+  getOrderNumber(val) {
+    orderNumber = val;
+    update();
   }
 
   isNew() {
@@ -147,12 +154,12 @@ class MessageViewModel extends GetxController {
     update();
   }
 
-  getSearchedMessage(val) {
+  getSearchedMessage(String val) {
     searchVal = val;
     _searchdMessages = _headerMessages
         .where((message) => message.from.id == homeViewModel.savedUser.id
-            ? message.to.userName.startsWith(val)
-            : message.from.userName.startsWith(val))
+            ? message.to.userName.toLowerCase().startsWith(val.toLowerCase())
+            : message.from.userName.toLowerCase().startsWith(val.toLowerCase()))
         .toList();
     if (_searchdMessages.isNotEmpty) {
       indexOfShownMessage = null;
@@ -164,5 +171,16 @@ class MessageViewModel extends GetxController {
     FireStoreMessage()
         .updateIsOpenedParameter(id)
         .then((_) => getLastMessages());
+  }
+
+  restParameters() {
+    restToUserValues();
+    isNewMessage.value = false;
+    isToBarClicked.value = false;
+    isLoading.value = false;
+    searchVal = '';
+    _searchdMessages = [];
+    orderNumber = null;
+    update();
   }
 }

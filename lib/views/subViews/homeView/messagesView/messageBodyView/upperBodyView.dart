@@ -15,7 +15,7 @@ class UpperBodyView extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return GetBuilder<MessageViewModel>(
       builder: (messageController) {
-        String messageVal = messageController.toValue;
+        String toVal = messageController.toValue;
         UserModel notMe = messageController.toUser;
         return Column(
           children: [
@@ -93,51 +93,70 @@ class UpperBodyView extends StatelessWidget {
                           child: StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('Users')
-                                  .where('role', isNotEqualTo: myRole)
+                                  .where('role',
+                                      isEqualTo: myRole == 'Admin'
+                                          ? 'Manger'
+                                          : 'Admin')
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 List<DocumentSnapshot> userSnap =
                                     snapshot.hasData ? snapshot.data.docs : [];
                                 List<UserModel> spUsers = userSnap
-                                    .map(
-                                        (doc) => UserModel.fromJson(false,doc.id,doc.data()))
-                                    .where((element) => messageVal != ''
+                                    .map((doc) => UserModel.fromJson(
+                                        false, doc.id, doc.data()))
+                                    .where((element) => toVal != ''
                                         ? element.userName
-                                            .startsWith(messageVal)
+                                            .toLowerCase()
+                                            .startsWith(toVal.toLowerCase())
                                         : false)
                                     .toList();
-                                return ListView.builder(
-                                    controller: ScrollController(),
-                                    itemCount: spUsers.length,
-                                    itemBuilder: (context, i) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          messageController
-                                              .getToUser(spUsers[i]);
-                                          messageController.closeToBar();
-                                        },
-                                        child: ListTile(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 10),
-                                          horizontalTitleGap: 8,
-                                          leading: CircleAvatar(
-                                            radius: 30,
-                                            child: Icon(Icons.person),
-                                          ),
-                                          title: RichText(
-                                              text: TextSpan(children: [
-                                            TextSpan(
-                                                text: spUsers[i].userName.capitalizeFirst,
-                                                style: TextStyle(
-                                                    color: Colors.black)),
-                                            TextSpan(
-                                                text: ' "${spUsers[i].role}"',
-                                                style: TextStyle(
-                                                    color: Colors.red)),
-                                          ])),
-                                        ),
-                                      );
-                                    });
+                                return spUsers.isEmpty
+                                    ? toVal != ''
+                                        ? Center(
+                                            child: CustomText(
+                                              txt: 'No User ! Try a new search',
+                                            ),
+                                          )
+                                        : Padding(padding: EdgeInsets.zero)
+                                    : ListView.builder(
+                                        controller: ScrollController(),
+                                        itemCount: spUsers.length,
+                                        itemBuilder: (context, i) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              messageController
+                                                  .getOrderNumber(null);
+                                              messageController
+                                                  .getToUser(spUsers[i]);
+                                              messageController.closeToBar();
+                                            },
+                                            child: ListTile(
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 5,
+                                                      vertical: 10),
+                                              horizontalTitleGap: 8,
+                                              leading: CircleAvatar(
+                                                radius: 30,
+                                                child: Icon(Icons.person),
+                                              ),
+                                              title: RichText(
+                                                  text: TextSpan(children: [
+                                                TextSpan(
+                                                    text: spUsers[i]
+                                                        .userName
+                                                        .capitalizeFirst,
+                                                    style: TextStyle(
+                                                        color: Colors.black)),
+                                                TextSpan(
+                                                    text:
+                                                        ' "${spUsers[i].role}"',
+                                                    style: TextStyle(
+                                                        color: Colors.red)),
+                                              ])),
+                                            ),
+                                          );
+                                        });
                               }),
                         ),
                       )

@@ -129,7 +129,6 @@ class ProductViewModel extends GetxController {
           FireStoreProduct()
               .addProductToFireStore(ProductModel(
             classification: prod.classification,
-            vendorId: prod.vendorId,
             prodName: prod.prodName,
             imgUrl: imgUrl,
             season: prod.season,
@@ -311,7 +310,6 @@ class ProductViewModel extends GetxController {
               .editProductfromFireStore(ProductModel(
             id: prod.id,
             classification: prod.classification,
-            vendorId: prod.vendorId,
             prodName: prod.prodName,
             imgUrl: imgUrl,
             season: prod.season,
@@ -339,9 +337,9 @@ class ProductViewModel extends GetxController {
     }
   }
 
-  deleteProd( ProductModel prod, BuildContext ctx) {
+  deleteProd(ProductModel prod, BuildContext ctx) {
     FireStoreProduct()
-        .deleteProductfromFireStore(currentCato.txt,prod)
+        .deleteProductfromFireStore(currentCato.txt, prod)
         .then((_) => Navigator.of(ctx).popUntil(ModalRoute.withName('/')));
   }
 

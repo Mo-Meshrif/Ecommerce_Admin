@@ -44,8 +44,7 @@ class _LowerBodyViewState extends State<LowerBodyView> {
           List<DocumentSnapshot> messageSnap =
               snapshot.hasData ? snapshot.data.docs : [];
           List messages = messageSnap
-              .where((element) =>
-                  ((element['from'] == widget.me.id ||
+              .where((element) => ((element['from'] == widget.me.id ||
                       element['to'] == widget.me.id) &&
                   (element['from'] == widget.notMe.id ||
                       element['to'] == widget.notMe.id)))
@@ -80,10 +79,9 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                                       messages[i]['from'] == widget.me.id
                                           ? Radius.circular(15)
                                           : Radius.zero,
-                                  bottomLeft:
-                                      messages[i]['to'] == widget.me.id
-                                          ? Radius.circular(15)
-                                          : Radius.zero)),
+                                  bottomLeft: messages[i]['to'] == widget.me.id
+                                      ? Radius.circular(15)
+                                      : Radius.zero)),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CustomText(
@@ -125,14 +123,30 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                       child: GestureDetector(
                           onTap: () {
                             if (_textController.text.isNotEmpty) {
-                              messageController.uploadMessage(
-                                  createdAt: Timestamp.now(),
-                                  vendorId: '',
-                                  customerId: '',
-                                  from: widget.me.id,
-                                  to: widget.notMe.id,
-                                  message: _textController.text,
-                                  orderNumber: null);
+                              (messageController.orderNumber != null ||
+                                      messageSnap.first['orderNumber'] != null)
+                                  ? messageController.uploadMessage(
+                                      createdAt: Timestamp.now(),
+                                      vendorId: widget.me.id,
+                                      customerId: widget.notMe.id,
+                                      from: widget.me.id,
+                                      to: widget.notMe.id,
+                                      message: _textController.text,
+                                      orderNumber:
+                                          messageSnap.first['orderNumber'] !=
+                                                  null
+                                              ? messageSnap.first['orderNumber']
+                                              : messageController.orderNumber,
+                                    )
+                                  : messageController.uploadMessage(
+                                      createdAt: Timestamp.now(),
+                                      vendorId: '',
+                                      customerId: '',
+                                      from: widget.me.id,
+                                      to: widget.notMe.id,
+                                      message: _textController.text,
+                                      orderNumber: null,
+                                    );
                               _textController.text = '';
                               if (messageController.isNewMessage.value) {
                                 messageController.isNew();

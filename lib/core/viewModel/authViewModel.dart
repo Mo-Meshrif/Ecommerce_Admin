@@ -37,7 +37,11 @@ class AuthViewModel extends GetxController {
   }
 
   bool isNotCustomer(String loginEmail) {
-    return _users.firstWhere((element) => element.email == loginEmail).role!='Customer';
+    var _index = _users.indexWhere((element) => element.email == loginEmail);
+    return _index == -1
+        ? true
+        : _users.firstWhere((element) => element.email == loginEmail).role !=
+            'Customer';
   }
 
   Future<void> getUsers() async {
@@ -47,9 +51,9 @@ class AuthViewModel extends GetxController {
         var index = _users.indexWhere((element) => element.id == data['id']);
         if (index >= 0) {
           _users.removeAt(index);
-          _users.add(UserModel.fromJson(false,element.id,data));
+          _users.add(UserModel.fromJson(false, element.id, data));
         } else {
-          _users.add(UserModel.fromJson(false,element.id,data));
+          _users.add(UserModel.fromJson(false, element.id, data));
         }
       });
       update();
@@ -68,7 +72,7 @@ class AuthViewModel extends GetxController {
         .onError((error, stackTrace) {
       _loading.value = false;
       update();
-      return handleAuthErrors(error.toString());
+      return handleAuthErrors(error.message);
     }).then((user) async {
       _loading.value = false;
       if (user != null) {
@@ -94,7 +98,7 @@ class AuthViewModel extends GetxController {
           .onError((error, stackTrace) {
         _loading.value = false;
         update();
-        return handleAuthErrors(error.toString());
+        return handleAuthErrors(error.message);
       }).then((user) {
         _loading.value = false;
         if (user != null) {
@@ -113,31 +117,37 @@ class AuthViewModel extends GetxController {
   }
 
   forgetPassword() async {
-    try {
-      _loading.value = true;
-      update();
-      await _auth.sendPasswordResetEmail(email: email).then((_) {
+    if (isNotCustomer(email)) {
+      try {
+        _loading.value = true;
+        update();
+        await _auth.sendPasswordResetEmail(email: email).then((_) {
+          _loading.value = false;
+          update();
+          Get.snackbar(
+            'Congratulations',
+            'Check you email !',
+            colorText: Colors.white,
+            snackPosition: SnackPosition.TOP,
+            duration: Duration(seconds: 5),
+          );
+        });
+      } catch (e) {
         _loading.value = false;
         update();
-        Get.snackbar(
-          'Congratulations',
-          'Check you email !',
-          colorText: Colors.white,
-          snackPosition: SnackPosition.TOP,
-          duration: Duration(seconds: 5),
-        );
-      });
-    } catch (e) {
+        handleAuthErrors(e.message);
+      }
+    } else {
       _loading.value = false;
       update();
-      handleAuthErrors(e);
+      handleAuthErrors('Customers are not allowed to enter !');
     }
   }
 
   handleAuthErrors(String error) {
     Get.snackbar(
       'AuthError',
-      error,
+      error.toString(),
       colorText: Colors.white,
       snackPosition: SnackPosition.TOP,
       duration: Duration(seconds: 5),
