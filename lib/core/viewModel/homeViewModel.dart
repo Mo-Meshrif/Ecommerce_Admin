@@ -7,7 +7,6 @@ class HomeViewModel extends GetxController {
   int currentItem = 0;
   LocalStorageData _localStorageData = Get.find<LocalStorageData>();
   UserModel savedUser;
-  ValueNotifier<bool> isNotify = ValueNotifier(false);
   ValueNotifier<bool> sortCustomersAscending = ValueNotifier(true);
   ValueNotifier<bool> sortShopsAscending = ValueNotifier(true);
   String sortCustomersColumn, sortShopsColumn;
@@ -18,12 +17,6 @@ class HomeViewModel extends GetxController {
 
   changeItemsIndex(val) {
     currentItem = val;
-    isNotify.value = false;
-    update();
-  }
-
-  changeNotifyState() {
-    isNotify.value = true;
     update();
   }
 

@@ -24,7 +24,6 @@ class HomeView extends StatelessWidget {
           int index = homeController.currentItem;
           int messagesIndex = userRole == 'Admin' ? 3 : 1;
           int logoutIndex = homeItems.indexOf(homeItems.last);
-          bool isNotify = homeController.isNotify.value;
           Get.put(CategoryViewModel());
           Get.put(OrderViewModel());
           return Scaffold(
@@ -51,24 +50,21 @@ class HomeView extends StatelessWidget {
                         itemCount: homeItems.length,
                         padding: EdgeInsets.only(left: 20),
                         itemBuilder: (context, i) {
-                          Color bodyColor =
-                              index == i && i != logoutIndex && !isNotify
-                                  ? swatchColor
-                                  : priColor;
-                          Color iconColor =
-                              index == i && i != logoutIndex && !isNotify
-                                  ? null
-                                  : swatchColor;
+                          Color bodyColor = index == i && i != logoutIndex
+                              ? swatchColor
+                              : priColor;
+                          Color iconColor = index == i && i != logoutIndex
+                              ? null
+                              : swatchColor;
                           BorderRadiusGeometry borderR =
                               index == i && i != logoutIndex
                                   ? BorderRadius.only(
                                       topLeft: Radius.circular(5),
                                       bottomLeft: Radius.circular(5))
                                   : null;
-                          Color contentColor =
-                              index == i && i != logoutIndex && !isNotify
-                                  ? priColor
-                                  : swatchColor;
+                          Color contentColor = index == i && i != logoutIndex
+                              ? priColor
+                              : swatchColor;
                           return GestureDetector(
                             onTap: () {
                               homeController.changeItemsIndex(i);
@@ -111,27 +107,26 @@ class HomeView extends StatelessWidget {
                 Expanded(
                   child: Container(
                     color: Colors.white,
-                    child: isNotify
-                        ? NotificationsView()
-                        : index != logoutIndex
-                            ? homeViews[index]
-                            : Center(
-                                child: CustomText(
-                                  txt: 'Good bye !',
-                                ),
-                              ),
+                    child: index != logoutIndex
+                        ? homeViews[index]
+                        : Center(
+                            child: CustomText(
+                              txt: 'Good bye !',
+                            ),
+                          ),
                   ),
                 ),
               ],
             ),
-            floatingActionButton:
-                index != logoutIndex && index != messagesIndex && !isNotify
-                    ? FloatingActionButton(
-                        backgroundColor: priColor,
-                        onPressed: () => homeController.changeNotifyState(),
-                        child: Icon(Icons.notifications),
-                      )
-                    : null,
+            floatingActionButton: index != logoutIndex && index != messagesIndex
+                ? FloatingActionButton(
+                    backgroundColor: priColor,
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (ctx) => NotificationsView()),
+                    child: Icon(Icons.notifications),
+                  )
+                : null,
           );
         },
       );
