@@ -43,6 +43,7 @@ dependencies:
   responsive_table: ^0.1.1+8
   dotted_border: ^2.0.0+1
   timelines: ^0.1.0
+  syncfusion_flutter_charts: ^19.4.38
 dev_dependencies:
   flutter_test:
     sdk: flutter

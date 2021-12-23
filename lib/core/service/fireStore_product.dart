@@ -6,6 +6,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 class FireStoreProduct {
   final collectionProduct = FirebaseFirestore.instance.collection('Products');
   final storageRef = FirebaseStorage.instance;
+
+  Future<List<QueryDocumentSnapshot>> getProductsfromFireStore() async {
+    var val = await collectionProduct.get();
+    return val.docs;
+  }
+
   Future<void> addProductToFireStore(ProductModel prod) async {
     return await collectionProduct.add(prod.toJson());
   }
