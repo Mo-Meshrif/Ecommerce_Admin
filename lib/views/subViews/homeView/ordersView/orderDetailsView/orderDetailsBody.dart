@@ -266,6 +266,7 @@ class OrderDetailsBody extends StatelessWidget {
                                                                 true;
                                                             orderController
                                                                 .changeOrderStatus(
+                                                              order.customerId,
                                                               order.orderId,
                                                               order.orderTrack,
                                                             );
@@ -278,8 +279,11 @@ class OrderDetailsBody extends StatelessWidget {
                                                       TextButton(
                                                           onPressed: () =>
                                                               orderController
-                                                                  .cancelOrder(order
-                                                                      .orderId),
+                                                                  .cancelOrder(
+                                                                      order
+                                                                          .customerId,
+                                                                      order
+                                                                          .orderId),
                                                           child: CustomText(
                                                             txt: 'No',
                                                             txtColor:

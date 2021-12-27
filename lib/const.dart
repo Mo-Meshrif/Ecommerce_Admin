@@ -87,3 +87,7 @@ List<DatatableHeader> headers = [
       sortable: true,
       textAlign: TextAlign.left),
 ];
+String serverToken =
+    'AAAAOtJSvxg:APA91bFGC9EUaMW6eilnS3OM0qu3bvWswykHs1BbNh6uZISX6kqr77D8-cnF8jkGdt9HKEQ8N8VsTCy76cBY3p5D5UERU4C-1XqI1LoavWyVWxCVPe-XV0XE1cQJvZ0NuuBlzEZ9it95';
+String vapidKey =
+    'BLmKD0J1hMxp3bCZORqQpj53Q5F6YtUN9ZdrfbmokNRugj-ePwrSnH2WZ5mHmPnD95IYKZi3Ohvd_9XhWjVg2gc';

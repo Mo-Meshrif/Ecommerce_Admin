@@ -33,7 +33,7 @@ class CategoryViewModel extends GetxController {
 
   getCatImage() async {
     Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImage(outputType: ImageType.bytes);
+        await ImagePickerWeb.getImageAsBytes();
     if (bytesFromPicker != null) {
       pickedImage = bytesFromPicker;
     }

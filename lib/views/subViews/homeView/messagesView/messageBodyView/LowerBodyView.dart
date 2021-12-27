@@ -123,8 +123,7 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                       child: GestureDetector(
                           onTap: () {
                             if (_textController.text.isNotEmpty) {
-                              (messageController.orderNumber != null ||
-                                      messageSnap.first['orderNumber'] != null)
+                              widget.notMe.role == 'Customer'
                                   ? messageController.uploadMessage(
                                       createdAt: Timestamp.now(),
                                       vendorId: widget.me.id,

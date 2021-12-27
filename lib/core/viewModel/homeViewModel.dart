@@ -16,8 +16,10 @@ class HomeViewModel extends GetxController {
   }
 
   changeItemsIndex(val) {
-    currentItem = val;
-    update();
+    if (currentItem != val) {
+      currentItem = val;
+      update();
+    }
   }
 
   getSavedUser() {

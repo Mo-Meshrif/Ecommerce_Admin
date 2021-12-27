@@ -41,7 +41,7 @@ class ProductViewModel extends GetxController {
   List<String> selectedSizes = [];
   getProdImage() async {
     Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImage(outputType: ImageType.bytes);
+        await ImagePickerWeb.getImageAsBytes();
     if (bytesFromPicker != null) {
       pickedImage = bytesFromPicker;
     }
@@ -229,7 +229,7 @@ class ProductViewModel extends GetxController {
 
   reGetProdImage() async {
     Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImage(outputType: ImageType.bytes);
+        await ImagePickerWeb.getImageAsBytes();
     if (bytesFromPicker != null) {
       rePickedImage = bytesFromPicker;
     }

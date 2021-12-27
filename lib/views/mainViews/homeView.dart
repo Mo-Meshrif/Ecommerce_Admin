@@ -1,3 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '/model/notificationModel.dart';
+import '../../widgets/onMessageNotify.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import '/core/viewModel/notificationViewModel.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/core/service/fireStore_user.dart';
@@ -10,7 +15,33 @@ import '../../widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    onMessage();
+    super.initState();
+  }
+
+  void onMessage() {
+    FirebaseMessaging.onMessage.listen(
+      (event) {
+        if (Get.find<HomeViewModel>().currentItem != 1) {
+          showDialog(
+            context: context,
+            builder: (ctx) => OnMessageNotify(
+              notification: event.notification,
+            ),
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
         builder: (homeController) {
@@ -22,10 +53,10 @@ class HomeView extends StatelessWidget {
           List<Widget> homeViews =
               userRole == 'Admin' ? adminViews : mangerViews;
           int index = homeController.currentItem;
-          int messagesIndex = userRole == 'Admin' ? 3 : 1;
           int logoutIndex = homeItems.indexOf(homeItems.last);
           Get.put(CategoryViewModel());
           Get.put(OrderViewModel());
+          Get.put(NotificationViewModel());
           return Scaffold(
             body: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,14 +149,42 @@ class HomeView extends StatelessWidget {
                 ),
               ],
             ),
-            floatingActionButton: index != logoutIndex && index != messagesIndex
-                ? FloatingActionButton(
-                    backgroundColor: priColor,
-                    onPressed: () => showDialog(
-                        context: context,
-                        builder: (ctx) => NotificationsView()),
-                    child: Icon(Icons.notifications),
-                  )
+            floatingActionButton: index != logoutIndex && index != 1
+                ? StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('Notifications')
+                        .orderBy('createdAt', descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      List<DocumentSnapshot> notificationsSnap =
+                          snapshot.hasData ? snapshot.data.docs : [];
+                      List<NotificationModel> notifications = notificationsSnap
+                          .map(
+                            (e) => NotificationModel.fromJson(
+                              e.id,
+                              e.data(),
+                            ),
+                          )
+                          .where((notify) =>
+                              notify.to == homeController.savedUser.id)
+                          .toList();
+                      bool hasNew = notifications
+                              .indexWhere((notify) => !notify.seen)
+                              .isNegative
+                          ? false
+                          : true;
+                      return FloatingActionButton(
+                        backgroundColor: priColor,
+                        onPressed: () => showDialog(
+                            context: context,
+                            builder: (ctx) => NotificationsView(
+                                notifications: notifications)),
+                        child: Icon(
+                          Icons.notifications,
+                          color: hasNew ? Colors.red : null,
+                        ),
+                      );
+                    })
                 : null,
           );
         },

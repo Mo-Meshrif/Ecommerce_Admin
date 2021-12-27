@@ -1,3 +1,4 @@
+import '/core/viewModel/notificationViewModel.dart';
 import '/core/viewModel/dashboardViewModel.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/core/viewModel/productViewModel.dart';
@@ -19,5 +20,6 @@ class Binds extends Bindings {
     Get.lazyPut(() => ProductViewModel());
     Get.lazyPut(() => OrderViewModel());
     Get.lazyPut(() => DashboardViewModel());
+    Get.lazyPut(() => NotificationViewModel());
   }
 }

@@ -1,3 +1,4 @@
+import '/core/viewModel/notificationViewModel.dart';
 import '/core/service/fireStore_message.dart';
 import '/core/viewModel/authViewModel.dart';
 import '/core/viewModel/homeViewModel.dart';
@@ -16,6 +17,7 @@ class MessageViewModel extends GetxController {
   String searchVal = '';
   HomeViewModel homeViewModel = Get.find();
   AuthViewModel _authViewModel = Get.find();
+  NotificationViewModel _notificationViewModel = Get.find();
   List<MessageModel> _headerMessages = [];
   List<MessageModel> _searchdMessages = [];
   List<MessageModel> get headerMessages => _searchdMessages.isNotEmpty
@@ -93,6 +95,8 @@ class MessageViewModel extends GetxController {
       getLastMessages();
       indexOfShownMessage = 0;
       update();
+      _notificationViewModel.sendNotification(
+          to, 'New message from ');
     });
   }
 
