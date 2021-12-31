@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/model/notificationModel.dart';
-import '../../widgets/onMessageNotify.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import '/core/viewModel/notificationViewModel.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '/core/viewModel/orderViewModel.dart';
@@ -15,33 +13,7 @@ import '../../widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeView extends StatefulWidget {
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  @override
-  void initState() {
-    onMessage();
-    super.initState();
-  }
-
-  void onMessage() {
-    FirebaseMessaging.onMessage.listen(
-      (event) {
-        if (Get.find<HomeViewModel>().currentItem != 1) {
-          showDialog(
-            context: context,
-            builder: (ctx) => OnMessageNotify(
-              notification: event.notification,
-            ),
-          );
-        }
-      },
-    );
-  }
-
+class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
         builder: (homeController) {
@@ -166,7 +138,8 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           )
                           .where((notify) =>
-                              notify.to == homeController.savedUser.id)
+                              notify.to.indexOf(homeController.savedUser.id) >
+                              0)
                           .toList();
                       bool hasNew = notifications
                               .indexWhere((notify) => !notify.seen)

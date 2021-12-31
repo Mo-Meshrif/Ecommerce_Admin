@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/widgets/onMessageNotify.dart';
 import '/model/notificationModel.dart';
 import 'package:http/http.dart' as http;
 import '/core/service/fireStore_notification.dart';
@@ -15,6 +16,7 @@ class NotificationViewModel extends GetxController {
   onInit() {
     addDeviceToken();
     getDevicesToken();
+    FirebaseMessaging.onMessage.listen((event) => onMessage(event));
     super.onInit();
   }
 
@@ -68,13 +70,19 @@ class NotificationViewModel extends GetxController {
             (_) => FireStoreNotification().addNotificationToFireStore(
               NotificationModel(
                 from: _homeViewModel.savedUser.id,
-                to: uid,
+                to: [uid],
                 message: body,
                 createdAt: Timestamp.now(),
                 seen: false,
               ),
             ),
           );
+    }
+  }
+
+  onMessage(RemoteMessage message) {
+    if (_homeViewModel.currentItem != 1) {
+      Get.dialog(OnMessageNotify(notification: message.notification));
     }
   }
 

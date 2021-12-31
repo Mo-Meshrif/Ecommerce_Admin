@@ -87,6 +87,7 @@ class DashboardViewModel extends GetxController {
         tempList[index].totalPrice += totalPrice;
       }
     });
+    tempList.sort((a,b)=>a.ordersNum.compareTo(b.ordersNum));
     return tempList;
   }
 }

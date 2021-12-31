@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationModel {
-  String id, from, to, message;
+  String id, from, message;
+  List<String> to;
   Timestamp createdAt;
   bool seen;
   NotificationModel({
