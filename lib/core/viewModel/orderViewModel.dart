@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_admin/core/viewModel/notificationViewModel.dart';
+import '/core/viewModel/notificationViewModel.dart';
 import '/model/orderModel.dart';
 import 'package:get/get.dart';
 import 'authViewModel.dart';
@@ -43,10 +43,30 @@ class OrderViewModel extends GetxController {
     await _collectionReference
         .doc(orderId)
         .update({'orderTrack': status}).then((_) {
-      if (selectedOrder.orderTrack.last['status']) {
-        _collectionReference.doc(orderId).update({'status': 'Completed'}).then(
-            (_) => _notificationViewModel.sendNotification(
-                uid, 'Your order has been Completed !'));
+      int index = selectedOrder.orderTrack
+          .lastIndexWhere((orderTrack) => orderTrack['status']);
+      int orderNumber = selectedOrder.orderNumber;
+      switch (index) {
+        case 1:
+          _notificationViewModel.sendNotification(
+              uid, 'Your order #$orderNumber has been Confirmed !');
+          break;
+        case 2:
+          _notificationViewModel.sendNotification(
+              uid, 'Your order #$orderNumber has been Processed !');
+          break;
+        case 3:
+          _notificationViewModel.sendNotification(
+              uid, 'Your order #$orderNumber has been Shipped !');
+          break;
+        case 4:
+          _collectionReference
+              .doc(orderId)
+              .update({'status': 'Completed'}).then((_) =>
+                  _notificationViewModel.sendNotification(
+                      uid, 'Your order #$orderNumber has been Completed !'));
+          break;
+        default:
       }
     });
   }

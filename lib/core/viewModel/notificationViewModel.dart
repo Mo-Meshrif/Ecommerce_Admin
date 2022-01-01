@@ -55,6 +55,7 @@ class NotificationViewModel extends GetxController {
                 'notification': <String, dynamic>{
                   'body': body,
                   'title': 'Notification',
+                  'sound': 'default',
                 },
                 'priority': 'high',
                 'data': <String, dynamic>{
@@ -87,7 +88,7 @@ class NotificationViewModel extends GetxController {
   }
 
   handleOnMessageDetails(String message) {
-    if (message == 'New message from ') {
+    if (message == 'New message ') {
       _homeViewModel.changeItemsIndex(1);
     } else {
       _homeViewModel.changeItemsIndex(2);

@@ -38,7 +38,7 @@ class NotificationItem extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: content,
+                    text: content+'from ',
                     style: TextStyle(color: Colors.black),
                   ),
                   TextSpan(

@@ -16,7 +16,10 @@ class OrdersView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('Orders').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('Orders')
+          .orderBy('createdAt', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         List<DocumentSnapshot> ordersSnap =
             snapshot.hasData ? snapshot.data.docs : [];
@@ -58,7 +61,8 @@ class OrdersView extends StatelessWidget {
                                         Navigator.of(ctx).pop();
                                         MessageViewModel _messageController =
                                             Get.put(MessageViewModel());
-                                        _messageController.isNewMessage.value=true;
+                                        _messageController.isNewMessage.value =
+                                            true;
                                         _messageController.getOrderNumber(
                                             orderController
                                                 .selectedOrder.orderNumber);

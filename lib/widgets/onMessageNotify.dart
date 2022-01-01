@@ -23,7 +23,7 @@ class OnMessageNotify extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomText(
-            txt: notification.body.replaceAll('from', ''),
+            txt: notification.body,
           ),
           SizedBox(height: 15),
           Row(

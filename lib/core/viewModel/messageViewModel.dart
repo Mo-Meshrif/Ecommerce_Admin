@@ -96,7 +96,7 @@ class MessageViewModel extends GetxController {
       indexOfShownMessage = 0;
       update();
       _notificationViewModel.sendNotification(
-          to, 'New message from ');
+          to, 'New message ');
     });
   }
 

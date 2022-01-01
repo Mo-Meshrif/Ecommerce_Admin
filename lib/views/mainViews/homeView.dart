@@ -138,7 +138,7 @@ class HomeView extends StatelessWidget {
                             ),
                           )
                           .where((notify) =>
-                              notify.to.indexOf(homeController.savedUser.id) >
+                              notify.to.indexOf(homeController.savedUser.id) >=
                               0)
                           .toList();
                       bool hasNew = notifications

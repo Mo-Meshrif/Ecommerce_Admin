@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timelines/timelines.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/model/orderModel.dart';
@@ -126,6 +127,8 @@ class OrderDetailsBody extends StatelessWidget {
                       hasPaymentCard
                           ? Card(
                               margin: EdgeInsets.all(10),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
                                 child: Column(
@@ -261,6 +264,13 @@ class OrderDetailsBody extends StatelessWidget {
                                                     children: [
                                                       TextButton(
                                                           onPressed: () {
+                                                            if (x == 1) {
+                                                              order.orderTrack[
+                                                                          1][
+                                                                      'createdAt'] =
+                                                                  Timestamp
+                                                                      .now();
+                                                            }
                                                             order.orderTrack[x]
                                                                     ['status'] =
                                                                 true;
