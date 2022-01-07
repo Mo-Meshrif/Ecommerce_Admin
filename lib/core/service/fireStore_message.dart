@@ -25,6 +25,7 @@ class FireStoreMessage {
       'to': to,
       'message': message,
       'orderNumber': orderNumber,
+      'pic': null,
       'isOpened': false
     });
   }

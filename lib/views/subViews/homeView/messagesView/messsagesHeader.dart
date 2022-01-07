@@ -57,6 +57,9 @@ class MessagesHeader extends StatelessWidget {
                         bool isOpened = headerMesssage[i].isOpened ||
                             headerMesssage[i].from.id ==
                                 messageController.homeViewModel.savedUser.id;
+                        UserModel notMe = me.id == headerMesssage[i].from.id
+                            ? headerMesssage[i].to
+                            : headerMesssage[i].from;
                         return GestureDetector(
                           onTap: () {
                             messageController.getIndexOfShownMessage(i);
@@ -70,14 +73,17 @@ class MessagesHeader extends StatelessWidget {
                             horizontalTitleGap: 8,
                             leading: CircleAvatar(
                               radius: 30,
+                              backgroundImage: notMe.pic == null
+                                  ? AssetImage('assets/order/person.png')
+                                  : NetworkImage(notMe.pic),
                             ),
                             title: CustomText(
-                              txt: me.id == headerMesssage[i].from.id
-                                  ? headerMesssage[i].to.userName.capitalizeFirst
-                                  : headerMesssage[i].from.userName.capitalizeFirst,
+                              txt: notMe.userName.capitalizeFirst,
                             ),
                             subtitle: CustomText(
-                              txt: headerMesssage[i].lastMessage,
+                              txt: headerMesssage[i].lastMessage ??
+                                  ('${notMe.userName.capitalizeFirst}' +
+                                      ' sent a photo'),
                               txtColor: isOpened ? Colors.grey : null,
                             ),
                             trailing: Padding(

@@ -62,37 +62,52 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                         ? CrossAxisAlignment.start
                         : CrossAxisAlignment.end,
                     children: [
-                      Container(
-                        constraints: BoxConstraints(
-                          minWidth: 40,
-                          maxWidth: (size.width - 350) * 0.5,
-                        ),
-                        child: Card(
-                          color: messages[i]['from'] == widget.me.id
-                              ? Colors.blue
-                              : Colors.black38,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15),
-                                  bottomRight:
-                                      messages[i]['from'] == widget.me.id
-                                          ? Radius.circular(15)
-                                          : Radius.zero,
-                                  bottomLeft: messages[i]['to'] == widget.me.id
-                                      ? Radius.circular(15)
-                                      : Radius.zero)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CustomText(
-                              txt: messages[i]['message'],
-                              maxLine: 20,
-                              txtColor: Colors.white,
-                              fSize: 17,
-                            ),
-                          ),
-                        ),
-                      ),
+                      messages[i]['message'] != null
+                          ? Container(
+                              constraints: BoxConstraints(
+                                minWidth: 40,
+                                maxWidth: (size.width - 350) * 0.5,
+                              ),
+                              child: Card(
+                                color: messages[i]['from'] == widget.me.id
+                                    ? Colors.blue
+                                    : Colors.black38,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                        bottomRight:
+                                            messages[i]['from'] == widget.me.id
+                                                ? Radius.circular(15)
+                                                : Radius.zero,
+                                        bottomLeft:
+                                            messages[i]['to'] == widget.me.id
+                                                ? Radius.circular(15)
+                                                : Radius.zero)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CustomText(
+                                    txt: messages[i]['message'],
+                                    maxLine: 20,
+                                    txtColor: Colors.white,
+                                    fSize: 17,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Padding(padding: EdgeInsets.zero),
+                      messages[i]['pic'] != null
+                          ? Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Image.network(
+                                messages[i]['pic'],
+                                width: 80,
+                                height: 80,
+                              ),
+                            )
+                          : Padding(padding: EdgeInsets.zero),
                     ],
                   ),
                 ),
@@ -132,8 +147,7 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                                       to: widget.notMe.id,
                                       message: _textController.text,
                                       orderNumber:
-                                          messageSnap.first['orderNumber'] !=
-                                                  null
+                                          messageController.orderNumber == null
                                               ? messageSnap.first['orderNumber']
                                               : messageController.orderNumber,
                                     )
