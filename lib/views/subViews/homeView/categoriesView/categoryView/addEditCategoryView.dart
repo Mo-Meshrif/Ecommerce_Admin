@@ -219,9 +219,10 @@ class AddEditCategoryView extends StatelessWidget {
                                       CircleAvatar(
                                         radius: 40,
                                         child: CustomText(
-                                          txt: 'MS'+(x+1).toString(),
+                                          txt: 'MS' + (x + 1).toString(),
                                         ),
                                       ),
+                                      SizedBox(width: 10),
                                       Expanded(
                                         child: GridView.builder(
                                           controller: ScrollController(),

@@ -74,7 +74,7 @@ class OrdersView extends StatelessWidget {
                                                         .selectedOrder
                                                         .customerId);
                                         Get.find<HomeViewModel>()
-                                            .changeItemsIndex(1);
+                                            .handleClickItem(1);
                                       },
                                     ),
                                     content: Container(

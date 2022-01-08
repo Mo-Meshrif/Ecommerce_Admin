@@ -1,10 +1,16 @@
+import '/helper/navigation_service.dart';
+import '/locator.dart';
+import 'authViewModel.dart';
+import '/const.dart';
+import '/core/service/fireStore_user.dart';
 import '../../helper/localStorageData.dart';
 import '../../model/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeViewModel extends GetxController {
-  int currentItem = 0;
+  List<Map<String, String>> items = [];
+  int logoutIndex = adminItems.indexOf(adminItems.last);
   LocalStorageData _localStorageData = Get.find<LocalStorageData>();
   UserModel savedUser;
   ValueNotifier<bool> sortCustomersAscending = ValueNotifier(true);
@@ -15,18 +21,37 @@ class HomeViewModel extends GetxController {
     super.onInit();
   }
 
-  changeItemsIndex(val) {
-    if (currentItem != val) {
-      currentItem = val;
-      update();
-    }
-  }
-
   getSavedUser() {
     _localStorageData.getUser.then((user) {
       savedUser = user;
       update();
+      initHomeView();
     });
+  }
+
+  initHomeView() {
+    if (savedUser != null) {
+      String role = savedUser.role;
+      items = role == 'Admin' ? adminItems : mangerItems;
+      update();
+      String initRoute =
+          role == 'Admin' ? categoriesPageRoute : dashboardPageRoute;
+      locator<NavigationService>().navigateTo(initRoute);
+    }
+  }
+
+  handleClickItem(int i) {
+    if (i == logoutIndex) {
+      FireStoreUser().updateOnlineState(
+        savedUser.id,
+        false,
+      );
+      Get.find<AuthViewModel>().logout();
+      Get.offAllNamed('/');
+    } else {
+      if (Get.currentRoute != items[i]['route'])
+        locator<NavigationService>().navigateTo(items[i]['route']);
+    }
   }
 
   //Customers_Logic

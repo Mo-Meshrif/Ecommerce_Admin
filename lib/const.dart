@@ -1,31 +1,43 @@
-import 'views/subViews/homeView/categoriesView/categoriesView.dart';
-import 'views/subViews/homeView/shopsView.dart';
-import 'views/subViews/homeView/customersView.dart';
-import 'views/subViews/homeView/dashboardView.dart';
-import 'views/subViews/homeView/messagesView/messagesView.dart';
-import 'views/subViews/homeView/ordersView/ordersView.dart';
-import 'views/subViews/homeView/productsView/productsView.dart';
 import 'package:responsive_table/DatatableHeader.dart';
 import 'package:flutter/material.dart';
 
 const Color priColor = Colors.indigo;
 const Color swatchColor = Colors.white;
+const rootRoute = "/";
+const categoriesPageDisplayName = "Categories";
+const categoriesPageRoute = "/categories";
+const messagesPageDisplayName = "Messages";
+const messagesPageRoute = "/messages";
+const customersPageDisplayName = "Customers";
+const customersPageRoute = "/customers";
+const shopsPageDisplayName = "Shops";
+const shopsPageRoute = "/shops";
+const dashboardPageDisplayName = "Dashboard";
+const dashboardPageRoute = "/dashboard";
+const ordersPageDisplayName = "Orders";
+const ordersPageRoute = "/orders";
+const productsDisplayName = "Products";
+const productsPageRoute = "/products";
 List<Map<String, String>> adminItems = [
   {
-    'title': 'Categories',
+    'title': categoriesPageDisplayName,
     'icon': 'assets/home/categories.png',
+    'route': categoriesPageRoute,
   },
   {
-    'title': 'Messages',
+    'title': messagesPageDisplayName,
     'icon': 'assets/home/messages.png',
+    'route': messagesPageRoute
   },
   {
-    'title': 'Customers',
+    'title': customersPageDisplayName,
     'icon': 'assets/home/customers.png',
+    'route': customersPageRoute
   },
   {
-    'title': 'Shops',
+    'title': shopsPageDisplayName,
     'icon': 'assets/home/shops.png',
+    'route': shopsPageRoute
   },
   {
     'title': 'Logout',
@@ -34,37 +46,29 @@ List<Map<String, String>> adminItems = [
 ];
 List<Map<String, String>> mangerItems = [
   {
-    'title': 'Dashboard',
+    'title': dashboardPageDisplayName,
     'icon': 'assets/home/dashboard.png',
+    'route': dashboardPageRoute
   },
   {
-    'title': 'Messages',
+    'title': messagesPageDisplayName,
     'icon': 'assets/home/messages.png',
+    'route': messagesPageRoute
   },
   {
-    'title': 'Orders',
+    'title': ordersPageDisplayName,
     'icon': 'assets/home/orders.png',
+    'route': ordersPageRoute
   },
   {
-    'title': 'Products',
+    'title': productsDisplayName,
     'icon': 'assets/home/products.png',
+    'route': productsPageRoute
   },
   {
     'title': 'Logout',
     'icon': 'assets/home/logout.png',
   },
-];
-List<Widget> adminViews = [
-  CategoriesView(),
-  MessagesView(),
-  CustomersView(),
-  ShopsView(),
-];
-List<Widget> mangerViews = [
-  DashboardView(),
-  MessagesView(),
-  OrdersView(),
-  ProductsView(),
 ];
 List<DatatableHeader> headers = [
   DatatableHeader(

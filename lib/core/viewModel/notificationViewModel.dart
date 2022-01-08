@@ -82,16 +82,16 @@ class NotificationViewModel extends GetxController {
   }
 
   onMessage(RemoteMessage message) {
-    if (_homeViewModel.currentItem != 1) {
+    if (Get.currentRoute!='/:messages') {
       Get.dialog(OnMessageNotify(notification: message.notification));
     }
   }
 
   handleOnMessageDetails(String message) {
     if (message == 'New message ') {
-      _homeViewModel.changeItemsIndex(1);
+      _homeViewModel.handleClickItem(1);
     } else {
-      _homeViewModel.changeItemsIndex(2);
+      _homeViewModel.handleClickItem(2);
     }
   }
 

@@ -29,22 +29,17 @@ class CustomersView extends StatelessWidget {
                     constraints: BoxConstraints(
                       maxHeight: 700,
                     ),
-                    child: Card(
-                      elevation: 1,
-                      shadowColor: Colors.black,
-                      clipBehavior: Clip.none,
-                      child: ResponsiveDatatable(
-                        headers: headers,
-                        source: customersList,
-                        autoHeight: false,
-                        onSort: (val) =>
-                            homeController.onSortCustomer(customersList, val),
-                        sortAscending:
-                            homeController.sortCustomersAscending.value,
-                        sortColumn: homeController.sortCustomersColumn,
-                        isLoading: customersList.isEmpty ? true : false,
-                        footers: [],
-                      ),
+                    child: ResponsiveDatatable(
+                      headers: headers,
+                      source: customersList,
+                      autoHeight: false,
+                      onSort: (val) =>
+                          homeController.onSortCustomer(customersList, val),
+                      sortAscending:
+                          homeController.sortCustomersAscending.value,
+                      sortColumn: homeController.sortCustomersColumn,
+                      isLoading: customersList.isEmpty ? true : false,
+                      footers: [],
                     ),
                   )));
         });

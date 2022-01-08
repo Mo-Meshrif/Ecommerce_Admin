@@ -29,22 +29,17 @@ class ShopsView extends StatelessWidget {
                     constraints: BoxConstraints(
                       maxHeight: 700,
                     ),
-                    child: Card(
-                      elevation: 1,
-                      shadowColor: Colors.black,
-                      clipBehavior: Clip.none,
-                      child: ResponsiveDatatable(
-                        headers: headers,
-                        source: shopsList,
-                        autoHeight: false,
-                        onSort: (val) =>
-                            homeController.onSortShops(shopsList, val),
-                        sortAscending: homeController.sortShopsAscending.value,
-                        sortColumn: homeController.sortShopsColumn,
-                        isLoading: shopsList.isEmpty ? true : false,
-                       
-                        footers: [],
-                      ),
+                    child: ResponsiveDatatable(
+                      headers: headers,
+                      source: shopsList,
+                      autoHeight: false,
+                      onSort: (val) =>
+                          homeController.onSortShops(shopsList, val),
+                      sortAscending: homeController.sortShopsAscending.value,
+                      sortColumn: homeController.sortShopsColumn,
+                      isLoading: shopsList.isEmpty ? true : false,
+                     
+                      footers: [],
                     ),
                   )));
         });
