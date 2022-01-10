@@ -1,0 +1,102 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '/core/service/fireStore_user.dart';
+import '/core/viewModel/authViewModel.dart';
+import '/core/viewModel/homeViewModel.dart';
+import '/model/notificationModel.dart';
+import '/views/subViews/notificationsView.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class NavTopView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeViewModel>(
+      builder: (homeController) => Container(
+        height: 30,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[200],
+              offset: Offset(3, 5),
+              blurRadius: 10,
+            )
+          ],
+        ),
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('Notifications')
+                    .orderBy('createdAt', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  List<DocumentSnapshot> notificationsSnap =
+                      snapshot.hasData ? snapshot.data.docs : [];
+                  List<NotificationModel> notifications = notificationsSnap
+                      .map(
+                        (e) => NotificationModel.fromJson(
+                          e.id,
+                          e.data(),
+                        ),
+                      )
+                      .where((notify) =>
+                          notify.to.indexOf(homeController.savedUser.id) >= 0)
+                      .toList();
+                  bool hasNew = notifications
+                          .indexWhere((notify) => !notify.seen)
+                          .isNegative
+                      ? false
+                      : true;
+                  return GestureDetector(
+                    onTap: () => Get.isDialogOpen
+                        ? Navigator.of(Get.overlayContext).pop()
+                        : Get.dialog(
+                            NotificationsView(notifications: notifications),
+                            barrierColor: Colors.grey[50],
+                          ),
+                    child: Stack(
+                      children: [
+                        Icon(
+                          Icons.notifications,
+                          size: 40,
+                        ),
+                        hasNew
+                            ? Positioned(
+                                top: 4,
+                                left: 9,
+                                child: Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(20)),
+                                ),
+                              )
+                            : Padding(padding: EdgeInsets.zero)
+                      ],
+                    ),
+                  );
+                }),
+            GestureDetector(
+              onTap: () {
+                FireStoreUser().updateOnlineState(
+                  homeController.savedUser.id,
+                  false,
+                );
+                Get.find<AuthViewModel>().logout();
+                Get.offAllNamed('/');
+              },
+              child: Icon(
+                Icons.power_settings_new,
+                size: 40,
+              ),
+            ),
+            SizedBox(width: 10)
+          ],
+        ),
+      ),
+    );
+  }
+}

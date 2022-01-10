@@ -39,10 +39,6 @@ List<Map<String, String>> adminItems = [
     'icon': 'assets/home/shops.png',
     'route': shopsPageRoute
   },
-  {
-    'title': 'Logout',
-    'icon': 'assets/home/logout.png',
-  },
 ];
 List<Map<String, String>> mangerItems = [
   {
@@ -64,10 +60,6 @@ List<Map<String, String>> mangerItems = [
     'title': productsDisplayName,
     'icon': 'assets/home/products.png',
     'route': productsPageRoute
-  },
-  {
-    'title': 'Logout',
-    'icon': 'assets/home/logout.png',
   },
 ];
 List<DatatableHeader> headers = [

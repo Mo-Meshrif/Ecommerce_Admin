@@ -1,8 +1,6 @@
 import '/helper/navigation_service.dart';
 import '/locator.dart';
-import 'authViewModel.dart';
 import '/const.dart';
-import '/core/service/fireStore_user.dart';
 import '../../helper/localStorageData.dart';
 import '../../model/userModel.dart';
 import 'package:flutter/material.dart';
@@ -41,17 +39,8 @@ class HomeViewModel extends GetxController {
   }
 
   handleClickItem(int i) {
-    if (i == logoutIndex) {
-      FireStoreUser().updateOnlineState(
-        savedUser.id,
-        false,
-      );
-      Get.find<AuthViewModel>().logout();
-      Get.offAllNamed('/');
-    } else {
-      if (Get.currentRoute != items[i]['route'])
-        locator<NavigationService>().navigateTo(items[i]['route']);
-    }
+    if (Get.currentRoute != items[i]['route'])
+      locator<NavigationService>().navigateTo(items[i]['route']);
   }
 
   //Customers_Logic

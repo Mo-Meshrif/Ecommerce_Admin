@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '/model/notificationModel.dart';
+import '../subViews/homeView/navTopView.dart';
 import '/core/viewModel/notificationViewModel.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/core/viewModel/categoryViewModel.dart';
-import '/views/subViews/notificationsView.dart';
 import '../../const.dart';
 import '../../core/viewModel/homeViewModel.dart';
 import '../../core/viewModel/authViewModel.dart';
@@ -72,42 +70,15 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: child,
+                  child: Column(
+                    children: [
+                      NavTopView(),
+                      Expanded(child: child),
+                    ],
+                  ),
                 ),
               ],
             ),
-            floatingActionButton: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('Notifications')
-                    .orderBy('createdAt', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  List<DocumentSnapshot> notificationsSnap =
-                      snapshot.hasData ? snapshot.data.docs : [];
-                  List<NotificationModel> notifications = notificationsSnap
-                      .map(
-                        (e) => NotificationModel.fromJson(
-                          e.id,
-                          e.data(),
-                        ),
-                      )
-                      .where((notify) =>
-                          notify.to.indexOf(homeController.savedUser.id) >= 0)
-                      .toList();
-                  bool hasNew = notifications
-                          .indexWhere((notify) => !notify.seen)
-                          .isNegative
-                      ? false
-                      : true;
-                  return FloatingActionButton(
-                    backgroundColor: priColor,
-                    onPressed: () => Get.dialog(NotificationsView(notifications: notifications)),
-                    child: Icon(
-                      Icons.notifications,
-                      color: hasNew ? Colors.red : null,
-                    ),
-                  );
-                }),
           );
         },
       );
