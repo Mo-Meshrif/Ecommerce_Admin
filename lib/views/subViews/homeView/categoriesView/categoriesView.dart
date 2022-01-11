@@ -54,6 +54,7 @@ class CategoriesView extends StatelessWidget {
                                 categoryController.restCatParameters(
                                     isEditDismiss: false);
                                 await showDialog(
+                                        barrierColor: Colors.grey[50],
                                         builder: (ctx) => AlertDialog(
                                               contentPadding:
                                                   const EdgeInsets.symmetric(

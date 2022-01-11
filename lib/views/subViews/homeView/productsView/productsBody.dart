@@ -38,6 +38,7 @@ class ProductBody extends StatelessWidget {
                               productController.getReParameters(prod);
                               showDialog(
                                   context: context,
+                                  barrierColor: Colors.grey[50],
                                   builder: (ctx) => AlertDialog(
                                         contentPadding:
                                             const EdgeInsets.symmetric(

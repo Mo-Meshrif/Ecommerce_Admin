@@ -43,6 +43,7 @@ class CategoryView extends StatelessWidget {
                       onTap: () async {
                         categoryController.getOldCategoryData(cat);
                         await showDialog(
+                                barrierColor: Colors.grey[50],
                                 builder: (ctx) => AlertDialog(
                                       contentPadding:
                                           const EdgeInsets.symmetric(

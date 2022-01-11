@@ -29,47 +29,50 @@ class OrderDetailsBody extends StatelessWidget {
                   flex: 2,
                   child: Column(
                     children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: DataTable(
-                            columns: orderController.itemheaders
-                                .map((e) =>
-                                    DataColumn(label: CustomText(txt: e)))
-                                .toList(),
-                            rows: order.items.map((item) {
-                              String quantity = item['quantity'].toString();
-                              return DataRow(cells: [
-                                DataCell(Row(
-                                  children: [
-                                    Image.network(
-                                      item['imgUrl'],
-                                      height: 30,
-                                      width: 30,
-                                    ),
-                                    SizedBox(width: 10),
-                                    CustomText(txt: item['name'])
-                                  ],
-                                )),
-                                DataCell(
-                                  CustomText(txt: item['size']),
-                                ),
-                                DataCell(
-                                  CustomText(txt: quantity),
-                                ),
-                                DataCell(
-                                  CustomText(txt: item['price']),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                    txt: orderController.getTotalPrice(
-                                      double.parse(item['price']),
-                                      double.parse(quantity),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: DataTable(
+                              columns: orderController.itemheaders
+                                  .map((e) =>
+                                      DataColumn(label: CustomText(txt: e)))
+                                  .toList(),
+                              rows: order.items.map((item) {
+                                String quantity = item['quantity'].toString();
+                                return DataRow(cells: [
+                                  DataCell(Row(
+                                    children: [
+                                      Image.network(
+                                        item['imgUrl'],
+                                        height: 30,
+                                        width: 30,
+                                      ),
+                                      SizedBox(width: 10),
+                                      CustomText(txt: item['name'])
+                                    ],
+                                  )),
+                                  DataCell(
+                                    CustomText(txt: item['size']),
+                                  ),
+                                  DataCell(
+                                    CustomText(txt: quantity),
+                                  ),
+                                  DataCell(
+                                    CustomText(txt: item['price']),
+                                  ),
+                                  DataCell(
+                                    CustomText(
+                                      txt: orderController.getTotalPrice(
+                                        double.parse(item['price']),
+                                        double.parse(quantity),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ]);
-                            }).toList()),
+                                ]);
+                              }).toList()),
+                        ),
                       ),
                       Card(
                         margin: EdgeInsets.all(10),

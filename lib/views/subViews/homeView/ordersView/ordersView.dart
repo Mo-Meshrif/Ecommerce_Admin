@@ -31,120 +31,128 @@ class OrdersView extends StatelessWidget {
             ? Center(child: CircularProgressIndicator())
             : GetBuilder<OrderViewModel>(
                 builder: (orderController) => orders.isNotEmpty
-                    ? DataTable(
-                        showCheckboxColumn: false,
-                        columns: orderController.orderheaders
-                            .map((e) => DataColumn(
-                                    label: CustomText(
-                                  txt: e,
-                                )))
-                            .toList(),
-                        rows: orders.map((order) {
-                          Map<String, dynamic> address = order.shippingAdress;
-                          UserModel customer =
-                              orderController.authViewModel.users.firstWhere(
-                                  (user) => user.id == order.customerId);
-                          return DataRow(
-                              onSelectChanged: (val) {
-                                orderController.getSelectedOrder(order);
-                                showDialog(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 24),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
+                    ? SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          showCheckboxColumn: false,
+                          columns: orderController.orderheaders
+                              .map((e) => DataColumn(
+                                      label: CustomText(
+                                    txt: e,
+                                  )))
+                              .toList(),
+                          rows: orders.map((order) {
+                            Map<String, dynamic> address = order.shippingAdress;
+                            UserModel customer =
+                                orderController.authViewModel.users.firstWhere(
+                                    (user) => user.id == order.customerId);
+                            return DataRow(
+                                onSelectChanged: (val) {
+                                  orderController.getSelectedOrder(order);
+                                  showDialog(
+                                    context: context,
+                                    barrierColor: Colors.grey[50],
+                                    builder: (ctx) => AlertDialog(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 24),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      title: OrderDetailsHeader(
+                                        order: order,
+                                        sendMessage: () {
+                                          Navigator.of(ctx).pop();
+                                          MessageViewModel _messageController =
+                                              Get.put(MessageViewModel());
+                                          _messageController
+                                              .isNewMessage.value = true;
+                                          _messageController.getOrderNumber(
+                                              orderController
+                                                  .selectedOrder.orderNumber);
+                                          _messageController.toUser =
+                                              orderController
+                                                  .authViewModel.users
+                                                  .firstWhere((user) =>
+                                                      user.id ==
+                                                      orderController
+                                                          .selectedOrder
+                                                          .customerId);
+                                          Get.find<HomeViewModel>()
+                                              .handleClickItem(1);
+                                        },
+                                      ),
+                                      content: Container(
+                                        width: (size.width - 220) * 0.6,
+                                        child: OrderDetailsBody(),
+                                      ),
                                     ),
-                                    title: OrderDetailsHeader(
-                                      order: order,
-                                      sendMessage: () {
-                                        Navigator.of(ctx).pop();
-                                        MessageViewModel _messageController =
-                                            Get.put(MessageViewModel());
-                                        _messageController.isNewMessage.value =
-                                            true;
-                                        _messageController.getOrderNumber(
-                                            orderController
-                                                .selectedOrder.orderNumber);
-                                        _messageController.toUser =
-                                            orderController.authViewModel.users
-                                                .firstWhere((user) =>
-                                                    user.id ==
-                                                    orderController
-                                                        .selectedOrder
-                                                        .customerId);
-                                        Get.find<HomeViewModel>()
-                                            .handleClickItem(1);
-                                      },
-                                    ),
-                                    content: Container(
-                                      width: (size.width - 220) * 0.6,
-                                      child: OrderDetailsBody(),
-                                    ),
+                                  );
+                                },
+                                cells: [
+                                  DataCell(
+                                    CustomText(
+                                        txt:
+                                            '#' + order.orderNumber.toString()),
                                   ),
-                                );
-                              },
-                              cells: [
-                                DataCell(
-                                  CustomText(
-                                      txt: '#' + order.orderNumber.toString()),
-                                ),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                          radius: 15,
-                                          backgroundImage: customer.pic != null
-                                              ? NetworkImage(customer.pic)
-                                              : AssetImage(
-                                                  'assets/order/person.png')),
-                                      SizedBox(width: 5),
-                                      CustomText(txt: customer.userName),
-                                    ],
-                                  ),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                      txt: address['street'] +
-                                          ',' +
-                                          address['city'] +
-                                          ',' +
-                                          address['state']),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                    txt: order.paymentMehod['paymentMehod'],
-                                  ),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                    txt: order.promoCode != ''
-                                        ? order.promoCode
-                                        : 'Not defined',
-                                  ),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                    txt: DateFormat('d/M/y').format(
-                                      order.createdAt.toDate(),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                            radius: 15,
+                                            backgroundImage: customer.pic !=
+                                                    null
+                                                ? NetworkImage(customer.pic)
+                                                : AssetImage(
+                                                    'assets/order/person.png')),
+                                        SizedBox(width: 5),
+                                        CustomText(txt: customer.userName),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                    txt: order.totalPrice,
+                                  DataCell(
+                                    CustomText(
+                                        txt: address['street'] +
+                                            ',' +
+                                            address['city'] +
+                                            ',' +
+                                            address['state']),
                                   ),
-                                ),
-                                DataCell(
-                                  CustomText(
-                                    txt: order.status,
-                                    txtColor: order.status == 'Pending'
-                                        ? Colors.red
-                                        : Colors.green,
+                                  DataCell(
+                                    CustomText(
+                                      txt: order.paymentMehod['paymentMehod'],
+                                    ),
                                   ),
-                                ),
-                              ]);
-                        }).toList(),
+                                  DataCell(
+                                    CustomText(
+                                      txt: order.promoCode != ''
+                                          ? order.promoCode
+                                          : 'Not defined',
+                                    ),
+                                  ),
+                                  DataCell(
+                                    CustomText(
+                                      txt: DateFormat('d/M/y').format(
+                                        order.createdAt.toDate(),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    CustomText(
+                                      txt: order.totalPrice,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    CustomText(
+                                      txt: order.status,
+                                      txtColor: order.status == 'Pending'
+                                          ? Colors.red
+                                          : Colors.green,
+                                    ),
+                                  ),
+                                ]);
+                          }).toList(),
+                        ),
                       )
                     : Center(
                         child: CustomText(txt: 'No Orders !'),
