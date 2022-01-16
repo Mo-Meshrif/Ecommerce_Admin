@@ -87,7 +87,7 @@ class MessagesHeader extends StatelessWidget {
                               txtColor: isOpened ? Colors.grey : null,
                             ),
                             trailing: Padding(
-                              padding: const EdgeInsets.only(top: 5),
+                              padding: const EdgeInsets.only(top: 8),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 class MessagesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return GetBuilder<MessageViewModel>(
         init: MessageViewModel(),
         builder: (messageController) =>
@@ -16,9 +15,8 @@ class MessagesView extends StatelessWidget {
                 ? Center(child: CircularProgressIndicator())
                 : Row(
                     children: [
-                      Container(
-                        width: 350,
-                        height: size.height,
+                      LimitedBox(
+                        maxWidth: 300,
                         child: MessagesHeader(),
                       ),
                       VerticalDivider(

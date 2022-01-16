@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/responsive.dart';
 import '/core/viewModel/homeViewModel.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '/views/subViews/homeView/ordersView/orderDetailsView/orderDetailsBody.dart';
@@ -83,7 +84,9 @@ class OrdersView extends StatelessWidget {
                                         },
                                       ),
                                       content: Container(
-                                        width: (size.width - 220) * 0.6,
+                                        width: Responsive.isDesktop(context)
+                                            ? (size.width - 220) * 0.75
+                                            : size.width * 0.75,
                                         child: OrderDetailsBody(),
                                       ),
                                     ),

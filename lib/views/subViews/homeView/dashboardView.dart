@@ -37,11 +37,11 @@ class DashboardView extends StatelessWidget {
                       children: [
                         Container(
                           height: 120,
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CardItem(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Expanded(
+                                child: CardItem(
                                   title: "Revenue",
                                   subtitle: "Revenue this month",
                                   value:
@@ -49,14 +49,18 @@ class DashboardView extends StatelessWidget {
                                   color1: Colors.green.shade700,
                                   color2: Colors.green,
                                 ),
-                                CardItem(
+                              ),
+                              Expanded(
+                                child: CardItem(
                                   title: "Products",
                                   subtitle: "Total products on store",
                                   value: "${dashBoardController.totalProducts}",
                                   color1: Colors.lightBlueAccent,
                                   color2: Colors.blue,
                                 ),
-                                CardItem(
+                              ),
+                              Expanded(
+                                child: CardItem(
                                   title: "Orders",
                                   subtitle: "Total orders for this month",
                                   value:
@@ -64,8 +68,8 @@ class DashboardView extends StatelessWidget {
                                   color1: Colors.redAccent,
                                   color2: Colors.red,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         Padding(

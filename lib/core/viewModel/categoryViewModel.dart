@@ -1,3 +1,4 @@
+import '/const.dart';
 import '/core/service/fireStore_Category.dart';
 import '/model/categoryModel.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -32,8 +33,7 @@ class CategoryViewModel extends GetxController {
   }
 
   getCatImage() async {
-    Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImageAsBytes();
+    Uint8List bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
     if (bytesFromPicker != null) {
       pickedImage = bytesFromPicker;
     }
@@ -46,10 +46,17 @@ class CategoryViewModel extends GetxController {
   }
 
   changeMainCounter(bool isEdit, String tag, int index) {
+   
     if (tag == 'add') {
-      if (subCategories['s'][index] != null) {
+      if (subCategories['s'][index] != ''||subCategories['s'].isNotEmpty) {
         mainSubCounter += 1;
-        if (isEdit) subCategories['s'].add('');
+        if (isEdit) {
+          subCategories['s'].add('');
+          int indexOfLast = subCategories['s'].indexOf(subCategories['s'].last);
+          subCounter.putIfAbsent(
+              's' + indexOfLast.toString(), () => [indexOfLast]);
+          subCategories.putIfAbsent('s' + indexOfLast.toString(), () => ['']);
+        }
       }
     } else {
       mainSubCounter -= 1;
@@ -62,7 +69,7 @@ class CategoryViewModel extends GetxController {
 
   changeSubCounter(bool isEdit, int mainCatoIndex, String tag, int index) {
     if (tag == 'add') {
-      if (subCategories['s' + mainCatoIndex.toString()][index] != null) {
+      if (subCategories['s' + mainCatoIndex.toString()][index] != '') {
         subCounter['s' + mainCatoIndex.toString()].add(1);
         if (isEdit) subCategories['s' + mainCatoIndex.toString()].add('');
       }
@@ -168,7 +175,7 @@ class CategoryViewModel extends GetxController {
     loading.value = true;
     update();
     FireStoreCategory().deleteCategoryfromFireStore(cato).then((_) {
-      Navigator.of(ctx).popUntil(ModalRoute.withName('/'));
+      Get.offNamedUntil(categoriesPageRoute, (route) => false);
       restCatParameters(isEditDismiss: false);
     });
   }

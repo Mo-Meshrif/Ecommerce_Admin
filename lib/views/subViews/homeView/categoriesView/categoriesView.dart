@@ -1,4 +1,5 @@
 import '../../../../core/viewModel/categoryViewModel.dart';
+import '../../../../responsive.dart';
 import 'categoryView/addEditCategoryView.dart';
 import '../../../../model/categoryModel.dart';
 import 'categoryView/categoryView.dart';
@@ -36,7 +37,7 @@ class CategoriesView extends StatelessWidget {
               : GridView.builder(
                   padding: EdgeInsets.all(15),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
+                    crossAxisCount: Responsive.isDesktop(context)?4:3,
                   ),
                   itemCount: categories.length + 1,
                   itemBuilder: (context, i) {
@@ -106,7 +107,10 @@ class CategoriesView extends StatelessWidget {
                                                 ],
                                               ),
                                               content: Container(
-                                                width: (size.width - 220) * 0.6,
+                                                width: Responsive.isDesktop(
+                                                        context)
+                                                    ? (size.width - 220) * 0.8
+                                                    : size.width * 0.8,
                                                 child: AddEditCategoryView(
                                                     oldCategory: null),
                                               ),

@@ -1,3 +1,4 @@
+import '../../../../../responsive.dart';
 import '../../../../../widgets/deleteAlert.dart';
 import '../../../../../core/viewModel/categoryViewModel.dart';
 import '/views/subViews/homeView/categoriesView/categoryView/addEditCategoryView.dart';
@@ -135,7 +136,9 @@ class CategoryView extends StatelessWidget {
                                         ],
                                       ),
                                       content: Container(
-                                        width: (size.width - 220) * 0.6,
+                                        width: Responsive.isDesktop(context)
+                                            ? (size.width - 220) * 0.8
+                                            : size.width * 0.8,
                                         child: AddEditCategoryView(
                                             oldCategory: cat),
                                       ),

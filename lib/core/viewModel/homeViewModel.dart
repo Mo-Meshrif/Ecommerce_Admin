@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeViewModel extends GetxController {
+  final GlobalKey<ScaffoldState> homeScaffoldKey=GlobalKey<ScaffoldState>();
   List<Map<String, String>> items = [];
   int logoutIndex = adminItems.indexOf(adminItems.last);
   LocalStorageData _localStorageData = Get.find<LocalStorageData>();

@@ -84,7 +84,7 @@ class UpperBodyView extends StatelessWidget {
                 messageController.isToBarClicked.value
                     ? Container(
                         margin: EdgeInsets.only(left: 50),
-                        height: 400,
+                        height: size.height*0.7,
                         width: (size.width - 350) * 0.3,
                         child: Card(
                           elevation: 10,

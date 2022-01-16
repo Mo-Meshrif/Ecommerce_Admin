@@ -71,29 +71,25 @@ class EditProductView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: CustomPopupMenu(
-                            title:'Category : ' +  productController.reCat,
-                            items: catNames,
-                            onSelect: (val) {
-                              productController.reCatIndex =
-                                  catNames.indexOf(val);
-                              productController.getReSelectedCat(val);
-                            },
-                          ),
+                        CustomPopupMenu(
+                          title:'Category : ' +  productController.reCat,
+                          items: catNames,
+                          onSelect: (val) {
+                            productController.reCatIndex =
+                                catNames.indexOf(val);
+                            productController.getReSelectedCat(val);
+                          },
                         ),
                         SizedBox(width: 10),
-                        Expanded(
-                          child: CustomPopupMenu(
-                            title: 'Main Sub : ' + productController.reMainSubCat,
-                            items: mainCatNames,
-                            onSelect: (val) {
-                              int index = mainCatNames.indexOf(val);
-                              productController.reMainSubIndex = index;
-                              productController.getCurrentCato(index);
-                              productController.getReSelectedMainSubCat(val);
-                            },
-                          ),
+                        CustomPopupMenu(
+                          title: 'Main Sub : ' + productController.reMainSubCat,
+                          items: mainCatNames,
+                          onSelect: (val) {
+                            int index = mainCatNames.indexOf(val);
+                            productController.reMainSubIndex = index;
+                            productController.getCurrentCato(index);
+                            productController.getReSelectedMainSubCat(val);
+                          },
                         ),
                       ],
                     ),
@@ -101,22 +97,18 @@ class EditProductView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: CustomPopupMenu(
-                            title: 'Sub-Cat : ' + productController.reSubCat,
-                            items: subCatNames,
-                            onSelect: (val) =>
-                                productController.getReSelectedSubCat(val),
-                          ),
+                        CustomPopupMenu(
+                          title: 'Sub-Cat : ' + productController.reSubCat,
+                          items: subCatNames,
+                          onSelect: (val) =>
+                              productController.getReSelectedSubCat(val),
                         ),
                         SizedBox(width: 10),
-                        Expanded(
-                          child: CustomPopupMenu(
-                            title:' Season : ' + productController.reSeason,
-                            items: ['Summer', 'Winter','Not defined'],
-                            onSelect: (val) =>
-                                productController.getReSelectedSesson(val),
-                          ),
+                        CustomPopupMenu(
+                          title:' Season : ' + productController.reSeason,
+                          items: ['Summer', 'Winter','Not defined'],
+                          onSelect: (val) =>
+                              productController.getReSelectedSesson(val),
                         ),
                       ],
                     ),

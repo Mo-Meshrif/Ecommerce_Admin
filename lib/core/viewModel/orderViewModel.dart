@@ -20,7 +20,7 @@ class OrderViewModel extends GetxController {
     'Deilevery Status',
   ];
   List<String> itemheaders = [
-    'Items Summary',
+    'Items',
     'Size',
     'QTY',
     'Price',
