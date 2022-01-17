@@ -1,8 +1,8 @@
 import '/model/userModel.dart';
 import '/model/messageModel.dart';
 import '/core/viewModel/messageViewModel.dart';
-import '../../../../widgets/customText.dart';
-import '../../../../widgets/customTextField.dart';
+import '/../../../widgets/customText.dart';
+import '/../../../widgets/customTextField.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';

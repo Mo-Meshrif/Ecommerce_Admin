@@ -3,8 +3,8 @@ import '/core/viewModel/notificationViewModel.dart';
 import '/model/notificationModel.dart';
 import '/model/userModel.dart';
 import 'package:get/get.dart';
-import '/widgets/notificationItem.dart';
-import '../../widgets/customText.dart';
+import 'widgets/notificationItem.dart';
+import '../../../../../widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

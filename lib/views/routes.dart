@@ -1,12 +1,12 @@
 import '/const.dart';
 import '/views/mainViews/authView.dart';
-import '/views/subViews/homeView/categoriesView/categoriesView.dart';
-import '/views/subViews/homeView/customersView.dart';
-import '/views/subViews/homeView/dashboardView.dart';
-import '/views/subViews/homeView/messagesView/messagesView.dart';
-import '/views/subViews/homeView/ordersView/ordersView.dart';
-import '/views/subViews/homeView/productsView/productsView.dart';
-import '/views/subViews/homeView/shopsView.dart';
+import '/views/subViews/homeView/homeWidgets/categoriesView/categoriesView.dart';
+import 'subViews/homeView/homeWidgets/customersView.dart';
+import 'subViews/homeView/homeWidgets/dashboardView/dashboardView.dart';
+import '/views/subViews/homeView/homeWidgets/messagesView/messagesView.dart';
+import '/views/subViews/homeView/homeWidgets/ordersView/ordersView.dart';
+import '/views/subViews/homeView/homeWidgets/productsView/productsView.dart';
+import 'subViews/homeView/homeWidgets/shopsView.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {

@@ -1,7 +1,7 @@
 import '/core/viewModel/messageViewModel.dart';
 import '/model/userModel.dart';
-import '../../../../../widgets/customText.dart';
-import '../../../../../widgets/customTextField.dart';
+import '/../../../../widgets/customText.dart';
+import '/../../../../widgets/customTextField.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';

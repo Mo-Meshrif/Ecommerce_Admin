@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customText.dart';
+import '../../../../../../widgets/customText.dart';
 
 class NotificationItem extends StatelessWidget {
   final bool seen;

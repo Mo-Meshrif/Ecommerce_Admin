@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import '/model/orderModel.dart';
 import '/widgets/customText.dart';
 import 'package:flutter/material.dart';
-import '../../../../../const.dart';
+import '/../../../../const.dart';
 import 'orderTrack.dart';
 class OrderDetailsHeader extends StatelessWidget {
   final OrderModel order;

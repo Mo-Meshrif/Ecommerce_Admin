@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../const.dart';
+import '../../../../const.dart';
 import '/core/service/fireStore_user.dart';
 import '/core/viewModel/authViewModel.dart';
 import '/core/viewModel/homeViewModel.dart';
 import '/model/notificationModel.dart';
-import '/views/subViews/notificationsView.dart';
+import 'notificationsView/notificationsView.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

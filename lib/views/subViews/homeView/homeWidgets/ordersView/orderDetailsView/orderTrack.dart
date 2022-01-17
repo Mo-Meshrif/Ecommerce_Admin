@@ -5,7 +5,7 @@ import '/widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timelines/timelines.dart';
-import '../../../../../const.dart';
+import '/../../../../const.dart';
 
 class OrdrTrack extends StatelessWidget {
   @override

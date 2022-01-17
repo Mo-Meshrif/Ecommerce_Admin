@@ -1,7 +1,7 @@
-import '../../../../responsive.dart';
+import '/../../../responsive.dart';
 import '/core/viewModel/productViewModel.dart';
 import '/model/productModel.dart';
-import '/views/subViews/homeView/productsView/editProductView.dart';
+import 'editProductView.dart';
 import '/widgets/customText.dart';
 import '/widgets/deleteAlert.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

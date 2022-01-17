@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '/responsive.dart';
 import '/core/viewModel/homeViewModel.dart';
 import '/core/viewModel/messageViewModel.dart';
-import '/views/subViews/homeView/ordersView/orderDetailsView/orderDetailsBody.dart';
+import '/views/subViews/homeView/homeWidgets/ordersView/orderDetailsView/orderDetailsBody.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/model/orderModel.dart';
 import '/model/userModel.dart';

@@ -1,7 +1,7 @@
 import '/model/categoryModel.dart';
-import '../../../../../core/viewModel/categoryViewModel.dart';
-import '../../../../../widgets/customText.dart';
-import '../../../../../widgets/customTextField.dart';
+import '/../../../../core/viewModel/categoryViewModel.dart';
+import '/../../../../widgets/customText.dart';
+import '/../../../../widgets/customTextField.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

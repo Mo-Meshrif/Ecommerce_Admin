@@ -1,9 +1,9 @@
-import '../../../../../responsive.dart';
-import '../../../../../widgets/deleteAlert.dart';
-import '../../../../../core/viewModel/categoryViewModel.dart';
-import '/views/subViews/homeView/categoriesView/categoryView/addEditCategoryView.dart';
+import '/../../../../responsive.dart';
+import '/../../../../widgets/deleteAlert.dart';
+import '/../../../../core/viewModel/categoryViewModel.dart';
+import '/views/subViews/homeView/homeWidgets/categoriesView/categoryView/addEditCategoryView.dart';
 import '../../../../../../model/categoryModel.dart';
-import '../../../../../widgets/customText.dart';
+import '/../../../../widgets/customText.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 

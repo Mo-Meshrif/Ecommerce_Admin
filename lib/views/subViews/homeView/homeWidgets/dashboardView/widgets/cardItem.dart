@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customText.dart';
+import '../../../../../../widgets/customText.dart';
 
 class CardItem extends StatelessWidget {
   final String subtitle;

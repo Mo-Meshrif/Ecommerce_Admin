@@ -1,7 +1,7 @@
-import '/views/subViews/homeView/productsView/productsBody.dart';
+import 'widgets/productsBody.dart';
 import '/core/viewModel/productViewModel.dart';
 import 'package:get/get.dart';
-import '/views/subViews/homeView/productsView/productsHeader.dart';
+import 'widgets/productsHeader.dart';
 import 'package:flutter/material.dart';
 
 class ProductsView extends StatelessWidget {

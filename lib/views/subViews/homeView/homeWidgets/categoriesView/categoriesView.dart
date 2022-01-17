@@ -1,7 +1,7 @@
-import '../../../../core/viewModel/categoryViewModel.dart';
-import '../../../../responsive.dart';
+import '/../../../core/viewModel/categoryViewModel.dart';
+import '/../../../responsive.dart';
 import 'categoryView/addEditCategoryView.dart';
-import '../../../../model/categoryModel.dart';
+import '/../../../model/categoryModel.dart';
 import 'categoryView/categoryView.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -3,7 +3,7 @@ import '/model/topCustomerModel.dart';
 import '/core/viewModel/dashboardViewModel.dart';
 import '/model/orderModel.dart';
 import '/model/salesModel.dart';
-import '/widgets/cardItem.dart';
+import 'widgets/cardItem.dart';
 import '/widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

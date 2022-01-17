@@ -2,8 +2,8 @@ import '/widgets/customText.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '/model/messageModel.dart';
 import '/model/userModel.dart';
-import '/views/subViews/homeView/messagesView/messageBodyView/LowerBodyView.dart';
-import '/views/subViews/homeView/messagesView/messageBodyView/upperBodyView.dart';
+import '/views/subViews/homeView/homeWidgets/messagesView/messageBodyView/LowerBodyView.dart';
+import '/views/subViews/homeView/homeWidgets/messagesView/messageBodyView/upperBodyView.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
