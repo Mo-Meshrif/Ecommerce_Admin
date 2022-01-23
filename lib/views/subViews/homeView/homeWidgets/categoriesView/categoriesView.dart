@@ -1,3 +1,4 @@
+import '/views/subViews/homeView/homeWidgets/categoriesView/mobileCategoriesView.dart';
 import '/../../../core/viewModel/categoryViewModel.dart';
 import '/../../../responsive.dart';
 import 'categoryView/addEditCategoryView.dart';
@@ -34,108 +35,115 @@ class CategoriesView extends StatelessWidget {
           }
           return categories.isEmpty
               ? Center(child: CircularProgressIndicator())
-              : GridView.builder(
-                  padding: EdgeInsets.all(15),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: Responsive.isDesktop(context)?4:3,
-                  ),
-                  itemCount: categories.length + 1,
-                  itemBuilder: (context, i) {
-                    return i != categories.length
-                        ? CategoryView(
-                            cats: categories,
-                            currentIndex: i != categories.length ? i : null,
-                          )
-                        : GetBuilder<CategoryViewModel>(
-                            builder: (categoryController) {
-                            GlobalKey<FormState> _key =
-                                categoryController.addCategoryKey;
-                            return GestureDetector(
-                              onTap: () async {
-                                categoryController.restCatParameters(
-                                    isEditDismiss: false);
-                                await showDialog(
-                                        barrierColor: Colors.grey[50],
-                                        builder: (ctx) => AlertDialog(
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 15,
-                                                      horizontal: 24),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              title: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text("Add Category"),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      _key.currentState.save();
-                                                      if (_key.currentState
-                                                          .validate()) {
-                                                        categoryController
-                                                            .addEditCategoryToFireStore(
-                                                          true,
-                                                          CategoryModel(
-                                                            txt: categoryController
-                                                                .catogoryTitle,
-                                                            createdAt:
-                                                                Timestamp.now(),
-                                                            avatarCol: '#' +
-                                                                categoryController
-                                                                    .pickedColor
-                                                                    .value
-                                                                    .toRadixString(
-                                                                        16),
-                                                            subCat:
-                                                                categoryController
+              : Responsive.isMobile(context)
+                  ? MobileCategoriesView(categories: categories)
+                  : GridView.builder(
+                      padding: EdgeInsets.all(15),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: Responsive.isDesktop(context) ? 4 : 3,
+                      ),
+                      itemCount: categories.length + 1,
+                      itemBuilder: (context, i) {
+                        return i != 0
+                            ? CategoryView(
+                                cats: categories,
+                                currentIndex: i - 1,
+                              )
+                            : GetBuilder<CategoryViewModel>(
+                                builder: (categoryController) {
+                                GlobalKey<FormState> _key =
+                                    categoryController.addCategoryKey;
+                                return GestureDetector(
+                                  onTap: () async {
+                                    categoryController.restCatParameters(
+                                        isEditDismiss: false);
+                                    await showDialog(
+                                            barrierColor: Colors.grey[50],
+                                            builder: (ctx) => AlertDialog(
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 15,
+                                                          horizontal: 24),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  title: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text("Add Category"),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          _key.currentState
+                                                              .save();
+                                                          if (_key.currentState
+                                                              .validate()) {
+                                                            categoryController
+                                                                .addEditCategoryToFireStore(
+                                                              true,
+                                                              CategoryModel(
+                                                                txt: categoryController
+                                                                    .catogoryTitle,
+                                                                createdAt:
+                                                                    Timestamp
+                                                                        .now(),
+                                                                avatarCol: '#' +
+                                                                    categoryController
+                                                                        .pickedColor
+                                                                        .value
+                                                                        .toRadixString(
+                                                                            16),
+                                                                subCat: categoryController
                                                                     .subCategories,
-                                                          ),
-                                                          categoryController
-                                                              .pickedImage,
-                                                          context,
-                                                        );
-                                                      }
-                                                    },
-                                                    child: CircleAvatar(
-                                                      child: Icon(Icons.add),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              content: Container(
-                                                width: Responsive.isDesktop(
-                                                        context)
-                                                    ? (size.width - 220) * 0.8
-                                                    : size.width * 0.8,
-                                                child: AddEditCategoryView(
-                                                    oldCategory: null),
-                                              ),
-                                            ),
-                                        context: context)
-                                    .then((_) =>
-                                        categoryController.restCatParameters(
-                                            isEditDismiss: false));
-                              },
-                              child: Card(
-                                color: Colors.grey[200],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 40,
+                                                              ),
+                                                              categoryController
+                                                                  .pickedImage,
+                                                              context,
+                                                            );
+                                                          }
+                                                        },
+                                                        child: CircleAvatar(
+                                                          child:
+                                                              Icon(Icons.add),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  content: Container(
+                                                    width: Responsive.isDesktop(
+                                                            context)
+                                                        ? (size.width - 220) *
+                                                            0.8
+                                                        : size.width * 0.8,
+                                                    child: AddEditCategoryView(
+                                                        oldCategory: null),
+                                                  ),
+                                                ),
+                                            context: context)
+                                        .then((_) => categoryController
+                                            .restCatParameters(
+                                                isEditDismiss: false));
+                                  },
+                                  child: Card(
+                                    color: Colors.grey[200],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 40,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
-                          });
-                  },
-                );
+                                );
+                              });
+                      },
+                    );
         });
   }
 }

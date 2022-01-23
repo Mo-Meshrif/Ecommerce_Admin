@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
   final Icon icon;
   final Widget prefix;
   final Widget suffix;
-
+  final bool autoFocus;
   CustomTextField({
     @required this.bodyColor,
     @required this.onChanged,
@@ -31,6 +31,7 @@ class CustomTextField extends StatelessWidget {
     this.txtEditingController,
     this.height,
     this.hintStyle,
+    this.autoFocus,
   });
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class CustomTextField extends StatelessWidget {
           borderRadius: shapeIsCircular ? BorderRadius.circular(20) : null),
       padding: const EdgeInsets.only(left: 8.0),
       child: TextFormField(
+        autofocus: autoFocus ?? false,
         controller: txtEditingController,
         initialValue: initVal,
         onTap: onTaped,

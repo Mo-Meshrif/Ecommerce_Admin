@@ -91,7 +91,7 @@ class OrderDetailsHeader extends StatelessWidget {
               ),
               content: Container(
                 width: 250,
-                child: OrdrTrack(),
+                child: OrderTrack(),
               ),
             ),
             barrierColor: Colors.grey[50],

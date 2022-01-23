@@ -1,3 +1,4 @@
+import '/responsive.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '/model/userModel.dart';
 import '/../../../../widgets/customText.dart';
@@ -66,7 +67,9 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                           ? Container(
                               constraints: BoxConstraints(
                                 minWidth: 40,
-                                maxWidth: (size.width - 350) * 0.5,
+                                maxWidth: Responsive.isDesktop(context)
+                                    ? (size.width - 350) * 0.5
+                                    : size.width * 0.5,
                               ),
                               child: Card(
                                 color: messages[i]['from'] == widget.me.id

@@ -155,6 +155,9 @@ class MessageViewModel extends GetxController {
 
   getIndexOfShownMessage(int i) {
     indexOfShownMessage = i;
+    if(indexOfShownMessage==null){
+      toUser=null;
+    }
     update();
   }
 

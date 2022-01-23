@@ -1,3 +1,6 @@
+import '/views/subViews/homeView/homeWidgets/messagesView/widgets/mobileNewMessage.dart';
+import '/core/viewModel/homeViewModel.dart';
+import '/responsive.dart';
 import '/model/userModel.dart';
 import '/model/messageModel.dart';
 import '/core/viewModel/messageViewModel.dart';
@@ -32,14 +35,16 @@ class MessagesHeader extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () => messageController.isNew(),
-                  child: CircleAvatar(
-                    child: Icon(messageController.isNewMessage.value
-                        ? Icons.close
-                        : Icons.post_add),
-                  ),
-                )
+                Responsive.isMobile(context)
+                    ? MobileNewMessage()
+                    : GestureDetector(
+                        onTap: () => messageController.isNew(),
+                        child: CircleAvatar(
+                          child: Icon(messageController.isNewMessage.value
+                              ? Icons.close
+                              : Icons.post_add),
+                        ),
+                      )
               ],
             ),
           ),
@@ -67,6 +72,7 @@ class MessagesHeader extends StatelessWidget {
                               messageController
                                   .updateMessage(headerMesssage[i].id);
                             }
+                            Get.find<HomeViewModel>().getCurrentIndex(1);
                           },
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(horizontal: 5),

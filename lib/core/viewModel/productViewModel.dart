@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import '/responsive.dart';
 import '/core/service/fireStore_Category.dart';
 import '/core/service/fireStore_product.dart';
 import '/core/viewModel/homeViewModel.dart';
@@ -9,9 +10,15 @@ import 'package:get/get.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 
 class ProductViewModel extends GetxController {
+  ValueNotifier isMobileAddProduct = ValueNotifier(false);
   onInit() {
     getCategories();
     super.onInit();
+  }
+
+  getMobileViewStatus(bool val) {
+    isMobileAddProduct.value = val;
+    update();
   }
 
   //add product
@@ -20,7 +27,9 @@ class ProductViewModel extends GetxController {
   Uint8List pickedImage;
   List<CategoryModel> _categories = [];
   List<CategoryModel> get categories => _categories;
-  String cat = 'Select Category',
+  String oldImage,
+      oldProdId,
+      cat = 'Select Category',
       mainSubCat = 'Select Main Sub-Category',
       subCat = 'Select Sub-Category',
       season = 'Select Product Season',
@@ -36,12 +45,36 @@ class ProductViewModel extends GetxController {
   List<String> selectedColors = [];
   Map<String, List<String>> sizes = {
     'Apparel': ['S', 'M', 'L', 'XL'],
-    'Shoes': ['4.5', '5', '6.5', '7']
+    'Shoes': ['4.5', '5.0', '6.5', '7.0']
   };
   List<String> selectedSizes = [];
+
+  getMobileProdData(ProductModel prod) {
+    CategoryModel currentCato = _categories
+        .firstWhere((cat) => cat.id == prod.classification['cat-id']);
+    oldProdId = prod.id;
+    oldImage = prod.imgUrl;
+    cat = currentCato.txt;
+    mainSubCat = prod.classification['category'];
+    subCat = prod.classification['sub-cat'];
+    prodName = prod.prodName;
+    season = prod.season;
+    colors = selectedColors = prod.color.cast<String>();
+    selectedSizes = prod.size.cast<String>();
+    prodPrice = prod.price;
+    brandName = prod.brand;
+    prodCondition = prod.condition;
+    prodSku = prod.sku;
+    materialType = prod.material;
+    isTrend = prod.trending;
+    catIndex = _categories.indexOf(currentCato);
+    mainSubIndex = (currentCato.subCat['s'] as List)
+        .indexOf(prod.classification['category']);
+    update();
+  }
+
   getProdImage() async {
-    Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImageAsBytes();
+    Uint8List bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
     if (bytesFromPicker != null) {
       pickedImage = bytesFromPicker;
     }
@@ -157,6 +190,7 @@ class ProductViewModel extends GetxController {
 
   restProdParameters() {
     pickedImage = null;
+    oldImage = null;
     cat = 'Select Category';
     mainSubCat = 'Select Main Sub-Category';
     subCat = 'Select Sub-Category';
@@ -228,8 +262,7 @@ class ProductViewModel extends GetxController {
   }
 
   reGetProdImage() async {
-    Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImageAsBytes();
+    Uint8List bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
     if (bytesFromPicker != null) {
       rePickedImage = bytesFromPicker;
     }
@@ -298,7 +331,8 @@ class ProductViewModel extends GetxController {
     update([4]);
   }
 
-  editProd(Uint8List image, ProductModel prod, BuildContext ctx) {
+  editProd(
+      String prodId, Uint8List image, ProductModel prod, BuildContext ctx) {
     reLoading.value = true;
     update([3]);
     if (image != null) {
@@ -307,32 +341,43 @@ class ProductViewModel extends GetxController {
           .then((imgUrl) {
         if (imgUrl != null) {
           FireStoreProduct()
-              .editProductfromFireStore(ProductModel(
-            id: prod.id,
-            classification: prod.classification,
-            prodName: prod.prodName,
-            imgUrl: imgUrl,
-            season: prod.season,
-            color: prod.color,
-            size: prod.size,
-            price: prod.price,
-            createdAt: prod.createdAt,
-            brand: prod.brand,
-            condition: prod.condition,
-            sku: prod.sku,
-            material: prod.material,
-            trending: prod.trending,
-          ))
+              .editProductfromFireStore(
+                  prodId,
+                  ProductModel(
+                    classification: prod.classification,
+                    prodName: prod.prodName,
+                    imgUrl: imgUrl,
+                    season: prod.season,
+                    color: prod.color,
+                    size: prod.size,
+                    price: prod.price,
+                    createdAt: prod.createdAt,
+                    brand: prod.brand,
+                    condition: prod.condition,
+                    sku: prod.sku,
+                    material: prod.material,
+                    trending: prod.trending,
+                  ))
               .then((_) {
-            Navigator.of(ctx).pop();
-            restReProdParameters();
+            if (Responsive.isMobile(ctx)) {
+              getMobileViewStatus(false);
+              restProdParameters();
+            } else {
+              Navigator.of(ctx).pop();
+              restReProdParameters();
+            }
           });
         }
       });
     } else {
-      FireStoreProduct().editProductfromFireStore(prod).then((_) {
-        Navigator.of(ctx).pop();
-        restReProdParameters();
+      FireStoreProduct().editProductfromFireStore(prodId, prod).then((_) {
+        if (Responsive.isMobile(ctx)) {
+          getMobileViewStatus(false);
+          restProdParameters();
+        } else {
+          Navigator.of(ctx).pop();
+          restReProdParameters();
+        }
       });
     }
   }

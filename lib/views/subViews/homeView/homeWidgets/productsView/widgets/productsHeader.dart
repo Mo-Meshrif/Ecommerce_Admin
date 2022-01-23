@@ -1,3 +1,4 @@
+import '/responsive.dart';
 import '/model/productModel.dart';
 import '/core/viewModel/productViewModel.dart';
 import '/model/categoryModel.dart';
@@ -43,13 +44,17 @@ class ProductsHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: CustomText(
-                    txt: 'Add New Product',
-                    fSize: 18,
-                  ),
-                ),
-                SizedBox(height: 15),
+                Responsive.isMobile(context)
+                    ? Padding(padding: EdgeInsets.zero)
+                    : Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: CustomText(
+                            txt: 'Add New Product',
+                            fSize: 18,
+                          ),
+                        ),
+                      ),
                 Center(
                   child: GestureDetector(
                     onTap: () => productController.getProdImage(),
@@ -58,9 +63,11 @@ class ProductsHeader extends StatelessWidget {
                       borderType: BorderType.Circle,
                       color: Colors.grey[350],
                       strokeWidth: 1,
-                      child: productController.pickedImage == null
-                          ? Icon(Icons.upload)
-                          : Image.memory(productController.pickedImage),
+                      child: productController.pickedImage != null
+                          ? Image.memory(productController.pickedImage)
+                          : productController.oldImage != null
+                              ? Image.network(productController.oldImage)
+                              : Icon(Icons.upload),
                     ),
                   ),
                 ),
@@ -113,6 +120,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
+                    initVal: productController.prodName,
                     onChanged: (val) => productController.prodName = val,
                     valid: (val) {
                       if (val.isEmpty) {
@@ -220,6 +228,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
+                    initVal: productController.brandName,
                     onChanged: (val) => productController.brandName = val,
                     valid: (val) {
                       if (val.isEmpty) {
@@ -237,6 +246,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
+                    initVal: productController.materialType,
                     onChanged: (val) => productController.materialType = val,
                     valid: (val) {
                       if (val.isEmpty) {
@@ -254,6 +264,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
+                    initVal: productController.prodCondition,
                     onChanged: (val) => productController.prodCondition = val,
                     valid: (val) {
                       if (val.isEmpty) {
@@ -271,6 +282,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
+                    initVal: productController.prodSku,
                     onChanged: (val) => productController.prodSku = val,
                     valid: (val) {
                       if (val.isEmpty) {
@@ -288,6 +300,7 @@ class ProductsHeader extends StatelessWidget {
                     height: 25,
                     shapeIsCircular: true,
                     bodyColor: Colors.grey[350],
+                    initVal: productController.prodPrice,
                     onChanged: (val) => productController.prodPrice = val,
                     valid: (val) {
                       if (val.isEmpty) {
@@ -356,30 +369,57 @@ class ProductsHeader extends StatelessWidget {
                       onpress: () {
                         _key.currentState.save();
                         if (_key.currentState.validate()) {
-                          productController.addProduct(
-                              ProductModel(
-                                classification: {
-                                  'cat-id': categories[catIndex].id,
-                                  'category': productController.mainSubCat,
-                                  'sub-cat': productController.subCat
-                                },
-                                prodName: productController.prodName,
-                                season: productController.season,
-                                color: selectedColors,
-                                size: selectedSizes,
-                                price: productController.prodPrice,
-                                createdAt: Timestamp.now(),
-                                brand: productController.brandName,
-                                condition: productController.prodCondition,
-                                sku: productController.prodSku,
-                                material: productController.materialType,
-                                trending: productController.isTrend,
-                              ),
-                              cat,
-                              productController.pickedImage);
+                          if (productController.oldImage == null) {
+                            productController.addProduct(
+                                ProductModel(
+                                  classification: {
+                                    'cat-id': categories[catIndex].id,
+                                    'category': productController.mainSubCat,
+                                    'sub-cat': productController.subCat
+                                  },
+                                  prodName: productController.prodName,
+                                  season: productController.season,
+                                  color: selectedColors,
+                                  size: selectedSizes,
+                                  price: productController.prodPrice,
+                                  createdAt: Timestamp.now(),
+                                  brand: productController.brandName,
+                                  condition: productController.prodCondition,
+                                  sku: productController.prodSku,
+                                  material: productController.materialType,
+                                  trending: productController.isTrend,
+                                ),
+                                cat,
+                                productController.pickedImage);
+                          } else {
+                            productController.editProd(
+                                productController.oldProdId,
+                                productController.pickedImage,
+                                ProductModel(
+                                  classification: {
+                                    'cat-id': categories[catIndex].id,
+                                    'category': productController.mainSubCat,
+                                    'sub-cat': productController.subCat
+                                  },
+                                  prodName: productController.prodName,
+                                  imgUrl: productController.oldImage,
+                                  season: productController.season,
+                                  color: selectedColors,
+                                  size: selectedSizes,
+                                  price: productController.prodPrice,
+                                  createdAt: Timestamp.now(),
+                                  brand: productController.brandName,
+                                  condition: productController.prodCondition,
+                                  sku: productController.prodSku,
+                                  material: productController.materialType,
+                                  trending: productController.isTrend,
+                                ),
+                                context);
+                          }
                         }
                       },
-                      title: 'Add',
+                      title:
+                          productController.oldImage == null ? 'Add' : 'Save',
                       titleColor: swatchColor,
                     ),
                   ],

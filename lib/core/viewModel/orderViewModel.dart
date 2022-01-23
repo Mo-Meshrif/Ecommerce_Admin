@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '/core/viewModel/notificationViewModel.dart';
 import '/model/orderModel.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,12 @@ class OrderViewModel extends GetxController {
     'Total Price',
   ];
   OrderModel selectedOrder;
+
+  ValueNotifier isMobileTrackOrder = ValueNotifier(false);
+  getMobileViewStatus(bool val) {
+    isMobileTrackOrder.value = val;
+    update();
+  }
 
   getSelectedOrder(OrderModel order) {
     selectedOrder = order;

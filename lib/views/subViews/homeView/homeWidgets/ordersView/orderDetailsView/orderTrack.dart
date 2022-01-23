@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:timelines/timelines.dart';
 import '/../../../../const.dart';
 
-class OrdrTrack extends StatelessWidget {
+class OrderTrack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderViewModel>(

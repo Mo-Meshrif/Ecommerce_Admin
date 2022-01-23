@@ -16,8 +16,8 @@ class FireStoreProduct {
     return await collectionProduct.add(prod.toJson());
   }
 
-  Future<void> editProductfromFireStore(ProductModel prod) async {
-    return await collectionProduct.doc(prod.id).update(prod.toJson());
+  Future<void> editProductfromFireStore(String prodId,ProductModel prod) async {
+    return await collectionProduct.doc(prodId).update(prod.toJson());
   }
 
   Future<void> deleteProductfromFireStore(String cat, ProductModel prod) async {

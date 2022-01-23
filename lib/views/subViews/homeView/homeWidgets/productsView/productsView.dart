@@ -1,3 +1,6 @@
+import '/core/viewModel/homeViewModel.dart';
+import '/responsive.dart';
+import '/views/subViews/homeView/homeWidgets/productsView/mobileProductsView.dart';
 import 'widgets/productsBody.dart';
 import '/core/viewModel/productViewModel.dart';
 import 'package:get/get.dart';
@@ -15,23 +18,31 @@ class ProductsView extends StatelessWidget {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 250,
-                      height: size.height,
-                      child: ProductsHeader(),
-                    ),
-                    VerticalDivider(
-                      color: Colors.grey,
-                      thickness: 0.5,
-                    ),
-                    Expanded(
-                      child: ProductBody(),
+              : Responsive.isMobile(context)
+                  ? WillPopScope(
+                      onWillPop: () async =>
+                          Get.find<HomeViewModel>().currentIndex == 0
+                              ? true
+                              : false,
+                      child: MobileProductsView(),
                     )
-                  ],
-                );
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 250,
+                          height: size.height,
+                          child: ProductsHeader(),
+                        ),
+                        VerticalDivider(
+                          color: Colors.grey,
+                          thickness: 0.5,
+                        ),
+                        Expanded(
+                          child: ProductBody(),
+                        )
+                      ],
+                    );
         });
   }
 }

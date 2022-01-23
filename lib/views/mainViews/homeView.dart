@@ -1,15 +1,16 @@
+import '../subViews/homeView/homeWidgets/customAppBar/appBarActions.dart';
+import '../subViews/homeView/homeWidgets/customAppBar/appBarTitle.dart';
+import '../subViews/homeView/homeWidgets/customAppBar/appBarLeading.dart';
 import '/views/subViews/homeView/homeWidgets/sideMenuView.dart';
 import '/views/subViews/homeView/desktopView.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '/responsive.dart';
-import '../subViews/homeView/homeWidgets/navTopView.dart';
 import '/core/viewModel/notificationViewModel.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/core/viewModel/categoryViewModel.dart';
 import '../../const.dart';
 import '../../core/viewModel/homeViewModel.dart';
 import '../../core/viewModel/authViewModel.dart';
-import '../../widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,24 +32,10 @@ class HomeView extends StatelessWidget {
                 ? AppBar(
                     backgroundColor: swatchColor,
                     elevation: 0,
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.menu,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => homeController
-                          .homeScaffoldKey.currentState
-                          .openDrawer(),
-                    ),
-                    title: CustomText(
-                      txt: 'Ecommerce App',
-                      txtColor: swatchColor,
-                      fSize: 20,
-                      fWeight: FontWeight.bold,
-                    ),
-                    actions: [
-                      NavTopView(),
-                    ],
+                    leading: AppBarLeading(),
+                    centerTitle: true,
+                    title: AppBarTitle(),
+                    actions: [AppBarActions()]
                   )
                 : null,
             drawer: ConstrainedBox(
@@ -71,7 +58,7 @@ class HomeView extends StatelessWidget {
               ),
             ),
             body: Responsive(
-              mobile: Container(),
+              mobile: child,
               tablet: child,
               desktop: DesktopView(
                 homeItems: homeItems,

@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeViewModel extends GetxController {
-  final GlobalKey<ScaffoldState> homeScaffoldKey=GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> homeScaffoldKey = GlobalKey<ScaffoldState>();
   List<Map<String, String>> items = [];
-  int logoutIndex = adminItems.indexOf(adminItems.last);
+  int currentIndex = 0;
   LocalStorageData _localStorageData = Get.find<LocalStorageData>();
   UserModel savedUser;
   ValueNotifier<bool> sortCustomersAscending = ValueNotifier(true);
@@ -42,6 +42,11 @@ class HomeViewModel extends GetxController {
   handleClickItem(int i) {
     if (Get.currentRoute != items[i]['route'])
       locator<NavigationService>().navigateTo(items[i]['route']);
+  }
+
+  getCurrentIndex(val) {
+    currentIndex = val;
+    update();
   }
 
   //Customers_Logic

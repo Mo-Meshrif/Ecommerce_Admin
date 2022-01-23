@@ -13,11 +13,12 @@ class NotificationsView extends StatelessWidget {
   NotificationsView({@required this.notifications});
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return GetBuilder<NotificationViewModel>(
       builder: (notificationController) => AlertDialog(
         alignment: Alignment.topRight,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+        insetPadding: EdgeInsets.fromLTRB(0, 10, 20, 0),
+        contentPadding: const EdgeInsets.all(5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
@@ -27,8 +28,8 @@ class NotificationsView extends StatelessWidget {
           txtColor: Colors.grey[900],
         ),
         content: Container(
-            height: 400,
-            width: 300,
+            height: size.height * 0.6,
+            width: 200,
             child: notifications.isEmpty
                 ? Center(
                     child: CustomText(
@@ -43,12 +44,13 @@ class NotificationsView extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.builder(
+                          padding: EdgeInsets.zero,
                           itemCount: notifications.length,
                           itemBuilder: (_, i) {
                             UserModel from = Get.find<AuthViewModel>()
                                 .users
-                                .firstWhere((user) =>
-                                    user.id == notifications[i].from);
+                                .firstWhere(
+                                    (user) => user.id == notifications[i].from);
                             bool isMessage =
                                 notifications[i].message.contains('message')
                                     ? true
@@ -56,8 +58,7 @@ class NotificationsView extends StatelessWidget {
                             return GestureDetector(
                               onTap: () {
                                 Navigator.pop(context);
-                                notificationController
-                                    .handleNotificationTapped(
+                                notificationController.handleNotificationTapped(
                                   notifications[i].id,
                                   notifications[i].message,
                                 );

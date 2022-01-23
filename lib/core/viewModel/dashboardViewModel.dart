@@ -12,7 +12,7 @@ class DashboardViewModel extends GetxController {
   ValueNotifier isLoading = ValueNotifier(false);
   AuthViewModel _authViewModel = Get.find();
   DateTime _dateTime = DateTime.now();
-  int totalProducts;
+  int totalProducts=0;
 
   onInit() {
     getTotalProductsOnStore();

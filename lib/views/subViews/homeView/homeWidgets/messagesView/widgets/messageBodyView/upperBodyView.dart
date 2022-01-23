@@ -1,3 +1,4 @@
+import '/responsive.dart';
 import '/core/viewModel/messageViewModel.dart';
 import '/model/userModel.dart';
 import '/../../../../const.dart';
@@ -84,8 +85,10 @@ class UpperBodyView extends StatelessWidget {
                 messageController.isToBarClicked.value
                     ? Container(
                         margin: EdgeInsets.only(left: 50),
-                        height: size.height*0.7,
-                        width: (size.width - 350) * 0.3,
+                        height: size.height * 0.7,
+                        width: Responsive.isDesktop(context)
+                            ? (size.width - 350) * 0.3
+                            : size.width * 0.3,
                         child: Card(
                           elevation: 10,
                           shape: RoundedRectangleBorder(
@@ -138,22 +141,18 @@ class UpperBodyView extends StatelessWidget {
                                               horizontalTitleGap: 8,
                                               leading: CircleAvatar(
                                                 radius: 30,
-                                                child: Icon(Icons.person),
+                                                backgroundImage: spUsers[i]
+                                                            .pic ==
+                                                        null
+                                                    ? AssetImage(
+                                                        'assets/order/person.png')
+                                                    : NetworkImage(
+                                                        spUsers[i].pic),
                                               ),
-                                              title: RichText(
-                                                  text: TextSpan(children: [
-                                                TextSpan(
-                                                    text: spUsers[i]
-                                                        .userName
-                                                        .capitalizeFirst,
-                                                    style: TextStyle(
-                                                        color: Colors.black)),
-                                                TextSpan(
-                                                    text:
-                                                        ' "${spUsers[i].role}"',
-                                                    style: TextStyle(
-                                                        color: Colors.red)),
-                                              ])),
+                                              title: CustomText(
+                                                  txt: spUsers[i]
+                                                      .userName
+                                                      .capitalizeFirst),
                                             ),
                                           );
                                         });

@@ -25,12 +25,13 @@ class NotificationItem extends StatelessWidget {
             : Padding(padding: EdgeInsets.only(left: 12)),
         Expanded(
           child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
             leading: Container(
               width: 40,
               child: Row(
                 children: [
                   Icon(icon),
-                  VerticalDivider(),
+                  VerticalDivider(color: Colors.grey,),
                 ],
               ),
             ),

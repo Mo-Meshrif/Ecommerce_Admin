@@ -94,10 +94,10 @@ class ProductBody extends StatelessWidget {
                                                   GestureDetector(
                                                     onTap: () => productController
                                                         .editProd(
+                                                            prod.id,
                                                             productController
                                                                 .rePickedImage,
                                                             ProductModel(
-                                                                id: prod.id,
                                                                 prodName:
                                                                     productController
                                                                         .reProdName,
@@ -149,9 +149,9 @@ class ProductBody extends StatelessWidget {
                                             ],
                                           ),
                                           content: Container(
-                                           width: Responsive.isDesktop(context)
-                                            ? (size.width - 220) * 0.75
-                                            : size.width * 0.75,
+                                            width: Responsive.isDesktop(context)
+                                                ? (size.width - 220) * 0.75
+                                                : size.width * 0.75,
                                             child: EditProductView(prod: prod),
                                           ),
                                         ));
