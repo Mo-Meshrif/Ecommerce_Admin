@@ -65,7 +65,7 @@ class MobileOrderView extends StatelessWidget {
                         onTap: () {
                           orderController.getSelectedOrder(orders[i]);
                           orderController.getMobileViewStatus(true);
-                          Get.find<HomeViewModel>().getCurrentIndex(2);
+                          Get.find<HomeViewModel>().getCurrentItem('order');
                         },
                         child: Icon(
                           Icons.delivery_dining,

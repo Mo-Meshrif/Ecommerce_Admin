@@ -1,6 +1,4 @@
-import '/views/subViews/homeView/homeWidgets/messagesView/widgets/mobileNewMessage.dart';
 import '/core/viewModel/homeViewModel.dart';
-import '/responsive.dart';
 import '/model/userModel.dart';
 import '/model/messageModel.dart';
 import '/core/viewModel/messageViewModel.dart';
@@ -20,32 +18,15 @@ class MessagesHeader extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                    bodyColor: Colors.grey[200],
-                    onChanged: (val) =>
-                        messageController.getSearchedMessage(val),
-                    valid: null,
-                    hintTxt: 'Search Messanger',
-                    icon: null,
-                    prefix: Icon(Icons.search),
-                    shapeIsCircular: true,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Responsive.isMobile(context)
-                    ? MobileNewMessage()
-                    : GestureDetector(
-                        onTap: () => messageController.isNew(),
-                        child: CircleAvatar(
-                          child: Icon(messageController.isNewMessage.value
-                              ? Icons.close
-                              : Icons.post_add),
-                        ),
-                      )
-              ],
+            child: CustomTextField(
+              bodyColor: Colors.grey[200],
+              onChanged: (val) =>
+                  messageController.getSearchedMessage(val),
+              valid: null,
+              hintTxt: 'Search Messanger',
+              icon: null,
+              prefix: Icon(Icons.search),
+              shapeIsCircular: true,
             ),
           ),
           Expanded(
@@ -72,7 +53,7 @@ class MessagesHeader extends StatelessWidget {
                               messageController
                                   .updateMessage(headerMesssage[i].id);
                             }
-                            Get.find<HomeViewModel>().getCurrentIndex(1);
+                            Get.find<HomeViewModel>().getCurrentItem('chat');
                           },
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(horizontal: 5),

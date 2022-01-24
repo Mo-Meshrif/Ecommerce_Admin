@@ -22,7 +22,6 @@ class HomeView extends StatelessWidget {
         builder: (homeController) {
           AuthViewModel _auth = Get.find();
           if (_auth.users.isEmpty) _auth.getUsers();
-          List<Map<String, String>> homeItems = homeController.items;
           Get.put(CategoryViewModel());
           Get.put(OrderViewModel());
           Get.put(NotificationViewModel());
@@ -52,7 +51,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 child: SideMenuView(
-                  homeItems: homeItems,
+                  homeItems: items,
                   onTap: (i) => homeController.handleClickItem(i),
                 ),
               ),
@@ -61,7 +60,7 @@ class HomeView extends StatelessWidget {
               mobile: child,
               tablet: child,
               desktop: DesktopView(
-                homeItems: homeItems,
+                homeItems: items,
                 child: child,
                 itemTap: (i) => homeController.handleClickItem(i),
               ),

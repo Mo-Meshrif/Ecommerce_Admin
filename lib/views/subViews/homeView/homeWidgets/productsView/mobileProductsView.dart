@@ -21,7 +21,7 @@ class MobileProductsView extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     productsController.getMobileViewStatus(true);
-                    Get.find<HomeViewModel>().getCurrentIndex(3);
+                    Get.find<HomeViewModel>().getCurrentItem('addProduct');
                   },
                   child: Container(
                     height: 100,
@@ -89,7 +89,7 @@ class MobileProductsView extends StatelessWidget {
                                         productsController
                                             .getMobileViewStatus(true);
                                         Get.find<HomeViewModel>()
-                                            .getCurrentIndex(3);
+                                            .getCurrentItem('editProduct');
                                       },
                                       child: Icon(
                                         Icons.edit,

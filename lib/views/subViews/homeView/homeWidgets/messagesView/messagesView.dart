@@ -19,7 +19,7 @@ class MessagesView extends StatelessWidget {
                 : Responsive.isMobile(context)
                     ? WillPopScope(
                         onWillPop: () async =>
-                            Get.find<HomeViewModel>().currentIndex == 0
+                            Get.find<HomeViewModel>().currentItem == 'dash'
                                 ? true
                                 : false,
                         child: MoblieMessageView(),

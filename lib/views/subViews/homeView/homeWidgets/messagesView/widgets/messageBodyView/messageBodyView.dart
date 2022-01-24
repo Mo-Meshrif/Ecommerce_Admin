@@ -24,12 +24,12 @@ class MessageBodyView extends StatelessWidget {
           to = currentMessage.to;
           from = currentMessage.from;
         }
-        return notMe != null || messageController.isNewMessage.value
+        return notMe != null 
             ? Column(
                 children: [
                   Responsive.isMobile(context)
                       ? Padding(padding: EdgeInsets.zero)
-                      : UpperBodyView(myRole: me.role),
+                      : UpperBodyView(),
                   notMe != null
                       ? Expanded(
                           child: LowerBodyView(

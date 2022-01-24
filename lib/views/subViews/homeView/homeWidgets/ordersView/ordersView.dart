@@ -36,7 +36,7 @@ class OrdersView extends StatelessWidget {
                     ? Responsive.isMobile(context)
                         ? WillPopScope(
                             onWillPop: () async =>
-                                Get.find<HomeViewModel>().currentIndex == 0
+                                Get.find<HomeViewModel>().currentItem == 'dash'
                                     ? true
                                     : false,
                             child: MobileOrderView(orders: orders),
@@ -79,8 +79,6 @@ class OrdersView extends StatelessWidget {
                                               MessageViewModel
                                                   _messageController =
                                                   Get.put(MessageViewModel());
-                                              _messageController
-                                                  .isNewMessage.value = true;
                                               _messageController.getOrderNumber(
                                                   orderController.selectedOrder
                                                       .orderNumber);
@@ -93,7 +91,7 @@ class OrdersView extends StatelessWidget {
                                                               .selectedOrder
                                                               .customerId);
                                               Get.find<HomeViewModel>()
-                                                  .handleClickItem(1);
+                                                  .handleClickItem(2);
                                             },
                                           ),
                                           content: Container(

@@ -8,13 +8,9 @@ import 'package:get/get.dart';
 
 class HomeViewModel extends GetxController {
   final GlobalKey<ScaffoldState> homeScaffoldKey = GlobalKey<ScaffoldState>();
-  List<Map<String, String>> items = [];
-  int currentIndex = 0;
+  String currentItem = 'dash';
   LocalStorageData _localStorageData = Get.find<LocalStorageData>();
   UserModel savedUser;
-  ValueNotifier<bool> sortCustomersAscending = ValueNotifier(true);
-  ValueNotifier<bool> sortShopsAscending = ValueNotifier(true);
-  String sortCustomersColumn, sortShopsColumn;
   onInit() {
     getSavedUser();
     super.onInit();
@@ -24,19 +20,10 @@ class HomeViewModel extends GetxController {
     _localStorageData.getUser.then((user) {
       savedUser = user;
       update();
-      initHomeView();
+      if (savedUser != null) {
+        locator<NavigationService>().navigateTo(dashboardPageRoute);
+      }
     });
-  }
-
-  initHomeView() {
-    if (savedUser != null) {
-      String role = savedUser.role;
-      items = role == 'Admin' ? adminItems : mangerItems;
-      update();
-      String initRoute =
-          role == 'Admin' ? categoriesPageRoute : dashboardPageRoute;
-      locator<NavigationService>().navigateTo(initRoute);
-    }
   }
 
   handleClickItem(int i) {
@@ -44,36 +31,8 @@ class HomeViewModel extends GetxController {
       locator<NavigationService>().navigateTo(items[i]['route']);
   }
 
-  getCurrentIndex(val) {
-    currentIndex = val;
-    update();
-  }
-
-  //Customers_Logic
-  onSortCustomer(List<Map<String, dynamic>> customersList, val) {
-    sortCustomersColumn = val;
-    sortCustomersAscending.value = !sortCustomersAscending.value;
-    if (sortCustomersAscending.value) {
-      customersList.sort((a, b) =>
-          b["$sortCustomersColumn"].compareTo(a["$sortCustomersColumn"]));
-    } else {
-      customersList.sort((a, b) =>
-          a["$sortCustomersColumn"].compareTo(b["$sortCustomersColumn"]));
-    }
-    update();
-  }
-
-  //Shops_Logic
-  onSortShops(List<Map<String, dynamic>> shopsList, val) {
-    sortShopsColumn = val;
-    sortShopsAscending.value = !sortShopsAscending.value;
-    if (sortShopsAscending.value) {
-      shopsList.sort(
-          (a, b) => b["$sortShopsColumn"].compareTo(a["$sortShopsColumn"]));
-    } else {
-      shopsList.sort(
-          (a, b) => a["$sortShopsColumn"].compareTo(b["$sortShopsColumn"]));
-    }
+  getCurrentItem(String val) {
+    currentItem = val;
     update();
   }
 }

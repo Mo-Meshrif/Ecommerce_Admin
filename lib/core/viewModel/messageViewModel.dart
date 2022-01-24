@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MessageViewModel extends GetxController {
-  ValueNotifier<bool> isNewMessage = ValueNotifier(false);
-  ValueNotifier<bool> isToBarClicked = ValueNotifier(false);
   ValueNotifier<bool> isLoading = ValueNotifier(false);
   UserModel toUser;
   String toValue = '';
@@ -35,25 +33,6 @@ class MessageViewModel extends GetxController {
 
   getOrderNumber(val) {
     orderNumber = val;
-    update();
-  }
-
-  isNew() {
-    isNewMessage.value = !isNewMessage.value;
-    update();
-    if (!isNewMessage.value) {
-      restToUserValues();
-      update();
-    }
-  }
-
-  openToBar() {
-    isToBarClicked.value = true;
-    update();
-  }
-
-  closeToBar() {
-    isToBarClicked.value = false;
     update();
   }
 

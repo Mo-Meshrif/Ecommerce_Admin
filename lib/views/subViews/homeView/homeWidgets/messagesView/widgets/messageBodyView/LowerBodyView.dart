@@ -164,9 +164,6 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                                       orderNumber: null,
                                     );
                               _textController.text = '';
-                              if (messageController.isNewMessage.value) {
-                                messageController.isNew();
-                              }
                             }
                           },
                           child: Icon(

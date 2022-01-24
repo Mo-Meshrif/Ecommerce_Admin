@@ -1,3 +1,4 @@
+import '../../../../../responsive.dart';
 import '/widgets/customText.dart';
 import '/core/viewModel/homeViewModel.dart';
 import '/core/viewModel/messageViewModel.dart';
@@ -10,13 +11,13 @@ class AppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (homeController) {
-      int currentIndex = homeController.currentIndex;
+      String currentItem = homeController.currentItem;
       UserModel me = homeController.savedUser;
       List<MessageModel> headerMessages = [];
       int indexOfShownMessage = 0;
       MessageModel currentMessage;
       UserModel notMe, toUser;
-      if (currentIndex == 1) {
+      if (currentItem == 'chat') {
         toUser = Get.find<MessageViewModel>().toUser;
         headerMessages = Get.find<MessageViewModel>().headerMessages;
         indexOfShownMessage =
@@ -29,16 +30,28 @@ class AppBarTitle extends StatelessWidget {
         }
       }
       Widget _widget;
-      switch (homeController.currentIndex) {
-        case 1:
+      switch (currentItem) {
+        case 'chat':
           _widget = CustomText(
             txt: toUser != null ? toUser.userName : notMe.userName,
             fSize: 18,
           );
           break;
-        case 2:
+        case 'order':
           _widget = CustomText(
             txt: 'Order Track',
+            fSize: 18,
+          );
+          break;
+        case 'addProduct':
+          _widget = CustomText(
+            txt: 'Add Product',
+            fSize: 18,
+          );
+          break;
+        case 'editProduct':
+          _widget = CustomText(
+            txt: 'Edit Product',
             fSize: 18,
           );
           break;
@@ -48,7 +61,12 @@ class AppBarTitle extends StatelessWidget {
             fSize: 18,
           );
       }
-      return _widget;
+      return Responsive.isMobile(context)
+          ? _widget
+          : CustomText(
+              txt: 'Ecommerce App',
+              fSize: 18,
+            );
     });
   }
 }

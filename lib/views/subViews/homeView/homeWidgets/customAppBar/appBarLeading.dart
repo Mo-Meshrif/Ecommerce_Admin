@@ -10,28 +10,32 @@ class AppBarLeading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (homeController) {
-      int currentIndex = homeController.currentIndex;
-      return currentIndex != 0 && Responsive.isMobile(context)
+      String currentItem = homeController.currentItem;
+      return currentItem != 'dash' && Responsive.isMobile(context)
           ? IconButton(
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.black,
               ),
               onPressed: () {
-                switch (currentIndex) {
-                  case 1:
+                switch (currentItem) {
+                  case 'chat':
                     Get.find<MessageViewModel>().getIndexOfShownMessage(null);
                     break;
-                  case 2:
+                  case 'order':
                     Get.find<OrderViewModel>().getMobileViewStatus(false);
                     break;
-                  case 3:
+                  case 'addProduct':
+                    Get.find<ProductViewModel>().restProdParameters();
+                    Get.find<ProductViewModel>().getMobileViewStatus(false);
+                    break;
+                  case 'editProduct':
                     Get.find<ProductViewModel>().restProdParameters();
                     Get.find<ProductViewModel>().getMobileViewStatus(false);
                     break;
                   default:
                 }
-                homeController.getCurrentIndex(0);
+                homeController.getCurrentItem('dash');
               },
             )
           : IconButton(

@@ -42,7 +42,6 @@ dependencies:
   mime: ^1.0.1
   flutter_colorpicker: ^0.6.0
   hexcolor: ^2.0.5
-  responsive_table: ^0.1.1+8
   dotted_border: ^2.0.0+1
   timelines: ^0.1.0
   syncfusion_flutter_charts: ^19.4.38
