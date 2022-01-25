@@ -1,3 +1,4 @@
+import '/helper/generatePageRoute.dart';
 import '/const.dart';
 import '/views/mainViews/authView.dart';
 import '/views/subViews/homeView/homeWidgets/categoriesView/categoriesView.dart';
@@ -10,25 +11,18 @@ import 'package:flutter/material.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case rootRoute:
-      return _getPageRoute(settings, AuthView());
+      return GeneratePageRoute(settings, AuthView());
     case dashboardPageRoute:
-      return _getPageRoute(settings, DashboardView());
+      return GeneratePageRoute(settings, DashboardView());
     case categoriesPageRoute:
-      return _getPageRoute(settings, CategoriesView());
+      return GeneratePageRoute(settings, CategoriesView());
     case messagesPageRoute:
-      return _getPageRoute(settings, MessagesView());
+      return GeneratePageRoute(settings, MessagesView());
     case ordersPageRoute:
-      return _getPageRoute(settings, OrdersView());
+      return GeneratePageRoute(settings, OrdersView());
     case productsPageRoute:
-      return _getPageRoute(settings, ProductsView());
+      return GeneratePageRoute(settings, ProductsView());
     default:
-      return _getPageRoute(settings, AuthView());
+      return GeneratePageRoute(settings, AuthView());
   }
-}
-
-_getPageRoute(RouteSettings settings, Widget child) {
-  return MaterialPageRoute(
-    settings: settings,
-    builder: (context) => child,
-  );
 }
