@@ -139,13 +139,12 @@ class CategoryView extends StatelessWidget {
                                         width: Responsive.isDesktop(context)
                                             ? (size.width - 220) * 0.8
                                             : size.width * 0.8,
-                                        child: AddEditCategoryView(
-                                            oldCategory: cat),
+                                        child: AddEditCategoryView(),
                                       ),
                                     ),
                                 context: context)
-                            .then((_) => categoryController.restCatParameters(
-                                isEditDismiss: true));
+                            .then(
+                                (_) => categoryController.restCatParameters());
                       },
                       child: CircleAvatar(
                         radius: 15,

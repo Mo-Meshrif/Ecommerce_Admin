@@ -1,4 +1,4 @@
-import '/model/categoryModel.dart';
+import '/responsive.dart';
 import '/../../../../core/viewModel/categoryViewModel.dart';
 import '/../../../../widgets/customText.dart';
 import '/../../../../widgets/customTextField.dart';
@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddEditCategoryView extends StatelessWidget {
-  final CategoryModel oldCategory;
-  AddEditCategoryView({@required this.oldCategory});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryViewModel>(
@@ -22,13 +20,17 @@ class AddEditCategoryView extends StatelessWidget {
                 ? Colors.black
                 : Colors.white
             : null;
-        bool isEdit = oldCategory != null ? true : false;
+        bool isEdit = categoryController.oldImage != null ? true : false;
         return categoryController.loading.value
             ? Center(child: CircularProgressIndicator())
             : Form(
-                key: oldCategory == null
-                    ? categoryController.addCategoryKey
-                    : categoryController.editCategoryKey,
+                key: categoryController.oldImage == null
+                    ? Responsive.isMobile(context)
+                        ? categoryController.mobileAddCategoryKey
+                        : categoryController.addCategoryKey
+                    : Responsive.isMobile(context)
+                        ? categoryController.mobileEditCategoryKey
+                        : categoryController.editCategoryKey,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,14 +45,18 @@ class AddEditCategoryView extends StatelessWidget {
                                 backgroundColor: pickedColor,
                                 radius: 40,
                                 child: GestureDetector(
-                                    onTap: () => categoryController.getCatImage(),
-                                    child: oldCategory != null &&
-                                            categoryController.pickedImage == null
-                                        ? Image.network(oldCategory.imgUrl)
+                                    onTap: () =>
+                                        categoryController.getCatImage(),
+                                    child: categoryController.oldImage !=
+                                                null &&
+                                            categoryController.pickedImage ==
+                                                null
+                                        ? Image.network(
+                                            categoryController.oldImage)
                                         : categoryController.pickedImage == null
                                             ? Icon(Icons.upload)
-                                            : Image.memory(
-                                                categoryController.pickedImage)),
+                                            : Image.memory(categoryController
+                                                .pickedImage)),
                               ),
                             ),
                             Positioned(
@@ -79,11 +85,13 @@ class AddEditCategoryView extends StatelessWidget {
                                                 ),
                                                 content: SingleChildScrollView(
                                                     child: ColorPicker(
-                                                  pickerColor: categoryController
-                                                      .pickedColor,
+                                                  pickerColor:
+                                                      categoryController
+                                                          .pickedColor,
                                                   onColorChanged: (color) =>
                                                       categoryController
-                                                          .getPickedColor(color),
+                                                          .getPickedColor(
+                                                              color),
                                                   showLabel: true,
                                                   pickerAreaHeightPercent: 0.8,
                                                 )),
@@ -104,7 +112,7 @@ class AddEditCategoryView extends StatelessWidget {
                       SizedBox(height: 10),
                       CustomTextField(
                         bodyColor: Colors.grey[200],
-                        initVal: oldCategory != null ? oldCategory.txt : null,
+                        initVal: categoryController.catogoryTitle,
                         onChanged: (val) =>
                             categoryController.catogoryTitle = val.trim(),
                         valid: (val) {
@@ -144,8 +152,7 @@ class AddEditCategoryView extends StatelessWidget {
                                   Expanded(
                                     child: CustomTextField(
                                         bodyColor: Colors.grey[200],
-                                        initVal: oldCategory != null &&
-                                                mainSubCategories.isNotEmpty
+                                        initVal: mainSubCategories.isNotEmpty
                                             ? mainSubCategories[i]
                                             : null,
                                         onChanged: (val) => categoryController
@@ -171,8 +178,8 @@ class AddEditCategoryView extends StatelessWidget {
                                           color: Colors.grey[200],
                                           height: 48,
                                           child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(bottom: 16),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 16),
                                             child: GestureDetector(
                                                 onTap: () => categoryController
                                                     .changeMainCounter(
@@ -237,10 +244,11 @@ class AddEditCategoryView extends StatelessWidget {
                                               itemCount: subCounter.length,
                                               itemBuilder: (ctx, i) {
                                                 int mainCatoIndex =
-                                                    mainSubCategories.indexWhere(
-                                                        (cato) =>
+                                                    mainSubCategories
+                                                        .indexWhere((cato) =>
                                                             cato ==
-                                                            mainSubCategories[x]);
+                                                            mainSubCategories[
+                                                                x]);
                                                 List<String> subCats =
                                                     categoryController
                                                             .subCategories[
@@ -252,7 +260,7 @@ class AddEditCategoryView extends StatelessWidget {
                                                           bodyColor:
                                                               Colors.grey[200],
                                                           initVal:
-                                                              oldCategory != null
+                                                              subCats[i] != null
                                                                   ? subCats[i]
                                                                   : null,
                                                           onChanged: (val) =>
@@ -286,14 +294,15 @@ class AddEditCategoryView extends StatelessWidget {
                                                     i == subCounter.length - 1 &&
                                                             i != 0
                                                         ? Container(
-                                                            color:
-                                                                Colors.grey[200],
+                                                            color: Colors
+                                                                .grey[200],
                                                             height: 48,
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
-                                                                      bottom: 16),
+                                                                      bottom:
+                                                                          16),
                                                               child: GestureDetector(
                                                                   onTap: () => categoryController
                                                                       .changeSubCounter(
@@ -316,11 +325,12 @@ class AddEditCategoryView extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    mainSubCategories.length-1>x?
-                                    Divider(
-                                      thickness: 0.5,
-                                      color: Colors.grey[400],
-                                    ):Padding(padding: EdgeInsets.zero),
+                                    mainSubCategories.length - 1 > x
+                                        ? Divider(
+                                            thickness: 0.5,
+                                            color: Colors.grey[400],
+                                          )
+                                        : Padding(padding: EdgeInsets.zero),
                                   ],
                                 );
                               }).toList(),

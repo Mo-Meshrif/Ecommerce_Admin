@@ -1,3 +1,4 @@
+import '/core/viewModel/categoryViewModel.dart';
 import '/core/viewModel/productViewModel.dart';
 import '/core/viewModel/orderViewModel.dart';
 import '/core/viewModel/messageViewModel.dart';
@@ -19,6 +20,16 @@ class AppBarLeading extends StatelessWidget {
               ),
               onPressed: () {
                 switch (currentItem) {
+                  case 'addCategory':
+                    Get.find<CategoryViewModel>()
+                        .restCatParameters();
+                    Get.find<CategoryViewModel>().getMobileViewStatus(false);
+                    break;
+                  case 'editCategory':
+                    Get.find<CategoryViewModel>()
+                        .restCatParameters();
+                    Get.find<CategoryViewModel>().getMobileViewStatus(false);
+                    break;
                   case 'chat':
                     Get.find<MessageViewModel>().getIndexOfShownMessage(null);
                     break;

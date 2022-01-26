@@ -8,8 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryViewModel extends GetxController {
+  ValueNotifier isMobileAddEditCategory = ValueNotifier(false);
   GlobalKey<FormState> addCategoryKey = GlobalKey<FormState>();
+  GlobalKey<FormState> mobileAddCategoryKey = GlobalKey<FormState>();
   GlobalKey<FormState> editCategoryKey = GlobalKey<FormState>();
+  GlobalKey<FormState> mobileEditCategoryKey = GlobalKey<FormState>();
+  String oldImage;
   Uint8List pickedImage;
   Color pickedColor = Colors.white;
   String catogoryTitle;
@@ -18,7 +22,13 @@ class CategoryViewModel extends GetxController {
   Map<String, List<String>> subCategories = {'s': []};
   ValueNotifier<bool> loading = ValueNotifier(false);
 
+  getMobileViewStatus(bool val) {
+    isMobileAddEditCategory.value = val;
+    update();
+  }
+
   getOldCategoryData(CategoryModel oldCategory) {
+    oldImage = oldCategory.imgUrl;
     catogoryTitle = oldCategory.txt;
     pickedColor = HexColor(oldCategory.avatarCol);
     subCategories = oldCategory.subCat
@@ -46,9 +56,8 @@ class CategoryViewModel extends GetxController {
   }
 
   changeMainCounter(bool isEdit, String tag, int index) {
-   
     if (tag == 'add') {
-      if (subCategories['s'][index] != ''||subCategories['s'].isNotEmpty) {
+      if (subCategories['s'][index] != '' || subCategories['s'].isNotEmpty) {
         mainSubCounter += 1;
         if (isEdit) {
           subCategories['s'].add('');
@@ -134,7 +143,7 @@ class CategoryViewModel extends GetxController {
             )
                 .then((_) {
               Navigator.of(ctx).pop();
-              restCatParameters(isEditDismiss: false);
+              restCatParameters();
             });
           }
         });
@@ -148,7 +157,7 @@ class CategoryViewModel extends GetxController {
       if (image == null) {
         FireStoreCategory().editCategoryfromFireStore(cato).then((_) {
           Navigator.of(ctx).pop();
-          restCatParameters(isEditDismiss: false);
+          restCatParameters();
         });
       } else {
         FireStoreCategory().uploadCatImage(image, cato.txt).then((imgUrl) {
@@ -164,7 +173,7 @@ class CategoryViewModel extends GetxController {
           )
               .then((_) {
             Navigator.of(ctx).pop();
-            restCatParameters(isEditDismiss: false);
+            restCatParameters();
           });
         });
       }
@@ -176,22 +185,19 @@ class CategoryViewModel extends GetxController {
     update();
     FireStoreCategory().deleteCategoryfromFireStore(cato).then((_) {
       Get.offNamedUntil(categoriesPageRoute, (route) => false);
-      restCatParameters(isEditDismiss: false);
+      restCatParameters();
     });
   }
 
-  restCatParameters({@required bool isEditDismiss}) {
-    if (isEditDismiss) {
-      pickedImage = null;
-    } else {
-      catogoryTitle = null;
-      subCategories = {'s': []};
-      mainSubCounter = 1;
-      subCounter = {};
-      pickedColor = Colors.white;
-      pickedImage = null;
-      loading.value = false;
-    }
+  restCatParameters() {
+    catogoryTitle = null;
+    subCategories = {'s': []};
+    mainSubCounter = 1;
+    subCounter = {};
+    pickedColor = Colors.white;
+    pickedImage = null;
+    oldImage=null;
+    loading.value = false;
     update();
   }
 }

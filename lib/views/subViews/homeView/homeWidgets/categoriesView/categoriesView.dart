@@ -1,3 +1,4 @@
+import '/core/viewModel/homeViewModel.dart';
 import '/views/subViews/homeView/homeWidgets/categoriesView/mobileCategoriesView.dart';
 import '/../../../core/viewModel/categoryViewModel.dart';
 import '/../../../responsive.dart';
@@ -36,7 +37,12 @@ class CategoriesView extends StatelessWidget {
           return categories.isEmpty
               ? Center(child: CircularProgressIndicator())
               : Responsive.isMobile(context)
-                  ? MobileCategoriesView(categories: categories)
+                  ? WillPopScope(
+                      onWillPop: () async =>
+                          Get.find<HomeViewModel>().currentItem != 'dash'
+                              ? false
+                              : true,
+                      child: MobileCategoriesView(categories: categories))
                   : GridView.builder(
                       padding: EdgeInsets.all(15),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -55,8 +61,7 @@ class CategoriesView extends StatelessWidget {
                                     categoryController.addCategoryKey;
                                 return GestureDetector(
                                   onTap: () async {
-                                    categoryController.restCatParameters(
-                                        isEditDismiss: false);
+                                    categoryController.restCatParameters();
                                     await showDialog(
                                             barrierColor: Colors.grey[50],
                                             builder: (ctx) => AlertDialog(
@@ -119,14 +124,13 @@ class CategoriesView extends StatelessWidget {
                                                         ? (size.width - 220) *
                                                             0.8
                                                         : size.width * 0.8,
-                                                    child: AddEditCategoryView(
-                                                        oldCategory: null),
+                                                    child:
+                                                        AddEditCategoryView(),
                                                   ),
                                                 ),
                                             context: context)
                                         .then((_) => categoryController
-                                            .restCatParameters(
-                                                isEditDismiss: false));
+                                            .restCatParameters());
                                   },
                                   child: Card(
                                     color: Colors.grey[200],

@@ -31,6 +31,18 @@ class AppBarTitle extends StatelessWidget {
       }
       Widget _widget;
       switch (currentItem) {
+         case 'addCategory':
+          _widget = CustomText(
+            txt: 'Add Category',
+            fSize: 18,
+          );
+          break;
+        case 'editCategory':
+          _widget = CustomText(
+            txt: 'Edit Category',
+            fSize: 18,
+          );
+          break;
         case 'chat':
           _widget = CustomText(
             txt: toUser != null ? toUser.userName : notMe.userName,
