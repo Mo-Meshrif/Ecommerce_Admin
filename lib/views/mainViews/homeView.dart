@@ -20,13 +20,14 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
         builder: (homeController) {
+          GlobalKey<ScaffoldState> _key = homeController.homeScaffoldKey;
           AuthViewModel _auth = Get.find();
           if (_auth.users.isEmpty) _auth.getUsers();
           Get.put(CategoryViewModel());
           Get.put(OrderViewModel());
           Get.put(NotificationViewModel());
           return Scaffold(
-            key: homeController.homeScaffoldKey,
+            key: _key,
             appBar: !Responsive.isDesktop(context)
                 ? AppBar(
                     backgroundColor: swatchColor,
@@ -34,8 +35,7 @@ class HomeView extends StatelessWidget {
                     leading: AppBarLeading(),
                     centerTitle: true,
                     title: AppBarTitle(),
-                    actions: [AppBarActions()]
-                  )
+                    actions: [AppBarActions()])
                 : null,
             drawer: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 220),
@@ -52,7 +52,10 @@ class HomeView extends StatelessWidget {
                 ),
                 child: SideMenuView(
                   homeItems: items,
-                  onTap: (i) => homeController.handleClickItem(i),
+                  onTap: (i) {
+                    homeController.handleClickItem(i);
+                    _key.currentState.openEndDrawer();
+                  },
                 ),
               ),
             ),
