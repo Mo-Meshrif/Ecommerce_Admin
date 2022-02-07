@@ -109,7 +109,7 @@ class DashboardView extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: 220,
+                          width: 240,
                           child: Card(
                             elevation: 2,
                             shape: RoundedRectangleBorder(

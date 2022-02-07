@@ -91,6 +91,7 @@ class OrderDetailsHeader extends StatelessWidget {
               ),
               content: Container(
                 width: 250,
+                height:MediaQuery.of(context).size.height*0.55 ,
                 child: OrderTrack(),
               ),
             ),

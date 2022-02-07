@@ -89,9 +89,9 @@ class NotificationViewModel extends GetxController {
 
   handleOnMessageDetails(String message) {
     if (message == 'New message ') {
-      _homeViewModel.handleClickItem(1);
-    } else {
       _homeViewModel.handleClickItem(2);
+    } else {
+      _homeViewModel.handleClickItem(3);
     }
   }
 

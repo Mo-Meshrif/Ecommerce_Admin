@@ -1,6 +1,6 @@
 {
-    "name": "ecommerce_admin",
-    "short_name": "ecommerce_admin",
+    "name": "Mega Store",
+    "short_name": "Mega Store",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
