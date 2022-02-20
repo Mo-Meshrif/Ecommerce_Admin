@@ -28,7 +28,7 @@ class SignInView extends StatelessWidget {
               CustomTextField(
                 onChanged: (val) => authController.email = val,
                 valid: (val) {
-                  if (val.trim().isEmpty) {
+                  if (val!.trim().isEmpty) {
                     return 'Enter your email !';
                   }
                   if (!val.trim().contains('@')) {
@@ -36,7 +36,7 @@ class SignInView extends StatelessWidget {
                   }
                   return null;
                 },
-                bodyColor: Colors.grey[200],
+                bodyColor: Colors.grey[200] as Color,
                 hintTxt: 'Email',
                 icon: Icon(Icons.mail),
               ),
@@ -46,13 +46,13 @@ class SignInView extends StatelessWidget {
               CustomTextField(
                 onChanged: (val) => authController.password = val,
                 valid: (val) {
-                  if (val.isEmpty) {
+                  if (val!.isEmpty) {
                     return 'Enter your password !';
                   }
                   return null;
                 },
                 obscure: true,
-                bodyColor: Colors.grey[200],
+                bodyColor: Colors.grey[200] as Color,
                 hintTxt: 'Password',
                 icon: Icon(Icons.lock_open),
               ),
@@ -87,8 +87,8 @@ class SignInView extends StatelessWidget {
                           padding: EdgeInsets.all(15),
                         ),
                         onPressed: () {
-                          _key.currentState.save();
-                          if (_key.currentState.validate()) {
+                          _key.currentState!.save();
+                          if (_key.currentState!.validate()) {
                             authController.signIn();
                           }
                         },

@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class MessageViewModel extends GetxController {
   ValueNotifier<bool> isLoading = ValueNotifier(false);
-  UserModel toUser;
+  UserModel? toUser;
   String toValue = '';
   String searchVal = '';
   HomeViewModel homeViewModel = Get.find();
@@ -23,8 +23,7 @@ class MessageViewModel extends GetxController {
       : searchVal == ''
           ? _headerMessages
           : [];
-  int indexOfShownMessage;
-  int orderNumber;
+  int? indexOfShownMessage = -1, orderNumber;
 
   onInit() {
     getLastMessages();
@@ -52,14 +51,15 @@ class MessageViewModel extends GetxController {
     update();
   }
 
-  uploadMessage(
-      {@required Timestamp createdAt,
-      @required String vendorId,
-      @required String customerId,
-      @required String from,
-      @required String to,
-      @required String message,
-      @required int orderNumber}) {
+  uploadMessage({
+    required Timestamp createdAt,
+    required String vendorId,
+    required String customerId,
+    required String from,
+    required String to,
+    required String message,
+    int? orderNumber,
+  }) {
     FireStoreMessage()
         .addMessageToFireStore(
       createdAt: createdAt,
@@ -68,14 +68,14 @@ class MessageViewModel extends GetxController {
       from: from,
       to: to,
       message: message,
-      orderNumber: orderNumber,
+      orderNumber: orderNumber as int,
     )
         .then((value) {
       getLastMessages();
+      if (toUser != null) toUser = null;
       indexOfShownMessage = 0;
       update();
-      _notificationViewModel.sendNotification(
-          to, 'New message ');
+      _notificationViewModel.sendNotification(to, 'New message ');
     });
   }
 
@@ -85,13 +85,13 @@ class MessageViewModel extends GetxController {
     List<UserModel> _users = _authViewModel.users;
     FireStoreMessage().getChatsFromFireStore().then((messages) {
       messages.forEach((message) {
-        if (homeViewModel.savedUser.id == message['from'] ||
-            homeViewModel.savedUser.id == message['to']) {
+        if (homeViewModel.savedUser?.id == message['from'] ||
+            homeViewModel.savedUser?.id == message['to']) {
           int index = _headerMessages.indexWhere((element) =>
-              (element.from.id == message['from'] ||
-                  element.from.id == message['to']) &&
-              (element.to.id == message['from'] ||
-                  element.to.id == message['to']));
+              (element.from!.id == message['from'] ||
+                  element.from!.id == message['to']) &&
+              (element.to!.id == message['from'] ||
+                  element.to!.id == message['to']));
           UserModel to = _users.firstWhere((user) => user.id == message['to']);
           UserModel from =
               _users.firstWhere((user) => user.id == message['from']);
@@ -132,10 +132,10 @@ class MessageViewModel extends GetxController {
     });
   }
 
-  getIndexOfShownMessage(int i) {
+  getIndexOfShownMessage(int? i) {
     indexOfShownMessage = i;
-    if(indexOfShownMessage==null){
-      toUser=null;
+    if (indexOfShownMessage == null) {
+      toUser = null;
     }
     update();
   }
@@ -143,9 +143,15 @@ class MessageViewModel extends GetxController {
   getSearchedMessage(String val) {
     searchVal = val;
     _searchdMessages = _headerMessages
-        .where((message) => message.from.id == homeViewModel.savedUser.id
-            ? message.to.userName.toLowerCase().startsWith(val.toLowerCase())
-            : message.from.userName.toLowerCase().startsWith(val.toLowerCase()))
+        .where((message) => message.from!.id == homeViewModel.savedUser?.id
+            ? message.to!.userName
+                .toString()
+                .toLowerCase()
+                .startsWith(val.toLowerCase())
+            : message.from!.userName
+                .toString()
+                .toLowerCase()
+                .startsWith(val.toLowerCase()))
         .toList();
     if (_searchdMessages.isNotEmpty) {
       indexOfShownMessage = null;

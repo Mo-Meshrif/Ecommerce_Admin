@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final double height;
+  final double? height;
   final bool shapeIsCircular;
   final Color bodyColor;
-  final String initVal;
-  final TextEditingController txtEditingController;
-  final void Function() onTaped;
+  final String? initVal;
+  final TextEditingController? txtEditingController;
+  final void Function()? onTaped;
   final void Function(String) onChanged;
-  final String Function(String) valid;
+  final String? Function(String?)? valid;
   final bool obscure;
   final String hintTxt;
-  final TextStyle hintStyle;
-  final Icon icon;
-  final Widget prefix;
-  final Widget suffix;
-  final bool autoFocus;
+  final TextStyle? hintStyle;
+  final Icon? icon;
+  final Widget? prefix;
+  final Widget? suffix;
+  final bool? autoFocus;
   CustomTextField({
-    @required this.bodyColor,
-    @required this.onChanged,
+    required this.bodyColor,
+    required this.onChanged,
     this.obscure = false,
-    @required this.valid,
-    @required this.hintTxt,
-    @required this.icon,
+    required this.valid,
+    required this.hintTxt,
+    this.icon,
     this.suffix,
     this.prefix,
     this.initVal,

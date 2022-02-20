@@ -13,10 +13,10 @@ class CategoryViewModel extends GetxController {
   GlobalKey<FormState> mobileAddCategoryKey = GlobalKey<FormState>();
   GlobalKey<FormState> editCategoryKey = GlobalKey<FormState>();
   GlobalKey<FormState> mobileEditCategoryKey = GlobalKey<FormState>();
-  String oldImage;
-  Uint8List pickedImage;
+  String? oldImage;
+  Uint8List? pickedImage;
   Color pickedColor = Colors.white;
-  String catogoryTitle;
+  String? catogoryTitle;
   int mainSubCounter = 1;
   Map<String, List<int>> subCounter = {};
   Map<String, List<String>> subCategories = {'s': []};
@@ -30,21 +30,22 @@ class CategoryViewModel extends GetxController {
   getOldCategoryData(CategoryModel oldCategory) {
     oldImage = oldCategory.imgUrl;
     catogoryTitle = oldCategory.txt;
-    pickedColor = HexColor(oldCategory.avatarCol);
-    subCategories = oldCategory.subCat
+    pickedColor = HexColor(oldCategory.avatarCol as String);
+    subCategories = oldCategory.subCat!
         .map((key, value) => MapEntry(key, List.castFrom(value)));
-    mainSubCounter = subCategories['s'].length;
-    for (int i = 0; i < subCategories['s'].length; i++) {
-      subCounter['s' + i.toString()] = subCategories['s' + i.toString()]
-          .map((e) => subCategories['s' + i.toString()].indexOf(e))
+    mainSubCounter = subCategories['s']!.length;
+    for (int i = 0; i < subCategories['s']!.length; i++) {
+      subCounter['s' + i.toString()] = subCategories['s' + i.toString()]!
+          .map((e) => subCategories['s' + i.toString()]!.indexOf(e))
           .toList();
     }
     update();
   }
 
   getCatImage() async {
-    Uint8List bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-    if (bytesFromPicker != null) {
+    Uint8List bytesFromPicker =
+        await ImagePickerWeb.getImageAsBytes() as Uint8List;
+    if (bytesFromPicker.isNotEmpty) {
       pickedImage = bytesFromPicker;
     }
     update();
@@ -57,20 +58,17 @@ class CategoryViewModel extends GetxController {
 
   changeMainCounter(bool isEdit, String tag, int index) {
     if (tag == 'add') {
-      if (subCategories['s'][index] != '' || subCategories['s'].isNotEmpty) {
+      if (subCategories['s']![index] != '') {
         mainSubCounter += 1;
-        if (isEdit) {
-          subCategories['s'].add('');
-          int indexOfLast = subCategories['s'].indexOf(subCategories['s'].last);
-          subCounter.putIfAbsent(
-              's' + indexOfLast.toString(), () => [indexOfLast]);
-          subCategories.putIfAbsent('s' + indexOfLast.toString(), () => ['']);
+        subCategories['s']!.add('');
+        if (!isEdit) {
+          subCounter.putIfAbsent('s' + (index + 1).toString(), () => [1]);
         }
       }
     } else {
       mainSubCounter -= 1;
-      if (subCategories['s'].length > index) {
-        subCategories['s'].removeLast();
+      if (subCategories['s']!.length > index) {
+        subCategories['s']!.removeLast();
       }
     }
     update();
@@ -78,14 +76,14 @@ class CategoryViewModel extends GetxController {
 
   changeSubCounter(bool isEdit, int mainCatoIndex, String tag, int index) {
     if (tag == 'add') {
-      if (subCategories['s' + mainCatoIndex.toString()][index] != '') {
-        subCounter['s' + mainCatoIndex.toString()].add(1);
-        if (isEdit) subCategories['s' + mainCatoIndex.toString()].add('');
-      }
+      subCounter['s' + mainCatoIndex.toString()]?.add(1);
+      subCategories['s' + mainCatoIndex.toString()]!.add('');
     } else {
-      subCounter['s' + mainCatoIndex.toString()].removeLast();
-      if (subCategories['s' + mainCatoIndex.toString()].length > index) {
-        subCategories['s' + mainCatoIndex.toString()].removeLast();
+      subCounter['s' + mainCatoIndex.toString()]?.removeLast();
+      if (subCategories.containsKey('s' + mainCatoIndex.toString())) {
+        if (subCategories['s' + mainCatoIndex.toString()]!.length > index) {
+          subCategories['s' + mainCatoIndex.toString()]!.removeAt(index);
+        }
       }
     }
     update();
@@ -93,16 +91,18 @@ class CategoryViewModel extends GetxController {
 
   addMainSubCategory(bool isEdit, String mainSub, int index) {
     if (mainSub == '') {
-      subCategories['s'].removeAt(index);
-      if (isEdit) subCategories['s'].insert(index, mainSub);
-    } else {
-      if (subCategories['s'].length - 1 >= index) {
-        subCategories['s'].removeAt(index);
+      subCategories['s']!.removeAt(index);
+      if (mainSubCounter != 1) {
+        mainSubCounter -= 1;
+        subCounter.update('s' + index.toString(), (value) => []);
       }
-      subCategories['s'].insert(index, mainSub);
+    } else {
+      if (subCategories['s']!.length - 1 >= index) {
+        subCategories['s']!.removeAt(index);
+      }
+      subCategories['s']!.insert(index, mainSub);
       if (!isEdit) {
-        subCategories['s' + index.toString()] = [];
-        subCounter['s' + index.toString()] = [1];
+        subCounter.putIfAbsent('s' + index.toString(), () => [1]);
       }
     }
     update();
@@ -110,26 +110,33 @@ class CategoryViewModel extends GetxController {
 
   addSubCategory(bool isEdit, int mainCatoIndex, String sub, int subCatoIndex) {
     if (sub == '') {
-      subCategories['s' + mainCatoIndex.toString()].removeAt(subCatoIndex);
-      if (isEdit)
-        subCategories['s' + mainCatoIndex.toString()].insert(subCatoIndex, sub);
+      subCategories['s' + mainCatoIndex.toString()]!.removeAt(subCatoIndex);
     } else {
-      if (subCategories['s' + mainCatoIndex.toString()].length - 1 >=
-          subCatoIndex) {
-        subCategories['s' + mainCatoIndex.toString()].removeAt(subCatoIndex);
+      if (subCategories.containsKey('s' + mainCatoIndex.toString())) {
+        if (subCategories['s' + mainCatoIndex.toString()]!.length - 1 >=
+            subCatoIndex) {
+          subCategories['s' + mainCatoIndex.toString()]!.removeAt(subCatoIndex);
+          subCategories['s' + mainCatoIndex.toString()]!
+              .insert(subCatoIndex, sub);
+        } else {
+          subCategories['s' + mainCatoIndex.toString()]!.add(sub);
+        }
+      } else {
+        subCategories['s' + mainCatoIndex.toString()] = [sub];
       }
-      subCategories['s' + mainCatoIndex.toString()].insert(subCatoIndex, sub);
     }
     update();
   }
 
   addEditCategoryToFireStore(
-      bool isAdd, CategoryModel cato, Uint8List image, BuildContext ctx) {
+      bool isAdd, CategoryModel cato, Uint8List? image, BuildContext ctx) {
     loading.value = true;
     update();
     if (isAdd) {
       if (image != null) {
-        FireStoreCategory().uploadCatImage(image, cato.txt).then((imgUrl) {
+        FireStoreCategory()
+            .uploadCatImage(image, cato.txt as String)
+            .then((String? imgUrl) {
           if (imgUrl != null) {
             FireStoreCategory()
                 .addCategoryToFireStore(
@@ -160,7 +167,9 @@ class CategoryViewModel extends GetxController {
           restCatParameters();
         });
       } else {
-        FireStoreCategory().uploadCatImage(image, cato.txt).then((imgUrl) {
+        FireStoreCategory()
+            .uploadCatImage(image, cato.txt as String)
+            .then((imgUrl) {
           FireStoreCategory()
               .editCategoryfromFireStore(
             CategoryModel(
@@ -184,7 +193,7 @@ class CategoryViewModel extends GetxController {
     loading.value = true;
     update();
     FireStoreCategory().deleteCategoryfromFireStore(cato).then((_) {
-      Get.offNamedUntil(categoriesPageRoute, (route) => false);
+      Navigator.of(ctx).popUntil(ModalRoute.withName(categoriesPageRoute));
       restCatParameters();
     });
   }
@@ -196,7 +205,7 @@ class CategoryViewModel extends GetxController {
     subCounter = {};
     pickedColor = Colors.white;
     pickedImage = null;
-    oldImage=null;
+    oldImage = null;
     loading.value = false;
     update();
   }

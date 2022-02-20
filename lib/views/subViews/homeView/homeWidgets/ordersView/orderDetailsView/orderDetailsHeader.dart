@@ -7,7 +7,7 @@ import 'orderTrack.dart';
 class OrderDetailsHeader extends StatelessWidget {
   final OrderModel order;
   final void Function() sendMessage;
-  OrderDetailsHeader({@required this.order, @required this.sendMessage});
+  OrderDetailsHeader({required this.order, required this.sendMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +83,15 @@ class OrderDetailsHeader extends StatelessWidget {
                     txt: 'Track Order',
                   ),
                   IconButton(
-                    onPressed: () =>
-                        Get.offNamedUntil(ordersPageRoute, (route) => false),
+                    onPressed: () => Navigator.of(context)
+                        .popUntil(ModalRoute.withName(ordersPageRoute)),
                     icon: Icon(Icons.close),
                   )
                 ],
               ),
               content: Container(
                 width: 250,
-                height:MediaQuery.of(context).size.height*0.55 ,
+                height: MediaQuery.of(context).size.height * 0.55,
                 child: OrderTrack(),
               ),
             ),

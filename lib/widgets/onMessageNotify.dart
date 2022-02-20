@@ -7,8 +7,8 @@ import 'customText.dart';
 
 class OnMessageNotify extends StatelessWidget {
   final RemoteNotification notification;
-  
-  OnMessageNotify({@required this.notification});
+
+  OnMessageNotify({required this.notification});
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -23,7 +23,7 @@ class OnMessageNotify extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomText(
-            txt: notification.body,
+            txt: notification.body as String,
           ),
           SizedBox(height: 15),
           Row(
@@ -40,7 +40,7 @@ class OnMessageNotify extends StatelessWidget {
                   onpress: () {
                     Navigator.pop(context);
                     notificationController
-                        .handleOnMessageDetails(notification.body);
+                        .handleOnMessageDetails(notification.body as String);
                   },
                   buttonColor: Colors.green,
                 ),

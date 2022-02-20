@@ -21,9 +21,7 @@ class FireStoreNotification {
   }
 
   Future<void> addNotificationToFireStore(
-      NotificationModel notification) async {
-    return await collectionNotification.add(notification.toJson());
-  }
+      NotificationModel notification) async => await collectionNotification.add(notification.toJson());
 
   Future<void> updateSeenValue(String id) async {
     await collectionNotification.doc(id).update({'seen': true});

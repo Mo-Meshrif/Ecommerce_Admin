@@ -24,9 +24,9 @@ class OrdersView extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         List<DocumentSnapshot> ordersSnap =
-            snapshot.hasData ? snapshot.data.docs : [];
+            snapshot.hasData ? (snapshot.data as QuerySnapshot).docs : [];
         List<OrderModel> orders = ordersSnap.map((element) {
-          Map<String, dynamic> data = element.data();
+          Map<String, dynamic> data = element.data() as Map<String, dynamic>;
           return OrderModel.fromJson(element.id, data);
         }).toList();
         return snapshot.connectionState == ConnectionState.waiting
@@ -52,8 +52,8 @@ class OrdersView extends StatelessWidget {
                                       )))
                                   .toList(),
                               rows: orders.map((order) {
-                                Map<String, dynamic> address =
-                                    order.shippingAdress;
+                                Map<String, dynamic> address = order
+                                    .shippingAdress as Map<String, dynamic>;
                                 UserModel customer = orderController
                                     .authViewModel.users
                                     .firstWhere(
@@ -116,11 +116,15 @@ class OrdersView extends StatelessWidget {
                                                 radius: 15,
                                                 backgroundImage: customer.pic !=
                                                         null
-                                                    ? NetworkImage(customer.pic)
+                                                    ? NetworkImage(
+                                                        customer.pic as String)
                                                     : AssetImage(
-                                                        'assets/order/person.png')),
+                                                            'assets/order/person.png')
+                                                        as ImageProvider),
                                             SizedBox(width: 5),
-                                            CustomText(txt: customer.userName),
+                                            CustomText(
+                                                txt: customer.userName
+                                                    as String),
                                           ],
                                         ),
                                       ),
@@ -135,31 +139,31 @@ class OrdersView extends StatelessWidget {
                                       DataCell(
                                         CustomText(
                                           txt: order
-                                              .paymentMehod['paymentMehod'],
+                                              .paymentMehod!['paymentMehod'],
                                         ),
                                       ),
                                       DataCell(
                                         CustomText(
                                           txt: order.promoCode != ''
-                                              ? order.promoCode
+                                              ? order.promoCode as String
                                               : 'Not defined',
                                         ),
                                       ),
                                       DataCell(
                                         CustomText(
                                           txt: DateFormat('d/M/y').format(
-                                            order.createdAt.toDate(),
+                                            order.createdAt!.toDate(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         CustomText(
-                                          txt: order.totalPrice,
+                                          txt: order.totalPrice as String,
                                         ),
                                       ),
                                       DataCell(
                                         CustomText(
-                                          txt: order.status,
+                                          txt: order.status as String,
                                           txtColor: order.status == 'Pending'
                                               ? Colors.red
                                               : Colors.green,

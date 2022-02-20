@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import '/responsive.dart';
 import '/model/productModel.dart';
 import '/core/viewModel/productViewModel.dart';
@@ -20,22 +21,27 @@ class ProductsHeader extends StatelessWidget {
       GetBuilder<ProductViewModel>(builder: (productController) {
         GlobalKey<FormState> _key = GlobalKey<FormState>();
         List<CategoryModel> categories = productController.categories;
-        List<String> catNames = categories.map((e) => e.txt).toList();
-        int catIndex = productController.catIndex;
-        List<String> mainCatNames = catIndex != null
-            ? (categories[catIndex].subCat['s'] as List).cast<String>()
-            : [];
-        int mainCatIndex = productController.mainSubIndex;
-        List<String> subCatNames = (catIndex != null && mainCatIndex != null)
-            ? (categories[catIndex].subCat['s' + '$mainCatIndex'] as List)
-                .cast<String>()
-            : [];
+        List<String> catNames =
+            categories.map((e) => e.txt).toList().cast<String>();
+        int catIndex = productController.catIndex as int;
+        List<String> mainCatNames = catIndex.isNegative
+            ? []
+            : (categories[catIndex].subCat!['s'] as List).cast<String>();
+        int mainCatIndex = productController.mainSubIndex as int;
+        List<String> subCatNames =
+            (catIndex.isNegative || mainCatIndex.isNegative)
+                ? []
+                : (categories[catIndex].subCat!['s' + '$mainCatIndex'] as List)
+                    .cast<String>();
         List<String> colors = productController.colors;
-        List<String> selectedColors = productController.selectedColors;
+        List<String> selectedColors =
+            productController.selectedColors as List<String>;
         Map<String, List<String>> sizesMap = productController.sizes;
-        String cat = productController.cat;
-        List<String> sizes = sizesMap.containsKey(cat) ? sizesMap[cat] : [];
-        List<String> selectedSizes = productController.selectedSizes;
+        String cat = productController.cat as String;
+        List<String> sizes =
+            sizesMap.containsKey(cat) ? sizesMap[cat] as List<String> : [];
+        List<String> selectedSizes =
+            productController.selectedSizes as List<String>;
         return Form(
           key: _key,
           child: SingleChildScrollView(
@@ -61,12 +67,14 @@ class ProductsHeader extends StatelessWidget {
                     child: DottedBorder(
                       padding: EdgeInsets.all(15),
                       borderType: BorderType.Circle,
-                      color: Colors.grey[350],
+                      color: Colors.grey[350] as Color,
                       strokeWidth: 1,
                       child: productController.pickedImage != null
-                          ? Image.memory(productController.pickedImage)
+                          ? Image.memory(
+                              productController.pickedImage as Uint8List)
                           : productController.oldImage != null
-                              ? Image.network(productController.oldImage)
+                              ? Image.network(
+                                  productController.oldImage as String)
                               : Icon(Icons.upload),
                     ),
                   ),
@@ -75,7 +83,7 @@ class ProductsHeader extends StatelessWidget {
                 CustomText(txt: 'Category Name'),
                 SizedBox(height: 10),
                 CustomPopupMenu(
-                  title: productController.cat,
+                  title: cat,
                   items: catNames,
                   onSelect: (val) {
                     productController.catIndex = catNames.indexOf(val);
@@ -88,7 +96,7 @@ class ProductsHeader extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 CustomPopupMenu(
-                  title: productController.mainSubCat,
+                  title: productController.mainSubCat as String,
                   items: mainCatNames,
                   onSelect: (val) {
                     productController.mainSubIndex = mainCatNames.indexOf(val);
@@ -101,7 +109,7 @@ class ProductsHeader extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 CustomPopupMenu(
-                  title: productController.subCat,
+                  title: productController.subCat as String,
                   items: subCatNames,
                   onSelect: (val) => productController.getSelectedSubCat(val),
                 ),
@@ -109,7 +117,7 @@ class ProductsHeader extends StatelessWidget {
                 CustomText(txt: 'Product Season'),
                 SizedBox(height: 10),
                 CustomPopupMenu(
-                  title: productController.season,
+                  title: productController.season as String,
                   items: ['Summer', 'Winter', 'Not defined'],
                   onSelect: (val) => productController.getSelectedSesson(val),
                 ),
@@ -117,20 +125,20 @@ class ProductsHeader extends StatelessWidget {
                 CustomText(txt: 'Product Name'),
                 SizedBox(height: 10),
                 CustomTextField(
-                    height: 25,
-                    shapeIsCircular: true,
-                    bodyColor: Colors.grey[350],
-                    initVal: productController.prodName,
-                    onChanged: (val) => productController.prodName = val,
-                    valid: (val) {
-                      if (val.isEmpty) {
-                        return 'The Feild is empty';
-                      }
-                      return null;
-                    },
-                    hintTxt: 'Enter Product Name',
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                    icon: null),
+                  height: 25,
+                  shapeIsCircular: true,
+                  bodyColor: Colors.grey[350] as Color,
+                  initVal: productController.prodName,
+                  onChanged: (val) => productController.prodName = val,
+                  valid: (val) {
+                    if (val!.isEmpty) {
+                      return 'The Feild is empty';
+                    }
+                    return null;
+                  },
+                  hintTxt: 'Enter Product Name',
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
                 SizedBox(height: 15),
                 CustomText(txt: 'Trending ?!'),
                 SizedBox(height: 10),
@@ -195,27 +203,26 @@ class ProductsHeader extends StatelessWidget {
                             )
                           : GestureDetector(
                               onTap: () => showDialog(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 15, horizontal: 24),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        title: CustomText(
-                                          txt: 'Pick Product Color',
-                                        ),
-                                        content: SingleChildScrollView(
-                                            child: ColorPicker(
-                                          pickerColor: Colors.white,
-                                          onColorChanged: (color) =>
-                                              productController.addColor(color),
-                                          showLabel: true,
-                                          pickerAreaHeightPercent: 0.8,
-                                        )),
-                                      )),
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 24),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  title: CustomText(
+                                    txt: 'Pick Product Color',
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: ColorPicker(
+                                      pickerColor: Colors.white,
+                                      onColorChanged: (color) =>
+                                          productController.addColor(color),
+                                      pickerAreaHeightPercent: 0.8,
+                                    ),
+                                  ),
+                                ),
+                              ),
                               child: Icon(Icons.add),
                             ),
                     ),
@@ -225,31 +232,31 @@ class ProductsHeader extends StatelessWidget {
                 CustomText(txt: 'Brand Name'),
                 SizedBox(height: 10),
                 CustomTextField(
-                    height: 25,
-                    shapeIsCircular: true,
-                    bodyColor: Colors.grey[350],
-                    initVal: productController.brandName,
-                    onChanged: (val) => productController.brandName = val,
-                    valid: (val) {
-                      if (val.isEmpty) {
-                        return 'The Feild is empty';
-                      }
-                      return null;
-                    },
-                    hintTxt: 'Enter Brand Name',
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                    icon: null),
+                  height: 25,
+                  shapeIsCircular: true,
+                  bodyColor: Colors.grey[350] as Color,
+                  initVal: productController.brandName,
+                  onChanged: (val) => productController.brandName = val,
+                  valid: (val) {
+                    if (val!.isEmpty) {
+                      return 'The Feild is empty';
+                    }
+                    return null;
+                  },
+                  hintTxt: 'Enter Brand Name',
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
                 SizedBox(height: 15),
                 CustomText(txt: 'Material Type'),
                 SizedBox(height: 10),
                 CustomTextField(
                     height: 25,
                     shapeIsCircular: true,
-                    bodyColor: Colors.grey[350],
+                    bodyColor: Colors.grey[350] as Color,
                     initVal: productController.materialType,
                     onChanged: (val) => productController.materialType = val,
                     valid: (val) {
-                      if (val.isEmpty) {
+                      if (val!.isEmpty) {
                         return 'The Feild is empty';
                       }
                       return null;
@@ -263,11 +270,11 @@ class ProductsHeader extends StatelessWidget {
                 CustomTextField(
                     height: 25,
                     shapeIsCircular: true,
-                    bodyColor: Colors.grey[350],
+                    bodyColor: Colors.grey[350] as Color,
                     initVal: productController.prodCondition,
                     onChanged: (val) => productController.prodCondition = val,
                     valid: (val) {
-                      if (val.isEmpty) {
+                      if (val!.isEmpty) {
                         return 'The Feild is empty';
                       }
                       return null;
@@ -281,11 +288,11 @@ class ProductsHeader extends StatelessWidget {
                 CustomTextField(
                     height: 25,
                     shapeIsCircular: true,
-                    bodyColor: Colors.grey[350],
+                    bodyColor: Colors.grey[350] as Color,
                     initVal: productController.prodSku,
                     onChanged: (val) => productController.prodSku = val,
                     valid: (val) {
-                      if (val.isEmpty) {
+                      if (val!.isEmpty) {
                         return 'The Feild is empty';
                       }
                       return null;
@@ -299,11 +306,11 @@ class ProductsHeader extends StatelessWidget {
                 CustomTextField(
                     height: 25,
                     shapeIsCircular: true,
-                    bodyColor: Colors.grey[350],
+                    bodyColor: Colors.grey[350] as Color,
                     initVal: productController.prodPrice,
                     onChanged: (val) => productController.prodPrice = val,
                     valid: (val) {
-                      if (val.isEmpty) {
+                      if (val!.isEmpty) {
                         return 'The Feild is empty';
                       }
                       return null;
@@ -342,8 +349,11 @@ class ProductsHeader extends StatelessWidget {
                                         txt: sizes[i],
                                       ),
                                       value: selected,
-                                      onChanged: (value) => productController
-                                          .getSelectedSizes(value, sizes[i]),
+                                      onChanged: (value) =>
+                                          productController.getSelectedSizes(
+                                        value as bool,
+                                        sizes[i],
+                                      ),
                                     );
                                   }),
                             ),
@@ -367,8 +377,8 @@ class ProductsHeader extends StatelessWidget {
                     CustomElevatedButton(
                       buttonColor: priColor,
                       onpress: () {
-                        _key.currentState.save();
-                        if (_key.currentState.validate()) {
+                        _key.currentState!.save();
+                        if (_key.currentState!.validate()) {
                           if (productController.oldImage == null) {
                             productController.addProduct(
                                 ProductModel(
@@ -390,11 +400,11 @@ class ProductsHeader extends StatelessWidget {
                                   trending: productController.isTrend,
                                 ),
                                 cat,
-                                productController.pickedImage);
+                                productController.pickedImage as Uint8List);
                           } else {
                             productController.editProd(
-                                productController.oldProdId,
-                                productController.pickedImage,
+                                productController.oldProdId as String,
+                                productController.pickedImage as Uint8List,
                                 ProductModel(
                                   classification: {
                                     'cat-id': categories[catIndex].id,

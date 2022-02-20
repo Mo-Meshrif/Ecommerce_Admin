@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-
 class FireStoreMessage {
   final collectionChat = FirebaseFirestore.instance.collection('Chats');
 
@@ -10,14 +8,13 @@ class FireStoreMessage {
   }
 
   Future<void> addMessageToFireStore(
-      {@required Timestamp createdAt,
-      @required String vendorId,
-      @required String customerId,
-      @required String from,
-      @required String to,
-      @required String message,
-      @required int orderNumber}) async {
-    return await collectionChat.add({
+      {required Timestamp createdAt,
+      required String vendorId,
+      required String customerId,
+      required String from,
+      required String to,
+      required String message,
+      required int orderNumber}) async => await collectionChat.add({
       'createdAt': createdAt,
       'vendorId': vendorId,
       'customerId': customerId,
@@ -28,7 +25,6 @@ class FireStoreMessage {
       'pic': null,
       'isOpened': false
     });
-  }
 
   Future<void> updateIsOpenedParameter(id) async {
     await collectionChat.doc(id).update({'isOpened': true});

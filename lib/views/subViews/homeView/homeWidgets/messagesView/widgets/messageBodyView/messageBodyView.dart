@@ -12,25 +12,26 @@ class MessageBodyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       GetBuilder<MessageViewModel>(builder: (messageController) {
-        UserModel notMe = messageController.toUser;
-        UserModel me = messageController.homeViewModel.savedUser;
+        UserModel? notMe = messageController.toUser;
+        UserModel me = messageController.homeViewModel.savedUser as UserModel;
         List<MessageModel> headerMessages = messageController.headerMessages;
-        int indexOfShownMessage = messageController.indexOfShownMessage;
+        int indexOfShownMessage = messageController.indexOfShownMessage as int;
         MessageModel currentMessage;
-        UserModel to;
-        UserModel from;
-        if (headerMessages.isNotEmpty && indexOfShownMessage != null) {
+        UserModel? to;
+        UserModel? from;
+        if (headerMessages.isNotEmpty && !indexOfShownMessage.isNegative) {
           currentMessage = headerMessages[indexOfShownMessage];
           to = currentMessage.to;
           from = currentMessage.from;
         }
-        return notMe != null 
+        bool hasNotMe = notMe != null ? true : false;
+        return hasNotMe
             ? Column(
                 children: [
                   Responsive.isMobile(context)
                       ? Padding(padding: EdgeInsets.zero)
                       : UpperBodyView(),
-                  notMe != null
+                  hasNotMe
                       ? Expanded(
                           child: LowerBodyView(
                             notMe: notMe,
@@ -42,12 +43,12 @@ class MessageBodyView extends StatelessWidget {
               )
             : to != null
                 ? LowerBodyView(
-                    notMe: me.id == to.id ? from : to,
+                    notMe: me.id == to.id ? from as UserModel : to,
                     me: me,
                   )
                 : messageController.headerMessages.isEmpty
                     ? Padding(padding: EdgeInsets.zero)
-                    : indexOfShownMessage == null
+                    : indexOfShownMessage.isNegative
                         ? Center(
                             child: CustomText(
                               txt:

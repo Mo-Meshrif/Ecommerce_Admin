@@ -1,6 +1,6 @@
 class UserModel {
-  String id, userName, email, pic, role;
-  bool isOnline;
+  String? id, userName, email, pic, role;
+  bool? isOnline;
   UserModel({
     this.id,
     this.userName,

@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 class HomeView extends StatelessWidget {
   final Widget child;
-  HomeView({@required this.child});
+  HomeView({required this.child});
   @override
   Widget build(BuildContext context) => GetBuilder<HomeViewModel>(
         builder: (homeController) {
@@ -54,7 +54,7 @@ class HomeView extends StatelessWidget {
                   homeItems: items,
                   onTap: (i) {
                     homeController.handleClickItem(i);
-                    _key.currentState.openEndDrawer();
+                    _key.currentState!.openEndDrawer();
                   },
                 ),
               ),

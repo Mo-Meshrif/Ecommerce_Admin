@@ -28,7 +28,7 @@ class ForgetPasswordView extends StatelessWidget {
               CustomTextField(
                 onChanged: (val) => authController.email = val,
                 valid: (val) {
-                  if (val.trim().isEmpty) {
+                  if (val!.trim().isEmpty) {
                     return 'Enter your email !';
                   }
                   if (!val.trim().contains('@')) {
@@ -36,7 +36,7 @@ class ForgetPasswordView extends StatelessWidget {
                   }
                   return null;
                 },
-                bodyColor: Colors.grey[200],
+                bodyColor: Colors.grey[200] as Color,
                 hintTxt: 'Email',
                 icon: Icon(Icons.mail),
               ),
@@ -47,7 +47,7 @@ class ForgetPasswordView extends StatelessWidget {
                   ? CustomText(
                       txt: 'Loading',
                       fSize: 18,
-                      txtColor:priColor,
+                      txtColor: priColor,
                     )
                   : Container(
                       width: size.width,
@@ -57,15 +57,15 @@ class ForgetPasswordView extends StatelessWidget {
                           padding: EdgeInsets.all(15),
                         ),
                         onPressed: () {
-                          _key.currentState.save();
-                          if (_key.currentState.validate()) {
+                          _key.currentState!.save();
+                          if (_key.currentState!.validate()) {
                             authController.forgetPassword();
                           }
                         },
                         child: CustomText(
                           txt: "SUBMET",
                           fSize: 22,
-                          txtColor:swatchColor,
+                          txtColor: swatchColor,
                           fWeight: FontWeight.bold,
                         ),
                       ),

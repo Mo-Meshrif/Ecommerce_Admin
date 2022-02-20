@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 class MobileOrderView extends StatelessWidget {
   final List<OrderModel> orders;
-  MobileOrderView({@required this.orders});
+  MobileOrderView({required this.orders});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderViewModel>(
@@ -58,7 +58,7 @@ class MobileOrderView extends StatelessWidget {
                       ),
                       subtitle: CustomText(
                         txt: DateFormat('dd-MM-yyyy hh:mm a').format(
-                          orders[i].createdAt.toDate(),
+                          orders[i].createdAt!.toDate(),
                         ),
                       ),
                       trailing: GestureDetector(
@@ -82,20 +82,20 @@ class MobileOrderView extends StatelessWidget {
                         CustomTitleRow(
                           title: 'Customer',
                           content: CustomText(
-                            txt: customer.userName,
+                            txt: customer.userName as String,
                           ),
                         ),
                         CustomTitleRow(
                           title: 'Products',
                           content: Row(
-                            children: orders[i].items.map((item) {
-                              int index = orders[i].items.indexOf(item);
+                            children: orders[i].items!.map((item) {
+                              int index = orders[i].items!.indexOf(item);
                               return Row(
                                 children: [
                                   CustomText(
                                     txt: item['name'] + '"${item['quantity']}"',
                                   ),
-                                  index != orders[i].items.length - 1
+                                  index != orders[i].items!.length - 1
                                       ? CustomText(
                                           txt: ',',
                                         )
@@ -108,13 +108,13 @@ class MobileOrderView extends StatelessWidget {
                         CustomTitleRow(
                           title: 'Price',
                           content: CustomText(
-                            txt: orders[i].totalPrice,
+                            txt: orders[i].totalPrice as String,
                           ),
                         ),
                         CustomTitleRow(
                           title: 'Delivery Status',
                           content: CustomText(
-                            txt: orders[i].status,
+                            txt: orders[i].status as String,
                             txtColor: orders[i].status == 'Pending'
                                 ? Colors.red
                                 : Colors.green,

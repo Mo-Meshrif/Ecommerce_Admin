@@ -47,17 +47,19 @@ class MobileProductsView extends StatelessWidget {
                             .collection('Products')
                             .snapshots(),
                         builder: (context, snapshot) {
-                          List<DocumentSnapshot> productsSnap =
-                              snapshot.hasData ? snapshot.data.docs : [];
+                          List<DocumentSnapshot> productsSnap = snapshot.hasData
+                              ? (snapshot.data as QuerySnapshot).docs
+                              : [];
                           List<ProductModel> prods = productsSnap
                               .map((element) => ProductModel.fromJson(
-                                  element.id, element.data()))
+                                  element.id,
+                                  element.data() as Map<String, dynamic>))
                               .toList();
                           return ListView.separated(
                             itemCount: prods.length,
                             itemBuilder: (context, i) {
-                              Map<String, dynamic> classification =
-                                  prods[i].classification;
+                              Map<String, dynamic> classification = prods[i]
+                                  .classification as Map<String, dynamic>;
                               return Card(
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide(
@@ -71,16 +73,16 @@ class MobileProductsView extends StatelessWidget {
                                       dividerColor: Colors.transparent),
                                   child: ExpansionTile(
                                     leading: Image.network(
-                                      prods[i].imgUrl,
+                                      prods[i].imgUrl as String,
                                       width: 40,
                                       height: 40,
                                     ),
                                     title: CustomText(
-                                      txt: prods[i].prodName,
+                                      txt: prods[i].prodName as String,
                                       txtColor: Colors.red,
                                     ),
                                     subtitle: CustomText(
-                                      txt: prods[i].price,
+                                      txt: prods[i].price as String,
                                     ),
                                     trailing: GestureDetector(
                                       onTap: () {
@@ -132,28 +134,29 @@ class MobileProductsView extends StatelessWidget {
                                       ),
                                       CustomTitleRow(
                                         title: 'Season',
-                                        content:
-                                            CustomText(txt: prods[i].season),
+                                        content: CustomText(
+                                            txt: prods[i].season as String),
                                       ),
                                       CustomTitleRow(
                                         title: 'Brand',
-                                        content:
-                                            CustomText(txt: prods[i].brand),
+                                        content: CustomText(
+                                            txt: prods[i].brand as String),
                                       ),
                                       CustomTitleRow(
                                         title: 'Material',
-                                        content:
-                                            CustomText(txt: prods[i].material),
+                                        content: CustomText(
+                                            txt: prods[i].material as String),
                                       ),
                                       CustomTitleRow(
                                         title: 'Sku',
-                                        content: CustomText(txt: prods[i].sku),
+                                        content: CustomText(
+                                            txt: prods[i].sku as String),
                                       ),
                                       CustomTitleRow(
                                         title: 'Color(s)',
                                         content: Row(
                                           children: prods[i]
-                                              .color
+                                              .color!
                                               .map((color) => Container(
                                                     height: 20,
                                                     width: 20,
@@ -171,12 +174,14 @@ class MobileProductsView extends StatelessWidget {
                                       ),
                                       CustomTitleRow(
                                         title: 'Size(s)',
-                                        content: prods[i].size.isNotEmpty
+                                        content: prods[i].size!.isNotEmpty
                                             ? Row(
                                                 children: prods[i]
-                                                    .size
-                                                    .map((size) => CustomText(
-                                                        txt: size + ','))
+                                                    .size!
+                                                    .map(
+                                                      (size) => CustomText(
+                                                          txt: size + ','),
+                                                    )
                                                     .toList(),
                                               )
                                             : CustomText(txt: 'Not defined'),

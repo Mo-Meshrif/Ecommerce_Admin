@@ -10,7 +10,7 @@ class UpperBodyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<MessageViewModel>(
       builder: (messageController) {
-        UserModel notMe = messageController.toUser;
+        UserModel? notMe = messageController.toUser;
         return notMe != null
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(8, 15, 0, 8),
@@ -29,17 +29,17 @@ class UpperBodyView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CustomText(
-                            txt: notMe.userName,
+                            txt: notMe.userName as String,
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: GestureDetector(
-                                onTap: () =>
-                                    messageController.restToUserValues(),
-                                child: Icon(
-                                  Icons.close,
-                                  size: 15,
-                                )),
+                              onTap: () => messageController.restToUserValues(),
+                              child: Icon(
+                                Icons.close,
+                                size: 15,
+                              ),
+                            ),
                           )
                         ],
                       ),

@@ -21,26 +21,27 @@ class NavTopView extends StatelessWidget {
                   .orderBy('createdAt', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
-                List<DocumentSnapshot> notificationsSnap =
-                    snapshot.hasData ? snapshot.data.docs : [];
+                List<DocumentSnapshot> notificationsSnap = snapshot.hasData
+                    ? (snapshot.data as QuerySnapshot).docs
+                    : [];
                 List<NotificationModel> notifications = notificationsSnap
                     .map(
                       (e) => NotificationModel.fromJson(
                         e.id,
-                        e.data(),
+                        e.data() as Map<String, dynamic>,
                       ),
                     )
                     .where((notify) =>
-                        notify.to.indexOf(homeController.savedUser.id) >= 0)
+                        notify.to!.indexOf(homeController.savedUser?.id) >= 0)
                     .toList();
                 bool hasNew = notifications
-                        .indexWhere((notify) => !notify.seen)
+                        .indexWhere((notify) => !(notify.seen as bool))
                         .isNegative
                     ? false
                     : true;
                 return GestureDetector(
-                  onTap: () => Get.isDialogOpen
-                      ? Navigator.of(Get.overlayContext).pop()
+                  onTap: () => Get.isDialogOpen as bool
+                      ? Navigator.of(Get.overlayContext as BuildContext).pop()
                       : Get.dialog(
                           NotificationsView(notifications: notifications),
                           barrierColor: Colors.grey[50],
@@ -49,7 +50,8 @@ class NavTopView extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.notifications,
-                        size: 40,color: Colors.black,
+                        size: 40,
+                        color: Colors.black,
                       ),
                       hasNew
                           ? Positioned(
@@ -71,7 +73,7 @@ class NavTopView extends StatelessWidget {
           GestureDetector(
             onTap: () {
               FireStoreUser().updateOnlineState(
-                homeController.savedUser.id,
+                homeController.savedUser?.id,
                 false,
               );
               Get.find<AuthViewModel>().logout();
@@ -79,7 +81,8 @@ class NavTopView extends StatelessWidget {
             },
             child: Icon(
               Icons.power_settings_new,
-              size: 40,color: Colors.black,
+              size: 40,
+              color: Colors.black,
             ),
           ),
           SizedBox(width: 10)

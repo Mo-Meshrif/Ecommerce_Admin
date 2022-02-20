@@ -15,15 +15,15 @@ class AuthViewModel extends GetxController {
     SignUpView(),
     ForgetPasswordView(),
   ];
-  String userName, email, password;
+  String? userName, email, password;
   FirebaseAuth _auth = FirebaseAuth.instance;
   final LocalStorageData _localStorageData = Get.find();
   ValueNotifier<bool> _loading = ValueNotifier(false);
   ValueNotifier<bool> get loading => _loading;
   List<UserModel> _users = [];
   List<UserModel> get users => _users;
-  Rxn<User> _user = Rxn<User>();
-  String get user => _user.value?.email;
+  late Rxn<User> _user = Rxn<User>();
+  String? get user => _user.value?.email;
   @override
   void onInit() {
     _user.bindStream(_auth.authStateChanges());
@@ -47,7 +47,7 @@ class AuthViewModel extends GetxController {
   Future<void> getUsers() async {
     FireStoreUser().getUsersFromFireStore().then((usersData) {
       usersData.forEach((element) {
-        Map data = element.data();
+        Map<String, dynamic> data = element.data() as Map<String, dynamic>;
         var index = _users.indexWhere((element) => element.id == data['id']);
         if (index >= 0) {
           _users.removeAt(index);
@@ -68,23 +68,21 @@ class AuthViewModel extends GetxController {
     _loading.value = true;
     update();
     await _auth
-        .createUserWithEmailAndPassword(email: email, password: password)
+        .createUserWithEmailAndPassword(email: email!, password: password!)
         .onError((error, stackTrace) {
       _loading.value = false;
       update();
-      return handleAuthErrors(error.message);
+      return handleAuthErrors(error.toString());
     }).then((user) async {
       _loading.value = false;
-      if (user != null) {
-        UserModel userModel = UserModel(
-            id: user.user.uid,
-            userName: userName,
-            email: email,
-            role: 'Manger',
-            isOnline: true);
-        await FireStoreUser().addUserToFireStore(userModel);
-        setUser(userModel);
-      }
+      UserModel userModel = UserModel(
+          id: user.user!.uid,
+          userName: userName!,
+          email: email!,
+          role: 'Manger',
+          isOnline: true);
+      await FireStoreUser().addUserToFireStore(userModel);
+      setUser(userModel);
       update();
     });
   }
@@ -92,21 +90,19 @@ class AuthViewModel extends GetxController {
   signIn() async {
     _loading.value = true;
     update();
-    if (isNotCustomer(email)) {
+    if (isNotCustomer(email!)) {
       await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
+          .signInWithEmailAndPassword(email: email!, password: password!)
           .onError((error, stackTrace) {
         _loading.value = false;
         update();
-        return handleAuthErrors(error.message);
+        return handleAuthErrors(error.toString());
       }).then((user) {
         _loading.value = false;
-        if (user != null) {
-          FireStoreUser().updateOnlineState(user.user.uid, true);
-          UserModel userData =
-              _users.firstWhere((element) => element.id == user.user.uid);
-          setUser(userData);
-        }
+        FireStoreUser().updateOnlineState(user.user!.uid, true);
+        UserModel userData =
+            _users.firstWhere((element) => element.id == user.user!.uid);
+        setUser(userData);
         update();
       });
     } else {
@@ -117,11 +113,11 @@ class AuthViewModel extends GetxController {
   }
 
   forgetPassword() async {
-    if (isNotCustomer(email)) {
+    if (isNotCustomer(email!)) {
       try {
         _loading.value = true;
         update();
-        await _auth.sendPasswordResetEmail(email: email).then((_) {
+        await _auth.sendPasswordResetEmail(email: email!).then((_) {
           _loading.value = false;
           update();
           Get.snackbar(
@@ -135,7 +131,7 @@ class AuthViewModel extends GetxController {
       } catch (e) {
         _loading.value = false;
         update();
-        handleAuthErrors(e.message);
+        handleAuthErrors(e.toString());
       }
     } else {
       _loading.value = false;
@@ -147,7 +143,7 @@ class AuthViewModel extends GetxController {
   handleAuthErrors(String error) {
     Get.snackbar(
       'AuthError',
-      error.toString(),
+      error,
       colorText: Colors.white,
       snackPosition: SnackPosition.TOP,
       duration: Duration(seconds: 5),

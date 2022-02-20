@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/userModel.dart';
 
 class MessageModel {
-  String id;
-  Timestamp messageTime;
-  String vendorId;
-  String customerId;
-  UserModel from;
-  UserModel to;
-  String lastMessage;
-  int orderNumber;
-  bool isOpened;
+  String? id;
+  Timestamp? messageTime;
+  String? vendorId;
+  String? customerId;
+  UserModel? from;
+  UserModel? to;
+  String? lastMessage;
+  int? orderNumber;
+  bool? isOpened;
   MessageModel({
     this.id,
     this.messageTime,
@@ -22,10 +22,7 @@ class MessageModel {
     this.orderNumber,
     this.isOpened,
   });
-  MessageModel.fromJson(String mid,Map<String, dynamic> map) {
-    if (map == null) {
-      return;
-    }
+  MessageModel.fromJson(String mid, Map<String, dynamic> map) {
     id = mid;
     messageTime = map['messageTime'];
     vendorId = map['vendorId'];

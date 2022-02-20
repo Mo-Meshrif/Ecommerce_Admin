@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationModel {
-  String id, from, message;
-  List to;
-  Timestamp createdAt;
-  bool seen;
+  String ?id, from, message;
+  List? to;
+  Timestamp? createdAt;
+  bool? seen;
   NotificationModel({
     this.from,
     this.to,
@@ -13,9 +13,6 @@ class NotificationModel {
     this.seen,
   });
   NotificationModel.fromJson(String notifyId, Map<String, dynamic> map) {
-    if (map == null) {
-      return;
-    }
     id = notifyId;
     from = map['from'];
     to = map['to'];

@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import '/responsive.dart';
 import '/../../../../core/viewModel/categoryViewModel.dart';
 import '/../../../../widgets/customText.dart';
@@ -13,9 +14,10 @@ class AddEditCategoryView extends StatelessWidget {
       builder: (categoryController) {
         int mainSubCounter = categoryController.mainSubCounter;
         Map<String, List<int>> subCounterMap = categoryController.subCounter;
-        List<String> mainSubCategories = categoryController.subCategories['s'];
+        List<String> mainSubCategories =
+            categoryController.subCategories['s'] as List<String>;
         Color pickedColor = categoryController.pickedColor;
-        Color backgroundColor = pickedColor != Colors.white
+        Color? backgroundColor = pickedColor != Colors.white
             ? pickedColor.computeLuminance() > 0.5
                 ? Colors.black
                 : Colors.white
@@ -51,12 +53,12 @@ class AddEditCategoryView extends StatelessWidget {
                                                 null &&
                                             categoryController.pickedImage ==
                                                 null
-                                        ? Image.network(
-                                            categoryController.oldImage)
+                                        ? Image.network(categoryController
+                                            .oldImage as String)
                                         : categoryController.pickedImage == null
                                             ? Icon(Icons.upload)
                                             : Image.memory(categoryController
-                                                .pickedImage)),
+                                                .pickedImage as Uint8List)),
                               ),
                             ),
                             Positioned(
@@ -92,7 +94,6 @@ class AddEditCategoryView extends StatelessWidget {
                                                       categoryController
                                                           .getPickedColor(
                                                               color),
-                                                  showLabel: true,
                                                   pickerAreaHeightPercent: 0.8,
                                                 )),
                                               )),
@@ -111,18 +112,17 @@ class AddEditCategoryView extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       CustomTextField(
-                        bodyColor: Colors.grey[200],
+                        bodyColor: Colors.grey[200] as Color,
                         initVal: categoryController.catogoryTitle,
                         onChanged: (val) =>
                             categoryController.catogoryTitle = val.trim(),
                         valid: (val) {
-                          if (val.isEmpty) {
+                          if (val!.isEmpty) {
                             return 'The Feild is empty';
                           }
                           return null;
                         },
                         hintTxt: 'Enter category title',
-                        icon: null,
                       ),
                       SizedBox(height: 15),
                       ExpansionTile(
@@ -147,49 +147,58 @@ class AddEditCategoryView extends StatelessWidget {
                                 crossAxisSpacing: 10,
                               ),
                               itemCount: mainSubCounter,
-                              itemBuilder: (ctx, i) => Row(
-                                children: [
-                                  Expanded(
-                                    child: CustomTextField(
-                                        bodyColor: Colors.grey[200],
-                                        initVal: mainSubCategories.isNotEmpty
-                                            ? mainSubCategories[i]
-                                            : null,
-                                        onChanged: (val) => categoryController
-                                            .addMainSubCategory(isEdit, val, i),
-                                        valid: (val) {
-                                          if (val.isEmpty) {
-                                            return 'The Feild is empty';
-                                          }
-                                          return null;
-                                        },
-                                        hintTxt: 'Enter main sub-category',
-                                        icon: null,
-                                        suffix: mainSubCategories.isNotEmpty
-                                            ? GestureDetector(
-                                                onTap: () => categoryController
-                                                    .changeMainCounter(
-                                                        isEdit, 'add', i),
-                                                child: Icon(Icons.add))
-                                            : null),
-                                  ),
-                                  i == mainSubCounter - 1 && i != 0
-                                      ? Container(
-                                          color: Colors.grey[200],
-                                          height: 48,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 16),
-                                            child: GestureDetector(
-                                                onTap: () => categoryController
-                                                    .changeMainCounter(
-                                                        isEdit, 'sub', i),
-                                                child: Icon(Icons.minimize)),
-                                          ),
-                                        )
-                                      : Padding(padding: EdgeInsets.zero)
-                                ],
-                              ),
+                              itemBuilder: (ctx, i) {
+                                bool addShown = mainSubCounter - 1 == i &&
+                                    (mainSubCategories.isNotEmpty
+                                        ? mainSubCategories[i] != ''
+                                        : false);
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextField(
+                                          bodyColor: Colors.grey[200] as Color,
+                                          initVal: mainSubCategories.isNotEmpty
+                                              ? mainSubCategories[i]
+                                              : null,
+                                          onChanged: (val) => categoryController
+                                              .addMainSubCategory(
+                                                  isEdit, val, i),
+                                          valid: (val) {
+                                            if (val!.isEmpty) {
+                                              return 'The Feild is empty';
+                                            }
+                                            return null;
+                                          },
+                                          hintTxt: 'Enter main sub-category',
+                                          suffix: addShown
+                                              ? GestureDetector(
+                                                  onTap: () =>
+                                                      categoryController
+                                                          .changeMainCounter(
+                                                              isEdit, 'add', i),
+                                                  child: Icon(Icons.add),
+                                                )
+                                              : null),
+                                    ),
+                                    i == mainSubCounter - 1 && i != 0
+                                        ? Container(
+                                            color: Colors.grey[200],
+                                            height: 48,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 16),
+                                              child: GestureDetector(
+                                                  onTap: () =>
+                                                      categoryController
+                                                          .changeMainCounter(
+                                                              isEdit, 'sub', i),
+                                                  child: Icon(Icons.minimize)),
+                                            ),
+                                          )
+                                        : Padding(padding: EdgeInsets.zero)
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -210,15 +219,16 @@ class AddEditCategoryView extends StatelessWidget {
                           : Column(
                               children: mainSubCategories.map((e) {
                                 int x = mainSubCategories.indexOf(e);
-                                List<int> subCounter =
-                                    subCounterMap['s' + x.toString()];
+                                List<int>? subCounter =
+                                    (subCounterMap['s' + x.toString()]);
+                                int subCounterLength = subCounter!.length;
                                 return Column(
                                   children: [
                                     SizedBox(height: 10),
                                     LimitedBox(
-                                      maxHeight: subCounter.length.isEven
-                                          ? subCounter.length * 30
-                                          : subCounter.length >= 6
+                                      maxHeight: subCounterLength.isEven
+                                          ? subCounterLength * 30
+                                          : subCounterLength >= 6
                                               ? 180
                                               : (subCounter.length * 30 + 30)
                                                   .toDouble(),
@@ -241,7 +251,7 @@ class AddEditCategoryView extends StatelessWidget {
                                                 mainAxisSpacing: 10,
                                                 crossAxisSpacing: 10,
                                               ),
-                                              itemCount: subCounter.length,
+                                              itemCount: subCounterLength,
                                               itemBuilder: (ctx, i) {
                                                 int mainCatoIndex =
                                                     mainSubCategories
@@ -249,7 +259,7 @@ class AddEditCategoryView extends StatelessWidget {
                                                             cato ==
                                                             mainSubCategories[
                                                                 x]);
-                                                List<String> subCats =
+                                                List<String>? subCats =
                                                     categoryController
                                                             .subCategories[
                                                         's' + x.toString()];
@@ -258,10 +268,11 @@ class AddEditCategoryView extends StatelessWidget {
                                                     Expanded(
                                                       child: CustomTextField(
                                                           bodyColor:
-                                                              Colors.grey[200],
+                                                              Colors.grey[200]
+                                                                  as Color,
                                                           initVal:
-                                                              subCats[i] != null
-                                                                  ? subCats[i]
+                                                              subCats?[i] != null
+                                                                  ? subCats![i]
                                                                   : null,
                                                           onChanged: (val) =>
                                                               categoryController
@@ -271,27 +282,25 @@ class AddEditCategoryView extends StatelessWidget {
                                                                       val,
                                                                       i),
                                                           valid: (val) {
-                                                            if (val.isEmpty) {
+                                                            if (val!.isEmpty) {
                                                               return 'The Feild is empty';
                                                             }
                                                             return null;
                                                           },
                                                           hintTxt:
                                                               'Enter sub-category',
-                                                          icon: null,
-                                                          suffix: i == subCounter.length - 1
+                                                          suffix: i == subCounterLength - 1
                                                               ? GestureDetector(
-                                                                  onTap: () => categoryController
-                                                                      .changeSubCounter(
+                                                                  onTap: () =>
+                                                                      categoryController.changeSubCounter(
                                                                           isEdit,
                                                                           mainCatoIndex,
                                                                           'add',
                                                                           i),
-                                                                  child:
-                                                                      Icon(Icons.add))
+                                                                  child: Icon(Icons.add))
                                                               : null),
                                                     ),
-                                                    i == subCounter.length - 1 &&
+                                                    i == subCounterLength - 1 &&
                                                             i != 0
                                                         ? Container(
                                                             color: Colors

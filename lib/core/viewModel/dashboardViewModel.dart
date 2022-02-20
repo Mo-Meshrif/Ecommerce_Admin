@@ -12,7 +12,7 @@ class DashboardViewModel extends GetxController {
   ValueNotifier isLoading = ValueNotifier(false);
   AuthViewModel _authViewModel = Get.find();
   DateTime _dateTime = DateTime.now();
-  int totalProducts=0;
+  int totalProducts = 0;
 
   onInit() {
     getTotalProductsOnStore();
@@ -22,8 +22,8 @@ class DashboardViewModel extends GetxController {
   double getTotalRevenuePerThisMonth(List<OrderModel> orders) {
     double totalRevenue = 0;
     orders.forEach((order) {
-      if (order.createdAt.toDate().month == _dateTime.month) {
-        totalRevenue += double.parse(order.totalPrice);
+      if (order.createdAt!.toDate().month == _dateTime.month) {
+        totalRevenue += double.parse(order.totalPrice as String);
       }
     });
     return totalRevenue;
@@ -42,7 +42,7 @@ class DashboardViewModel extends GetxController {
   int getTotalOrdersPerThisMonth(List<OrderModel> orders) {
     List<OrderModel> tempList = [];
     orders.forEach((order) {
-      if (order.createdAt.toDate().month == _dateTime.month) {
+      if (order.createdAt!.toDate().month == _dateTime.month) {
         tempList.add(order);
       }
     });
@@ -52,14 +52,14 @@ class DashboardViewModel extends GetxController {
   List<SalesModel> getTotalRevenuePerMonths(List<OrderModel> orders) {
     List<SalesModel> tempList = [];
     orders.forEach((order) {
-      if (order.createdAt.toDate().month <= _dateTime.month) {
-        String month = DateFormat("MMMM").format(order.createdAt.toDate());
-        double revenue = double.parse(order.totalPrice);
+      if (order.createdAt!.toDate().month <= _dateTime.month) {
+        String month = DateFormat("MMMM").format(order.createdAt!.toDate());
+        double revenue = double.parse(order.totalPrice as String);
         int index = tempList.indexWhere((element) => element.month == month);
         if (index < 0) {
           tempList.add(SalesModel(month: month, revenue: revenue));
         } else {
-          tempList[index].revenue += revenue;
+          tempList[index].revenue = tempList[index].revenue! + revenue;
         }
       }
     });
@@ -73,7 +73,7 @@ class DashboardViewModel extends GetxController {
           .firstWhere((user) => user.id == order.customerId);
       int index =
           tempList.indexWhere((element) => element.id == order.customerId);
-      double totalPrice = double.parse(order.totalPrice);
+      double totalPrice = double.parse(order.totalPrice as String);
       if (index < 0) {
         tempList.add(TopCustomerModel(
           id: user.id,
@@ -83,11 +83,11 @@ class DashboardViewModel extends GetxController {
           totalPrice: totalPrice,
         ));
       } else {
-        tempList[index].ordersNum += 1;
-        tempList[index].totalPrice += totalPrice;
+        tempList[index].ordersNum = tempList[index].ordersNum! + 1;
+        tempList[index].totalPrice = tempList[index].totalPrice! + totalPrice;
       }
     });
-    tempList.sort((a,b)=>a.ordersNum.compareTo(b.ordersNum));
+    tempList.sort((a, b) => a.ordersNum!.compareTo(b.ordersNum as int));
     return tempList;
   }
 }

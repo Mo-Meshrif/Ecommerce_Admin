@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import '/const.dart';
 import '/responsive.dart';
 import '/core/service/fireStore_Category.dart';
 import '/core/service/fireStore_product.dart';
@@ -24,10 +25,10 @@ class ProductViewModel extends GetxController {
   //add product
   HomeViewModel homeViewModel = Get.find();
   ValueNotifier isLoading = ValueNotifier(false);
-  Uint8List pickedImage;
+  Uint8List? pickedImage;
   List<CategoryModel> _categories = [];
   List<CategoryModel> get categories => _categories;
-  String oldImage,
+  String? oldImage,
       oldProdId,
       cat = 'Select Category',
       mainSubCat = 'Select Main Sub-Category',
@@ -39,43 +40,44 @@ class ProductViewModel extends GetxController {
       prodCondition,
       prodSku,
       prodPrice;
-  int catIndex, mainSubIndex;
+  int? catIndex = -1, mainSubIndex = -1;
   bool isTrend = false;
   List<String> colors = ['#ffe91e63', '#ff000000'];
-  List<String> selectedColors = [];
+  List<String>? selectedColors = [];
   Map<String, List<String>> sizes = {
     'Apparel': ['S', 'M', 'L', 'XL'],
     'Shoes': ['4.5', '5.0', '6.5', '7.0']
   };
-  List<String> selectedSizes = [];
+  List<String>? selectedSizes = [];
 
   getMobileProdData(ProductModel prod) {
     CategoryModel currentCato = _categories
-        .firstWhere((cat) => cat.id == prod.classification['cat-id']);
+        .firstWhere((cat) => cat.id == prod.classification!['cat-id']);
     oldProdId = prod.id;
     oldImage = prod.imgUrl;
     cat = currentCato.txt;
-    mainSubCat = prod.classification['category'];
-    subCat = prod.classification['sub-cat'];
+    mainSubCat = prod.classification!['category'];
+    subCat = prod.classification!['sub-cat'];
     prodName = prod.prodName;
     season = prod.season;
-    colors = selectedColors = prod.color.cast<String>();
-    selectedSizes = prod.size.cast<String>();
+    colors = selectedColors = prod.color!.cast<String>();
+    selectedSizes = prod.size!.cast<String>();
     prodPrice = prod.price;
     brandName = prod.brand;
     prodCondition = prod.condition;
     prodSku = prod.sku;
     materialType = prod.material;
-    isTrend = prod.trending;
+    isTrend = prod.trending as bool;
     catIndex = _categories.indexOf(currentCato);
-    mainSubIndex = (currentCato.subCat['s'] as List)
-        .indexOf(prod.classification['category']);
+    mainSubIndex = (currentCato.subCat!['s'] as List)
+        .indexOf(prod.classification!['category']);
     update();
   }
 
   getProdImage() async {
-    Uint8List bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-    if (bytesFromPicker != null) {
+    Uint8List bytesFromPicker =
+        await ImagePickerWeb.getImageAsBytes() as Uint8List;
+    if (bytesFromPicker.isNotEmpty) {
       pickedImage = bytesFromPicker;
     }
     update();
@@ -86,7 +88,8 @@ class ProductViewModel extends GetxController {
     try {
       FireStoreCategory().getCategoriesFromFireStore().then((value) {
         for (int i = 0; i < value.length; i++) {
-          _categories.add(CategoryModel.fromJson(value[i].id, value[i].data()));
+          _categories.add(CategoryModel.fromJson(
+              value[i].id, value[i].data() as Map<String, dynamic>));
         }
         isLoading.value = false;
         update();
@@ -135,29 +138,31 @@ class ProductViewModel extends GetxController {
   }
 
   getSelectedColors(color) {
-    int index = selectedColors.indexWhere((element) => element == color);
+    int index = selectedColors!.indexWhere((element) => element == color);
     if (index >= 0) {
-      selectedColors.removeAt(index);
+      selectedColors!.removeAt(index);
     } else {
-      selectedColors.add(color);
+      selectedColors!.add(color);
     }
     update([1]);
   }
 
   getSelectedSizes(bool selected, String val) {
     if (selected) {
-      selectedSizes.add(val);
+      selectedSizes!.add(val);
     } else {
-      selectedSizes.remove(val);
+      selectedSizes!.remove(val);
     }
     update([2]);
   }
 
-  addProduct(ProductModel prod, String cat, Uint8List image) {
+  addProduct(ProductModel prod, String cat, Uint8List? image) {
     isLoading.value = true;
     update();
     if (image != null) {
-      FireStoreProduct().uploadProdImage(image, cat, prod).then((imgUrl) {
+      FireStoreProduct()
+          .uploadProdImage(image, cat, prod)
+          .then((String? imgUrl) {
         if (imgUrl != null) {
           FireStoreProduct()
               .addProductToFireStore(ProductModel(
@@ -197,7 +202,7 @@ class ProductViewModel extends GetxController {
     season = 'Select Product Season';
     prodName =
         brandName = materialType = prodCondition = prodSku = prodPrice = null;
-    catIndex = mainSubIndex = null;
+    catIndex = mainSubIndex = -1;
     isTrend = false;
     colors = ['#ffe91e63', '#ff000000'];
     selectedColors = [];
@@ -220,8 +225,8 @@ class ProductViewModel extends GetxController {
     'Size(s)',
     'Trending'
   ];
-  Uint8List rePickedImage;
-  String reCat,
+  Uint8List? rePickedImage;
+  String? reCat,
       reMainSubCat,
       reSubCat,
       reSeason,
@@ -231,19 +236,19 @@ class ProductViewModel extends GetxController {
       reProdCondition,
       reProdSku,
       reProdPrice;
-  bool reTrend;
+  bool? reTrend;
   List<String> reColors = [];
   List<String> reSelectedColors = [];
   List<String> reSelectedSizes = [];
-  int reCatIndex, reMainSubIndex;
-  CategoryModel currentCato;
+  int? reCatIndex = -1, reMainSubIndex = -1;
+  CategoryModel? currentCato;
 
   getReParameters(ProductModel prod) {
     CategoryModel catModel = _categories
-        .firstWhere((cat) => cat.id == prod.classification['cat-id']);
+        .firstWhere((cat) => cat.id == prod.classification!['cat-id']);
     reCat = catModel.txt;
-    reMainSubCat = prod.classification['category'];
-    reSubCat = prod.classification['sub-cat'];
+    reMainSubCat = prod.classification!['category'];
+    reSubCat = prod.classification!['sub-cat'];
     reSeason = prod.season;
     reProdName = prod.prodName;
     reBrandName = prod.brand;
@@ -252,18 +257,19 @@ class ProductViewModel extends GetxController {
     reProdSku = prod.sku;
     reProdPrice = prod.price;
     reTrend = prod.trending;
-    reColors = reSelectedColors = prod.color.cast<String>();
-    reSelectedSizes = prod.size.cast<String>();
+    reColors = reSelectedColors = prod.color!.cast<String>();
+    reSelectedSizes = prod.size!.cast<String>();
     currentCato = catModel;
-    reCatIndex = _categories.indexOf(currentCato);
-    reMainSubIndex = (currentCato.subCat['s'] as List)
-        .indexOf(prod.classification['category']);
+    reCatIndex = _categories.indexOf(currentCato as CategoryModel);
+    reMainSubIndex = (currentCato!.subCat!['s'] as List)
+        .indexOf(prod.classification!['category']);
     update([3]);
   }
 
   reGetProdImage() async {
-    Uint8List bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
-    if (bytesFromPicker != null) {
+    Uint8List bytesFromPicker =
+        await ImagePickerWeb.getImageAsBytes() as Uint8List;
+    if (bytesFromPicker.isNotEmpty) {
       rePickedImage = bytesFromPicker;
     }
     update([3]);
@@ -309,7 +315,7 @@ class ProductViewModel extends GetxController {
       reColors.removeAt(index);
     }
     reColors.add(hexColor);
-    update([4]);
+    update([3]);
   }
 
   reGetSelectedColors(color) {
@@ -319,7 +325,7 @@ class ProductViewModel extends GetxController {
     } else {
       reSelectedColors.add(color);
     }
-    update([4]);
+    update([3]);
   }
 
   reGetSelectedSizes(bool selected, String val) {
@@ -328,17 +334,17 @@ class ProductViewModel extends GetxController {
     } else {
       reSelectedSizes.remove(val);
     }
-    update([4]);
+    update([3]);
   }
 
   editProd(
-      String prodId, Uint8List image, ProductModel prod, BuildContext ctx) {
+      String prodId, Uint8List? image, ProductModel prod, BuildContext ctx) {
     reLoading.value = true;
     update([3]);
     if (image != null) {
       FireStoreProduct()
-          .uploadProdImage(image, currentCato.txt, prod)
-          .then((imgUrl) {
+          .uploadProdImage(image, currentCato!.txt as String, prod)
+          .then((String? imgUrl) {
         if (imgUrl != null) {
           FireStoreProduct()
               .editProductfromFireStore(
@@ -384,13 +390,13 @@ class ProductViewModel extends GetxController {
 
   deleteProd(ProductModel prod, BuildContext ctx) {
     FireStoreProduct()
-        .deleteProductfromFireStore(currentCato.txt, prod)
-        .then((_) => Navigator.of(ctx).popUntil(ModalRoute.withName('/')));
+        .deleteProductfromFireStore(currentCato!.txt as String, prod)
+        .then((_) => Navigator.of(ctx).popUntil(ModalRoute.withName(productsPageRoute)));
   }
 
   restReProdParameters() {
     rePickedImage = null;
-    reLoading.value = false;
+    reLoading.value = false; 
     update([3]);
   }
 }

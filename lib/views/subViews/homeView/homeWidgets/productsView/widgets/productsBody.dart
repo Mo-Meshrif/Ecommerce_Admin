@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import '/../../../responsive.dart';
 import '/core/viewModel/productViewModel.dart';
 import '/model/productModel.dart';
@@ -18,9 +19,9 @@ class ProductBody extends StatelessWidget {
         stream: FirebaseFirestore.instance.collection('Products').snapshots(),
         builder: (context, snapshot) {
           List<DocumentSnapshot> productsSnap =
-              snapshot.hasData ? snapshot.data.docs : [];
+              snapshot.hasData ? (snapshot.data as QuerySnapshot).docs : [];
           List<ProductModel> prods = productsSnap.map((element) {
-            Map<String, dynamic> data = element.data();
+            Map<String, dynamic> data = element.data() as Map<String, dynamic>;
             return ProductModel.fromJson(element.id, data);
           }).toList();
           return GetBuilder<ProductViewModel>(
@@ -94,13 +95,13 @@ class ProductBody extends StatelessWidget {
                                                   GestureDetector(
                                                     onTap: () => productController
                                                         .editProd(
-                                                            prod.id,
+                                                            prod.id as String,
                                                             productController
-                                                                .rePickedImage,
+                                                                    .rePickedImage
+                                                                as Uint8List,
                                                             ProductModel(
-                                                                prodName:
-                                                                    productController
-                                                                        .reProdName,
+                                                                prodName: productController
+                                                                    .reProdName,
                                                                 imgUrl:
                                                                     prod.imgUrl,
                                                                 season:
@@ -130,7 +131,7 @@ class ProductBody extends StatelessWidget {
                                                                 classification: {
                                                                   'cat-id':
                                                                       productController
-                                                                          .currentCato
+                                                                          .currentCato!
                                                                           .id,
                                                                   'category':
                                                                       productController
@@ -159,46 +160,46 @@ class ProductBody extends StatelessWidget {
                               cells: [
                                 DataCell(
                                   Image.network(
-                                    prod.imgUrl,
+                                    prod.imgUrl as String,
                                     height: 50,
                                     width: 50,
                                   ),
                                 ),
                                 DataCell(
-                                  CustomText(txt: prod.prodName),
+                                  CustomText(txt: prod.prodName as String),
                                 ),
                                 DataCell(
                                   RichText(
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                            text:
-                                                prod.classification['category'],
+                                            text: prod
+                                                .classification!['category'],
                                             style:
                                                 TextStyle(color: Colors.black)),
                                         TextSpan(
                                             text:
-                                                ' "${prod.classification['sub-cat']}"',
+                                                ' "${prod.classification!['sub-cat']}"',
                                             style: TextStyle(color: Colors.red))
                                       ],
                                     ),
                                   ),
                                 ),
                                 DataCell(
-                                  CustomText(txt: prod.season),
+                                  CustomText(txt: prod.season as String),
                                 ),
                                 DataCell(
-                                  CustomText(txt: prod.brand),
+                                  CustomText(txt: prod.brand as String),
                                 ),
                                 DataCell(
-                                  CustomText(txt: prod.material),
+                                  CustomText(txt: prod.material as String),
                                 ),
                                 DataCell(
-                                  CustomText(txt: prod.sku),
+                                  CustomText(txt: prod.sku as String),
                                 ),
                                 DataCell(
                                   Row(
-                                    children: prod.color
+                                    children: prod.color!
                                         .map((color) => Container(
                                               height: 20,
                                               width: 20,
@@ -213,9 +214,9 @@ class ProductBody extends StatelessWidget {
                                   ),
                                 ),
                                 DataCell(
-                                  prod.size.isNotEmpty
+                                  prod.size!.isNotEmpty
                                       ? Row(
-                                          children: prod.size
+                                          children: prod.size!
                                               .map((size) =>
                                                   CustomText(txt: size + ','))
                                               .toList(),

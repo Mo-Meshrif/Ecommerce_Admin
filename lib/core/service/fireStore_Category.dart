@@ -13,24 +13,24 @@ class FireStoreCategory {
     return val.docs;
   }
 
-  Future<void> addCategoryToFireStore(CategoryModel category) async {
-    return await collectionCategory.add(category.toJson());
-  }
+  Future<void> addCategoryToFireStore(CategoryModel category) async => await collectionCategory.add(category.toJson());
 
   Future<void> editCategoryfromFireStore(CategoryModel category) async {
     return await collectionCategory.doc(category.id).update(category.toJson());
   }
 
   Future<void> deleteCategoryfromFireStore(CategoryModel category) async {
-    return await collectionCategory.doc(category.id).delete().then((_) => storageRef
-        .ref()
-        .child('categories')
-        .child('${category.txt}')
-        .child('${category.txt}.png').delete());
+    return await collectionCategory.doc(category.id).delete().then((_) =>
+        storageRef
+            .ref()
+            .child('categories')
+            .child('${category.txt}')
+            .child('${category.txt}.png')
+            .delete());
   }
 
   Future<String> uploadCatImage(Uint8List pic, String catTitle) async {
-    String url;
+    late String url;
     Reference reference = storageRef
         .ref()
         .child('categories')

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class ControlView extends GetWidget<AuthViewModel> {
   final Widget child;
 
-  ControlView({@required this.child});
+  ControlView({required this.child});
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.user != null

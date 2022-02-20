@@ -1,4 +1,3 @@
-
 import '/widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -8,9 +7,9 @@ import 'homeWidgets/sideMenuView.dart';
 
 class DesktopView extends StatelessWidget {
   const DesktopView({
-    @required this.homeItems,
-    @required this.child,
-    @required this.itemTap,
+    required this.homeItems,
+    required this.child,
+    required this.itemTap,
   });
 
   final List<Map<String, String>> homeItems;
@@ -61,7 +60,7 @@ class DesktopView extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey[200],
+                      color: Colors.grey[200] as Color,
                       offset: Offset(3, 5),
                       blurRadius: 10,
                     )

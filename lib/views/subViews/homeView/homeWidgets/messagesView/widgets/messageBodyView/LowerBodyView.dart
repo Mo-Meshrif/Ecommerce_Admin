@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 class LowerBodyView extends StatefulWidget {
   final UserModel notMe;
   final UserModel me;
-  LowerBodyView({@required this.notMe, @required this.me});
+  LowerBodyView({required this.notMe, required this.me});
 
   @override
   State<LowerBodyView> createState() => _LowerBodyViewState();
@@ -43,7 +43,7 @@ class _LowerBodyViewState extends State<LowerBodyView> {
             .snapshots(),
         builder: (context, snapshot) {
           List<DocumentSnapshot> messageSnap =
-              snapshot.hasData ? snapshot.data.docs : [];
+              snapshot.hasData ? (snapshot.data as QuerySnapshot).docs : [];
           List messages = messageSnap
               .where((element) => ((element['from'] == widget.me.id ||
                       element['to'] == widget.me.id) &&
@@ -119,7 +119,7 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                 children: [
                   Expanded(
                     child: CustomTextField(
-                      bodyColor: Colors.grey[200],
+                      bodyColor: Colors.grey[200] as Color,
                       txtEditingController: _textController,
                       onChanged: (val) {
                         _textController.text = val;
@@ -144,10 +144,10 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                               widget.notMe.role == 'Customer'
                                   ? messageController.uploadMessage(
                                       createdAt: Timestamp.now(),
-                                      vendorId: widget.me.id,
-                                      customerId: widget.notMe.id,
-                                      from: widget.me.id,
-                                      to: widget.notMe.id,
+                                      vendorId: widget.me.id as String,
+                                      customerId: widget.notMe.id as String,
+                                      from: widget.me.id as String,
+                                      to: widget.notMe.id as String,
                                       message: _textController.text,
                                       orderNumber:
                                           messageController.orderNumber == null
@@ -158,10 +158,9 @@ class _LowerBodyViewState extends State<LowerBodyView> {
                                       createdAt: Timestamp.now(),
                                       vendorId: '',
                                       customerId: '',
-                                      from: widget.me.id,
-                                      to: widget.notMe.id,
+                                      from: widget.me.id as String,
+                                      to: widget.notMe.id as String,
                                       message: _textController.text,
-                                      orderNumber: null,
                                     );
                               _textController.text = '';
                             }

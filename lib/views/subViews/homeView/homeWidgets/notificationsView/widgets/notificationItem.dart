@@ -7,11 +7,11 @@ class NotificationItem extends StatelessWidget {
   final String content, from, time;
 
   NotificationItem({
-    @required this.seen,
-    @required this.icon,
-    @required this.content,
-    @required this.from,
-    @required this.time,
+    required this.seen,
+    required this.icon,
+    required this.content,
+    required this.from,
+    required this.time,
   });
   @override
   Widget build(BuildContext context) {

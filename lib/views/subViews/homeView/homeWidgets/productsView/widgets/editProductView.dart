@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import '/core/viewModel/productViewModel.dart';
 import '/model/categoryModel.dart';
 import '/model/productModel.dart';
@@ -14,29 +15,32 @@ import '/../../../const.dart';
 class EditProductView extends StatelessWidget {
   final ProductModel prod;
 
-  EditProductView({@required this.prod});
+  EditProductView({required this.prod});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductViewModel>(
       id: 3,
       builder: (productController) {
         List<CategoryModel> categories = productController.categories;
-        List<String> catNames = categories.map((e) => e.txt).toList();
-        int catIndex = productController.reCatIndex;
-        List<String> mainCatNames = catIndex != null
-            ? (categories[catIndex].subCat['s'] as List).cast<String>()
-            : [];
-        int mainCatIndex = productController.reMainSubIndex;
-        List<String> subCatNames = (catIndex != null && mainCatIndex != null)
-            ? (categories[catIndex].subCat['s' + '$mainCatIndex'] as List)
-                .cast<String>()
-            : [];
-        bool isTrend = productController.reTrend;
+        List<String> catNames =
+            categories.map((e) => e.txt).toList().cast<String>();
+        int catIndex = productController.reCatIndex as int;
+        List<String> mainCatNames = catIndex.isNegative
+            ? []
+            : (categories[catIndex].subCat!['s'] as List).cast<String>();
+        int mainCatIndex = productController.reMainSubIndex as int;
+        List<String> subCatNames =
+            (catIndex.isNegative || mainCatIndex.isNegative)
+                ? []
+                : (categories[catIndex].subCat!['s' + '$mainCatIndex'] as List)
+                    .cast<String>();
+        bool isTrend = productController.reTrend as bool;
         List<String> colors = productController.reColors;
         List<String> selectedColors = productController.reSelectedColors;
         Map<String, List<String>> sizesMap = productController.sizes;
-        String cat = productController.reCat;
-        List<String> sizes = sizesMap.containsKey(cat) ? sizesMap[cat] : [];
+        String cat = productController.reCat as String;
+        List<String> sizes =
+            sizesMap.containsKey(cat) ? sizesMap[cat] as List<String> : [];
         List<String> selectedSizes = productController.reSelectedSizes;
         return productController.reLoading.value
             ? Center(child: CircularProgressIndicator())
@@ -56,11 +60,12 @@ class EditProductView extends StatelessWidget {
                           strokeWidth: 1,
                           child: productController.rePickedImage == null
                               ? Image.network(
-                                  prod.imgUrl,
+                                  prod.imgUrl as String,
                                   width: 50,
                                   height: 50,
                                 )
-                              : Image.memory(productController.rePickedImage),
+                              : Image.memory(
+                                  productController.rePickedImage as Uint8List),
                         ),
                       ),
                     ),
@@ -72,7 +77,8 @@ class EditProductView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomPopupMenu(
-                          title:'Category : ' +  productController.reCat,
+                          title: 'Category : ' +
+                              (productController.reCat as String),
                           items: catNames,
                           onSelect: (val) {
                             productController.reCatIndex =
@@ -82,7 +88,8 @@ class EditProductView extends StatelessWidget {
                         ),
                         SizedBox(width: 10),
                         CustomPopupMenu(
-                          title: 'Main Sub : ' + productController.reMainSubCat,
+                          title: 'Main Sub : ' +
+                              (productController.reMainSubCat as String),
                           items: mainCatNames,
                           onSelect: (val) {
                             int index = mainCatNames.indexOf(val);
@@ -98,15 +105,17 @@ class EditProductView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomPopupMenu(
-                          title: 'Sub-Cat : ' + productController.reSubCat,
+                          title: 'Sub-Cat : ' +
+                              (productController.reSubCat as String),
                           items: subCatNames,
                           onSelect: (val) =>
                               productController.getReSelectedSubCat(val),
                         ),
                         SizedBox(width: 10),
                         CustomPopupMenu(
-                          title:' Season : ' + productController.reSeason,
-                          items: ['Summer', 'Winter','Not defined'],
+                          title: ' Season : ' +
+                              (productController.reSeason as String),
+                          items: ['Summer', 'Winter', 'Not defined'],
                           onSelect: (val) =>
                               productController.getReSelectedSesson(val),
                         ),
@@ -138,38 +147,38 @@ class EditProductView extends StatelessWidget {
                     CustomText(txt: 'Product Name :'),
                     SizedBox(height: 10),
                     CustomTextField(
-                        height: 25,
-                        shapeIsCircular: true,
-                        bodyColor: Colors.grey[350],
-                        initVal: productController.reProdName,
-                        onChanged: (val) => productController.reProdName = val,
-                        valid: (val) {
-                          if (val.isEmpty) {
-                            return 'The Feild is empty';
-                          }
-                          return null;
-                        },
-                        hintTxt: 'Enter Product Name',
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                        icon: null),
+                      height: 25,
+                      shapeIsCircular: true,
+                      bodyColor: Colors.grey[350] as Color,
+                      initVal: productController.reProdName,
+                      onChanged: (val) => productController.reProdName = val,
+                      valid: (val) {
+                        if (val!.isEmpty) {
+                          return 'The Feild is empty';
+                        }
+                        return null;
+                      },
+                      hintTxt: 'Enter Product Name',
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
                     SizedBox(height: 15),
                     CustomText(txt: 'Brand Name : '),
                     SizedBox(height: 10),
                     CustomTextField(
-                        height: 25,
-                        shapeIsCircular: true,
-                        bodyColor: Colors.grey[350],
-                        initVal: productController.reBrandName,
-                        onChanged: (val) => productController.reBrandName = val,
-                        valid: (val) {
-                          if (val.isEmpty) {
-                            return 'The Feild is empty';
-                          }
-                          return null;
-                        },
-                        hintTxt: 'Enter Brand Name',
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
-                        icon: null),
+                      height: 25,
+                      shapeIsCircular: true,
+                      bodyColor: Colors.grey[350] as Color,
+                      initVal: productController.reBrandName,
+                      onChanged: (val) => productController.reBrandName = val,
+                      valid: (val) {
+                        if (val!.isEmpty) {
+                          return 'The Feild is empty';
+                        }
+                        return null;
+                      },
+                      hintTxt: 'Enter Brand Name',
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
                     SizedBox(height: 15),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,39 +226,31 @@ class EditProductView extends StatelessWidget {
                                           )
                                         : GestureDetector(
                                             onTap: () => showDialog(
-                                                context: context,
-                                                builder: (ctx) => AlertDialog(
-                                                      contentPadding:
-                                                          const EdgeInsets
-                                                                  .symmetric(
-                                                              vertical: 15,
-                                                              horizontal: 24),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                      ),
-                                                      title: CustomText(
-                                                        txt:
-                                                            'Pick Product Color',
-                                                      ),
-                                                      content:
-                                                          SingleChildScrollView(
-                                                              child:
-                                                                  ColorPicker(
-                                                        pickerColor:
-                                                            Colors.white,
-                                                        onColorChanged:
-                                                            (color) =>
-                                                                productController
-                                                                    .reAddColor(
-                                                                        color),
-                                                        showLabel: true,
-                                                        pickerAreaHeightPercent:
-                                                            0.8,
-                                                      )),
-                                                    )),
+                                              context: context,
+                                              builder: (ctx) => AlertDialog(
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 15,
+                                                        horizontal: 24),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                title: CustomText(
+                                                  txt: 'Pick Product Color',
+                                                ),
+                                                content: SingleChildScrollView(
+                                                  child: ColorPicker(
+                                                    pickerColor: Colors.white,
+                                                    onColorChanged: (color) =>
+                                                        productController
+                                                            .reAddColor(color),
+                                                    pickerAreaHeightPercent:
+                                                        0.8,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                             child: Icon(Icons.add),
                                           ),
                                   ),
@@ -293,7 +294,9 @@ class EditProductView extends StatelessWidget {
                                             onChanged: (value) =>
                                                 productController
                                                     .reGetSelectedSizes(
-                                                        value, sizes[i]),
+                                              value as bool,
+                                              sizes[i],
+                                            ),
                                           );
                                         }),
                                   ),
@@ -314,22 +317,22 @@ class EditProductView extends StatelessWidget {
                               CustomText(txt: 'Material Type :'),
                               SizedBox(height: 10),
                               CustomTextField(
-                                  height: 25,
-                                  shapeIsCircular: true,
-                                  bodyColor: Colors.grey[350],
-                                  initVal: productController.reMaterialType,
-                                  onChanged: (val) =>
-                                      productController.reMaterialType = val,
-                                  valid: (val) {
-                                    if (val.isEmpty) {
-                                      return 'The Feild is empty';
-                                    }
-                                    return null;
-                                  },
-                                  hintTxt: 'Enter Material Type',
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey, fontSize: 15),
-                                  icon: null),
+                                height: 25,
+                                shapeIsCircular: true,
+                                bodyColor: Colors.grey[350] as Color,
+                                initVal: productController.reMaterialType,
+                                onChanged: (val) =>
+                                    productController.reMaterialType = val,
+                                valid: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'The Feild is empty';
+                                  }
+                                  return null;
+                                },
+                                hintTxt: 'Enter Material Type',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              ),
                             ],
                           ),
                         ),
@@ -341,22 +344,22 @@ class EditProductView extends StatelessWidget {
                               CustomText(txt: 'Product Condition :'),
                               SizedBox(height: 10),
                               CustomTextField(
-                                  height: 25,
-                                  shapeIsCircular: true,
-                                  bodyColor: Colors.grey[350],
-                                  initVal: productController.reProdCondition,
-                                  onChanged: (val) =>
-                                      productController.reProdCondition = val,
-                                  valid: (val) {
-                                    if (val.isEmpty) {
-                                      return 'The Feild is empty';
-                                    }
-                                    return null;
-                                  },
-                                  hintTxt: 'Enter Product Condition',
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey, fontSize: 15),
-                                  icon: null),
+                                height: 25,
+                                shapeIsCircular: true,
+                                bodyColor: Colors.grey[350] as Color,
+                                initVal: productController.reProdCondition,
+                                onChanged: (val) =>
+                                    productController.reProdCondition = val,
+                                valid: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'The Feild is empty';
+                                  }
+                                  return null;
+                                },
+                                hintTxt: 'Enter Product Condition',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              ),
                             ],
                           ),
                         )
@@ -372,22 +375,22 @@ class EditProductView extends StatelessWidget {
                               CustomText(txt: 'Product Sku :'),
                               SizedBox(height: 10),
                               CustomTextField(
-                                  height: 25,
-                                  shapeIsCircular: true,
-                                  bodyColor: Colors.grey[350],
-                                  initVal: productController.reProdSku,
-                                  onChanged: (val) =>
-                                      productController.reProdSku = val,
-                                  valid: (val) {
-                                    if (val.isEmpty) {
-                                      return 'The Feild is empty';
-                                    }
-                                    return null;
-                                  },
-                                  hintTxt: 'Enter Product Sku',
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey, fontSize: 15),
-                                  icon: null),
+                                height: 25,
+                                shapeIsCircular: true,
+                                bodyColor: Colors.grey[350] as Color,
+                                initVal: productController.reProdSku,
+                                onChanged: (val) =>
+                                    productController.reProdSku = val,
+                                valid: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'The Feild is empty';
+                                  }
+                                  return null;
+                                },
+                                hintTxt: 'Enter Product Sku',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              ),
                             ],
                           ),
                         ),
@@ -399,22 +402,22 @@ class EditProductView extends StatelessWidget {
                               CustomText(txt: 'Product Price (\$) :'),
                               SizedBox(height: 10),
                               CustomTextField(
-                                  height: 25,
-                                  shapeIsCircular: true,
-                                  bodyColor: Colors.grey[350],
-                                  initVal: productController.reProdPrice,
-                                  onChanged: (val) =>
-                                      productController.reProdPrice = val,
-                                  valid: (val) {
-                                    if (val.isEmpty) {
-                                      return 'The Feild is empty';
-                                    }
-                                    return null;
-                                  },
-                                  hintTxt: 'Enter Product Price',
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey, fontSize: 15),
-                                  icon: null),
+                                height: 25,
+                                shapeIsCircular: true,
+                                bodyColor: Colors.grey[350] as Color,
+                                initVal: productController.reProdPrice,
+                                onChanged: (val) =>
+                                    productController.reProdPrice = val,
+                                valid: (val) {
+                                  if (val!.isEmpty) {
+                                    return 'The Feild is empty';
+                                  }
+                                  return null;
+                                },
+                                hintTxt: 'Enter Product Price',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 15),
+                              ),
                             ],
                           ),
                         )

@@ -7,11 +7,11 @@ class DeleteAlert extends StatelessWidget {
   final void Function() agree, notAgree;
 
   DeleteAlert({
-    @required this.isLoading,
-    @required this.title,
-    @required this.messageContent,
-    @required this.agree,
-    @required this.notAgree,
+    required this.isLoading,
+    required this.title,
+    required this.messageContent,
+    required this.agree,
+    required this.notAgree,
   });
   @override
   Widget build(BuildContext context) {

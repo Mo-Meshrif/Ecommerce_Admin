@@ -13,19 +13,19 @@ class AppBarActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (homeController) {
       String currentItem = homeController.currentItem;
-      UserModel me = homeController.savedUser;
+      UserModel me = homeController.savedUser as UserModel;
       List<MessageModel> headerMessages = [];
       int indexOfShownMessage = 0;
       MessageModel currentMessage;
-      UserModel notMe, toUser;
+      UserModel? notMe, toUser;
       if (currentItem == 'chat') {
-        toUser = Get.find<MessageViewModel>().toUser;
+        toUser = Get.find<MessageViewModel>().toUser as UserModel;
         headerMessages = Get.find<MessageViewModel>().headerMessages;
         indexOfShownMessage =
             Get.find<MessageViewModel>().indexOfShownMessage ?? 0;
         if (headerMessages.isNotEmpty) {
           currentMessage = headerMessages[indexOfShownMessage];
-          notMe = me.id == currentMessage.to.id
+          notMe = me.id == currentMessage.to!.id
               ? currentMessage.from
               : currentMessage.to;
           if (notMe == null) {
@@ -40,9 +40,9 @@ class AppBarActions extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10),
             child: CircleAvatar(
               radius: 20,
-              backgroundImage: notMe.pic == null
+              backgroundImage: notMe!.pic == null
                   ? AssetImage('assets/order/person.png')
-                  : NetworkImage(notMe.pic),
+                  : NetworkImage(notMe.pic as String) as ImageProvider,
             ),
           );
           break;

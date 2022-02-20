@@ -12,11 +12,11 @@ class FireStoreProduct {
     return val.docs;
   }
 
-  Future<void> addProductToFireStore(ProductModel prod) async {
-    return await collectionProduct.add(prod.toJson());
-  }
+  Future<void> addProductToFireStore(ProductModel prod) async =>
+      await collectionProduct.add(prod.toJson());
 
-  Future<void> editProductfromFireStore(String prodId,ProductModel prod) async {
+  Future<void> editProductfromFireStore(
+      String prodId, ProductModel prod) async {
     return await collectionProduct.doc(prodId).update(prod.toJson());
   }
 
@@ -26,21 +26,21 @@ class FireStoreProduct {
             .ref()
             .child('products')
             .child('$cat')
-            .child('${prod.classification['category']}')
-            .child('${prod.classification['sub-cat']}')
+            .child('${prod.classification!['category']}')
+            .child('${prod.classification!['sub-cat']}')
             .child('${prod.prodName}.png')
             .delete());
   }
 
   Future<String> uploadProdImage(
       Uint8List pic, String cat, ProductModel prod) async {
-    String url;
+    late String url;
     Reference reference = storageRef
         .ref()
         .child('products')
         .child('$cat')
-        .child('${prod.classification['category']}')
-        .child('${prod.classification['sub-cat']}')
+        .child('${prod.classification!['category']}')
+        .child('${prod.classification!['sub-cat']}')
         .child('${prod.prodName}.png');
     await reference.putData(pic).then((val) async {
       url = await val.ref.getDownloadURL();

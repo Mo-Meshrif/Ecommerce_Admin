@@ -12,11 +12,11 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (homeController) {
       String currentItem = homeController.currentItem;
-      UserModel me = homeController.savedUser;
+      UserModel me = homeController.savedUser as UserModel;
       List<MessageModel> headerMessages = [];
       int indexOfShownMessage = 0;
       MessageModel currentMessage;
-      UserModel notMe, toUser;
+      UserModel? notMe, toUser;
       if (currentItem == 'chat') {
         toUser = Get.find<MessageViewModel>().toUser;
         headerMessages = Get.find<MessageViewModel>().headerMessages;
@@ -24,14 +24,14 @@ class AppBarTitle extends StatelessWidget {
             Get.find<MessageViewModel>().indexOfShownMessage ?? 0;
         if (headerMessages.isNotEmpty) {
           currentMessage = headerMessages[indexOfShownMessage];
-          notMe = me.id == currentMessage.to.id
+          notMe = me.id == currentMessage.to!.id
               ? currentMessage.from
               : currentMessage.to;
         }
       }
       Widget _widget;
       switch (currentItem) {
-         case 'addCategory':
+        case 'addCategory':
           _widget = CustomText(
             txt: 'Add Category',
             fSize: 18,
@@ -45,7 +45,9 @@ class AppBarTitle extends StatelessWidget {
           break;
         case 'chat':
           _widget = CustomText(
-            txt: toUser != null ? toUser.userName : notMe.userName,
+            txt: toUser != null
+                ? toUser.userName as String
+                : notMe!.userName as String,
             fSize: 18,
           );
           break;

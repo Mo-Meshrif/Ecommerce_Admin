@@ -4,8 +4,8 @@ import '../../../../const.dart';
 
 class SideMenuView extends StatelessWidget {
   SideMenuView({
-    @required this.homeItems,
-    @required this.onTap,
+    required this.homeItems,
+    required this.onTap,
   });
   final List<Map<String, String>> homeItems;
   final void Function(int val) onTap;
@@ -19,13 +19,13 @@ class SideMenuView extends StatelessWidget {
         onTap: () => onTap(i),
         child: ListTile(
           leading: Image.asset(
-            homeItems[i]['icon'],
+            homeItems[i]['icon'] as String,
             color: swatchColor,
             width: 40,
             height: 40,
           ),
           title: CustomText(
-            txt: homeItems[i]['title'],
+            txt: homeItems[i]['title'] as String,
             txtColor: swatchColor,
           ),
         ),

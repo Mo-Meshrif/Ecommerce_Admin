@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 class NotificationsView extends StatelessWidget {
   final List<NotificationModel> notifications;
-  NotificationsView({@required this.notifications});
+  NotificationsView({required this.notifications});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,26 +52,26 @@ class NotificationsView extends StatelessWidget {
                                 .firstWhere(
                                     (user) => user.id == notifications[i].from);
                             bool isMessage =
-                                notifications[i].message.contains('message')
+                                notifications[i].message!.contains('message')
                                     ? true
                                     : false;
                             return GestureDetector(
                               onTap: () {
                                 Navigator.pop(context);
                                 notificationController.handleNotificationTapped(
-                                  notifications[i].id,
+                                  notifications[i].id as String,
                                   notifications[i].message,
                                 );
                               },
                               child: NotificationItem(
-                                seen: notifications[i].seen,
+                                seen: notifications[i].seen as bool,
                                 icon: isMessage
                                     ? Icons.mail
                                     : Icons.delivery_dining,
-                                content: notifications[i].message,
-                                from: from.userName,
+                                content: notifications[i].message as String,
+                                from: from.userName as String,
                                 time: DateFormat('hh:mm a').format(
-                                  notifications[i].createdAt.toDate(),
+                                  notifications[i].createdAt!.toDate(),
                                 ),
                               ),
                             );

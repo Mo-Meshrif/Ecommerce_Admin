@@ -5,7 +5,7 @@ class CustomTitleRow extends StatelessWidget {
   final String title;
   final Widget content;
 
-  CustomTitleRow({@required this.title, @required this.content});
+  CustomTitleRow({required this.title, required this.content});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -13,7 +13,7 @@ class CustomTitleRow extends StatelessWidget {
       children: [
         CustomText(
           txt: title,
-          txtColor: Colors.grey[700],
+          txtColor: Colors.grey[700] as Color,
         ),
         content
       ],

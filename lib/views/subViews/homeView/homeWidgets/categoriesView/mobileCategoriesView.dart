@@ -9,23 +9,23 @@ import 'package:flutter/material.dart';
 
 class MobileCategoriesView extends StatelessWidget {
   final List<CategoryModel> categories;
-  MobileCategoriesView({@required this.categories});
+  MobileCategoriesView({required this.categories});
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryViewModel>(
       builder: (categoryController) => categoryController
               .isMobileAddEditCategory.value
           ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: AddEditCategoryView(),
-          )
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: AddEditCategoryView(),
+            )
           : SingleChildScrollView(
               child: Column(
                 children: [
                   GestureDetector(
                     onTap: () {
-                       Get.find<HomeViewModel>().getCurrentItem('addCategory');
-                       categoryController.getMobileViewStatus(true);
+                      Get.find<HomeViewModel>().getCurrentItem('addCategory');
+                      categoryController.getMobileViewStatus(true);
                     },
                     child: Container(
                       height: 100,
@@ -49,8 +49,8 @@ class MobileCategoriesView extends StatelessWidget {
                     children: categories.map(
                       (cat) {
                         List<dynamic> subCat = [];
-                        for (var i = 0; i < cat.subCat['s'].length; i++) {
-                          subCat.addAll(cat.subCat['s' + i.toString()]);
+                        for (var i = 0; i < cat.subCat!['s'].length; i++) {
+                          subCat.addAll(cat.subCat!['s' + i.toString()]);
                         }
                         List<dynamic> subCatWithoutRepeated =
                             subCat.toSet().toList();
@@ -67,14 +67,14 @@ class MobileCategoriesView extends StatelessWidget {
                                 .copyWith(dividerColor: Colors.transparent),
                             child: ExpansionTile(
                               leading: Image.network(
-                                cat.imgUrl,
-                                color: HexColor(cat.avatarCol),
+                                cat.imgUrl as String,
+                                color: HexColor(cat.avatarCol as String),
                                 width: 40,
                                 height: 40,
                               ),
                               title: CustomText(
-                                txt: cat.txt,
-                                txtColor: HexColor(cat.avatarCol),
+                                txt: cat.txt as String,
+                                txtColor: HexColor(cat.avatarCol as String),
                               ),
                               subtitle: CustomText(
                                 txt: 'Sub-Category : ' +
@@ -82,7 +82,8 @@ class MobileCategoriesView extends StatelessWidget {
                               ),
                               trailing: GestureDetector(
                                 onTap: () {
-                                  Get.find<HomeViewModel>().getCurrentItem('editCategory');
+                                  Get.find<HomeViewModel>()
+                                      .getCurrentItem('editCategory');
                                   categoryController.getMobileViewStatus(true);
                                   categoryController.getOldCategoryData(cat);
                                 },

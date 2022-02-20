@@ -21,13 +21,11 @@ class AppBarLeading extends StatelessWidget {
               onPressed: () {
                 switch (currentItem) {
                   case 'addCategory':
-                    Get.find<CategoryViewModel>()
-                        .restCatParameters();
+                    Get.find<CategoryViewModel>().restCatParameters();
                     Get.find<CategoryViewModel>().getMobileViewStatus(false);
                     break;
                   case 'editCategory':
-                    Get.find<CategoryViewModel>()
-                        .restCatParameters();
+                    Get.find<CategoryViewModel>().restCatParameters();
                     Get.find<CategoryViewModel>().getMobileViewStatus(false);
                     break;
                   case 'chat':
@@ -55,7 +53,7 @@ class AppBarLeading extends StatelessWidget {
                 color: Colors.black,
               ),
               onPressed: () =>
-                  homeController.homeScaffoldKey.currentState.openDrawer(),
+                  homeController.homeScaffoldKey.currentState!.openDrawer(),
             );
     });
   }

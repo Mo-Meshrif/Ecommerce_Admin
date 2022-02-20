@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 class OrderModel {
-  String orderId, customerId, status, promoCode,totalPrice;
-  Timestamp createdAt;
-  List orderTrack;
-  int orderNumber;
-  Map<String, dynamic> shippingAdress, paymentMehod;
-  List items;
-  double rate;
+  String? orderId, customerId, status, promoCode,totalPrice;
+  Timestamp? createdAt;
+  List? orderTrack;
+  int? orderNumber;
+  Map<String, dynamic>? shippingAdress, paymentMehod;
+  List? items;
+  double? rate;
   OrderModel({
     this.orderId,
     this.customerId,
@@ -22,9 +21,6 @@ class OrderModel {
     this.rate, this.totalPrice,
   });
   OrderModel.fromJson(String id,Map<String, dynamic> map) {
-    if (map == null) {
-      return;
-    }
     orderId = id;
     customerId = map['customerId'];
     status = map['status'];

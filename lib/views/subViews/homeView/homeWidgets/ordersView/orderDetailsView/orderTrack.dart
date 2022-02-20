@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timelines/timelines.dart';
 import '/../../../../const.dart';
-
 class OrderTrack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -29,19 +28,19 @@ class OrderTrack extends StatelessWidget {
             ),
             builder: TimelineTileBuilder.connected(
               connectionDirection: ConnectionDirection.before,
-              itemCount: order.orderTrack.length,
+              itemCount: order.orderTrack!.length,
               contentsBuilder: (_, index) {
-                int x = order.orderTrack
+                int x = order.orderTrack!
                     .indexWhere((element) => element['status'] == false);
                 return Padding(
-                  padding: EdgeInsets.only(
-                      left: 8.0, bottom: index == x ? 20 : 50),
+                  padding:
+                      EdgeInsets.only(left: 8.0, bottom: index == x ? 20 : 50),
                   child: Column(
                     children: [
                       Row(
                         children: [
                           CustomText(
-                            txt: order.orderTrack[index]['title'],
+                            txt: order.orderTrack![index]['title'],
                           ),
                           index == x
                               ? CustomText(txt: ' ?')
@@ -60,13 +59,12 @@ class OrderTrack extends StatelessWidget {
                                   TextButton(
                                       onPressed: () {
                                         if (x == 1) {
-                                          order.orderTrack[1]['createdAt'] =
+                                          order.orderTrack![1]['createdAt'] =
                                               Timestamp.now();
                                         }
-                                        order.orderTrack[x]['status'] =
-                                            true;
+                                        order.orderTrack![x]['status'] = true;
                                         orderController.changeOrderStatus(
-                                          order.customerId,
+                                          order.customerId as String,
                                           order.orderId,
                                           order.orderTrack,
                                         );
@@ -78,7 +76,7 @@ class OrderTrack extends StatelessWidget {
                                   TextButton(
                                       onPressed: () =>
                                           orderController.cancelOrder(
-                                              order.customerId,
+                                              order.customerId as String,
                                               order.orderId),
                                       child: CustomText(
                                         txt: 'No',
@@ -93,7 +91,7 @@ class OrderTrack extends StatelessWidget {
                 );
               },
               indicatorBuilder: (_, index) {
-                if (order.orderTrack[index]['status'] == true) {
+                if (order.orderTrack![index]['status'] == true) {
                   return DotIndicator(
                     size: 30,
                     color: priColor,
@@ -111,7 +109,7 @@ class OrderTrack extends StatelessWidget {
                 }
               },
               connectorBuilder: (_, index, ___) => SolidLineConnector(
-                color: order.orderTrack[index]['status'] == true
+                color: order.orderTrack![index]['status'] == true
                     ? priColor
                     : null,
               ),

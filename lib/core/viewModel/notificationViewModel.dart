@@ -12,7 +12,7 @@ import '../../const.dart';
 class NotificationViewModel extends GetxController {
   FirebaseMessaging fbMessaging = FirebaseMessaging.instance;
   HomeViewModel _homeViewModel = Get.find();
-  List<Map<String, dynamic>> _tokens;
+  late List<Map<String, dynamic>> _tokens;
   onInit() {
     addDeviceToken();
     getDevicesToken();
@@ -23,7 +23,7 @@ class NotificationViewModel extends GetxController {
   getDevicesToken() {
     FireStoreNotification().getTokensfromFireStore().then((value) {
       _tokens = value.map((e) {
-        Map<String, dynamic> data = e.data();
+        Map<String, dynamic> data = e.data() as Map<String, dynamic>;
         return {'id': e.id, 'token': data['token']};
       }).toList();
       update();
@@ -31,12 +31,12 @@ class NotificationViewModel extends GetxController {
   }
 
   addDeviceToken() async {
-    await fbMessaging
-        .getToken(vapidKey: vapidKey)
-        .then((value) => FireStoreNotification().addTokenToFireStore(
-              _homeViewModel.savedUser.id,
-              value,
-            ));
+    await fbMessaging.getToken(vapidKey: vapidKey).then(
+          (value) => FireStoreNotification().addTokenToFireStore(
+            _homeViewModel.savedUser!.id as String,
+            value,
+          ),
+        );
   }
 
   sendNotification(String uid, body) async {
@@ -70,7 +70,7 @@ class NotificationViewModel extends GetxController {
           .then(
             (_) => FireStoreNotification().addNotificationToFireStore(
               NotificationModel(
-                from: _homeViewModel.savedUser.id,
+                from: _homeViewModel.savedUser!.id,
                 to: [uid],
                 message: body,
                 createdAt: Timestamp.now(),
@@ -82,8 +82,9 @@ class NotificationViewModel extends GetxController {
   }
 
   onMessage(RemoteMessage message) {
-    if (Get.currentRoute!='/:messages') {
-      Get.dialog(OnMessageNotify(notification: message.notification));
+    if (Get.currentRoute != '/:messages') {
+      Get.dialog(OnMessageNotify(
+          notification: message.notification as RemoteNotification));
     }
   }
 

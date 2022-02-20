@@ -1,19 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ProductModel {
-  String id,
-      prodName,
-      imgUrl,
-      price,
-      season,
-      brand,
-      condition,
-      sku,
-      material;
-  bool trending;
-  Map<String, dynamic> classification;
-  List<dynamic> color, size;
-  Timestamp createdAt;
+  String? id, prodName, imgUrl, price, season, brand, condition, sku, material;
+  bool? trending;
+  Map<String, dynamic>? classification;
+  List<dynamic>? color, size;
+  Timestamp? createdAt;
   ProductModel({
     this.id,
     this.prodName,
@@ -30,10 +21,7 @@ class ProductModel {
     this.classification,
     this.trending,
   });
-  ProductModel.fromJson(String pid,Map<String, dynamic> map) {
-    if (map == null) {
-      return;
-    }
+  ProductModel.fromJson(String pid, Map<String, dynamic> map) {
     id = pid;
     prodName = map['prodName'];
     imgUrl = map['imgUrl'];
@@ -49,7 +37,7 @@ class ProductModel {
     classification = map['classification'];
     trending = map['trending'];
   }
-   toJson() {
+  toJson() {
     return {
       'prodName': prodName,
       'imgUrl': imgUrl,
@@ -57,8 +45,8 @@ class ProductModel {
       'color': color,
       'size': size,
       'price': price,
-      'createdAt':createdAt,
-      'brand':brand,
+      'createdAt': createdAt,
+      'brand': brand,
       'condition': condition,
       'sku': sku,
       'material': material,

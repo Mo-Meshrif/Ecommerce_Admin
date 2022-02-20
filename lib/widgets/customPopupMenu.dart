@@ -5,8 +5,11 @@ class CustomPopupMenu extends StatelessWidget {
   final String title;
   final List<String> items;
   final void Function(dynamic) onSelect;
-  CustomPopupMenu(
-      {@required this.title, @required this.items, @required this.onSelect});
+  CustomPopupMenu({
+    required this.title,
+    required this.items,
+    required this.onSelect,
+  });
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
@@ -19,7 +22,7 @@ class CustomPopupMenu extends StatelessWidget {
           children: [
             CustomText(
               txt: title,
-              txtColor: title.startsWith('Select')?Colors.grey:null,
+              txtColor: title.startsWith('Select') ? Colors.grey : null,
             ),
             Icon(
               Icons.arrow_drop_down,

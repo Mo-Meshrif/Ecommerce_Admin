@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: generateRoute,
-      builder: (_, child) =>ControlView(child: child),
+      builder: (_, child) =>ControlView(child: child!),
     );
   }
 }

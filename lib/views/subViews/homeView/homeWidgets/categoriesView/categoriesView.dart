@@ -21,7 +21,7 @@ class CategoriesView extends StatelessWidget {
         builder: (context, snapshot) {
           List<CategoryModel> categories = [];
           if (snapshot.hasData) {
-            snapshot.data.docs as List<DocumentSnapshot>
+            (snapshot.data as QuerySnapshot).docs
               ..forEach((element) {
                 var data = element.data() as Map;
                 categories.add(CategoryModel(
@@ -83,9 +83,9 @@ class CategoriesView extends StatelessWidget {
                                                       Text("Add Category"),
                                                       GestureDetector(
                                                         onTap: () {
-                                                          _key.currentState
+                                                          _key.currentState!
                                                               .save();
-                                                          if (_key.currentState
+                                                          if (_key.currentState!
                                                               .validate()) {
                                                             categoryController
                                                                 .addEditCategoryToFireStore(

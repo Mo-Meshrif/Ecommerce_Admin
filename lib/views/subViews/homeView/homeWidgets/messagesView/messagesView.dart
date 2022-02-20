@@ -1,3 +1,4 @@
+import '/widgets/customText.dart';
 import '/core/viewModel/homeViewModel.dart';
 import 'mobileMessageView.dart';
 import '/responsive.dart';
@@ -12,10 +13,16 @@ class MessagesView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<MessageViewModel>(
         init: MessageViewModel(),
-        builder: (messageController) =>
-            messageController.headerMessages.isEmpty &&
-                    messageController.isLoading.value
-                ? Center(child: CircularProgressIndicator())
+        builder: (messageController) => messageController.isLoading.value
+            ? Center(child: CircularProgressIndicator())
+            : messageController.headerMessages.isEmpty &&
+                    messageController.toUser == null
+                ? Center(
+                    child: CustomText(
+                      txt: 'No messages yet !',
+                      fSize: 20,
+                    ),
+                  )
                 : Responsive.isMobile(context)
                     ? WillPopScope(
                         onWillPop: () async =>

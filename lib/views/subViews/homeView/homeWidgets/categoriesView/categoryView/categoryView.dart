@@ -10,14 +10,14 @@ import 'package:flutter/material.dart';
 class CategoryView extends StatelessWidget {
   final int currentIndex;
   final List<CategoryModel> cats;
-  CategoryView({@required this.currentIndex, @required this.cats});
+  CategoryView({required this.currentIndex, required this.cats});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     CategoryModel cat = cats[currentIndex];
     List<dynamic> subCat = [];
-    for (var i = 0; i < cat.subCat['s'].length; i++) {
-      subCat.addAll(cat.subCat['s' + i.toString()]);
+    for (var i = 0; i < cat.subCat!['s'].length; i++) {
+      subCat.addAll(cat.subCat!['s' + i.toString()]);
     }
     List<dynamic> subCatWithoutRepeated = subCat.toSet().toList();
     return Card(
@@ -98,8 +98,8 @@ class CategoryView extends StatelessWidget {
                                                     ),
                                               GestureDetector(
                                                 onTap: () {
-                                                  _key.currentState.save();
-                                                  if (_key.currentState
+                                                  _key.currentState!.save();
+                                                  if (_key.currentState!
                                                       .validate()) {
                                                     categoryController
                                                         .addEditCategoryToFireStore(
@@ -165,7 +165,7 @@ class CategoryView extends StatelessWidget {
                 ),
                 SizedBox(width: 5),
                 CustomText(
-                  txt: cat.txt,
+                  txt: cat.txt as String,
                 ),
               ],
             ),

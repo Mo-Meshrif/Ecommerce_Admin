@@ -10,11 +10,11 @@ class OrderDetailsBody extends StatelessWidget {
   Widget build(BuildContext context) => GetBuilder<OrderViewModel>(
         builder: (orderController) {
           OrderModel order = orderController.selectedOrder;
-          Map<String, dynamic> address = order.shippingAdress;
+          Map<String, dynamic> address = order.shippingAdress as Map<String, dynamic>  ;
           bool hasPaymentCard =
-              order.paymentMehod.containsKey('delails') ? true : false;
+              order.paymentMehod!.containsKey('delails') ? true : false;
           Map<String, dynamic> paymentDetails =
-              hasPaymentCard ? order.paymentMehod['delails'] : {};
+              hasPaymentCard ? order.paymentMehod!['delails'] : {};
           return SingleChildScrollView(
             controller: ScrollController(),
             child: Column(
@@ -27,7 +27,7 @@ class OrderDetailsBody extends StatelessWidget {
                       columns: orderController.itemheaders
                           .map((e) => DataColumn(label: CustomText(txt: e)))
                           .toList(),
-                      rows: order.items.map((item) {
+                      rows: order.items!.map((item) {
                         String quantity = item['quantity'].toString();
                         return DataRow(cells: [
                           DataCell(Row(
@@ -171,7 +171,7 @@ class OrderDetailsBody extends StatelessWidget {
 class RowText extends StatelessWidget {
   final String title, subTitle;
 
-  RowText({@required this.title, @required this.subTitle});
+  RowText({required this.title, required this.subTitle});
   @override
   Widget build(BuildContext context) {
     return Row(

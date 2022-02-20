@@ -27,7 +27,7 @@ class OrderViewModel extends GetxController {
     'Price',
     'Total Price',
   ];
-  OrderModel selectedOrder;
+  late OrderModel selectedOrder;
 
   ValueNotifier isMobileTrackOrder = ValueNotifier(false);
   getMobileViewStatus(bool val) {
@@ -50,9 +50,9 @@ class OrderViewModel extends GetxController {
     await _collectionReference
         .doc(orderId)
         .update({'orderTrack': status}).then((_) {
-      int index = selectedOrder.orderTrack
+      int index = selectedOrder.orderTrack!
           .lastIndexWhere((orderTrack) => orderTrack['status']);
-      int orderNumber = selectedOrder.orderNumber;
+      int orderNumber = selectedOrder.orderNumber as int;
       switch (index) {
         case 1:
           _notificationViewModel.sendNotification(

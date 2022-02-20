@@ -28,12 +28,12 @@ class SignUpView extends StatelessWidget {
               CustomTextField(
                 onChanged: (val) => authController.userName = val,
                 valid: (val) {
-                  if (val.trim().isEmpty) {
+                  if (val!.trim().isEmpty) {
                     return 'Enter your username !';
                   }
                   return null;
                 },
-                bodyColor: Colors.grey[200],
+                bodyColor: Colors.grey[200] as Color,
                 hintTxt: 'Username',
                 icon: Icon(Icons.person_outline_outlined),
               ),
@@ -43,7 +43,7 @@ class SignUpView extends StatelessWidget {
               CustomTextField(
                 onChanged: (val) => authController.email = val,
                 valid: (val) {
-                  if (val.trim().isEmpty) {
+                  if (val!.trim().isEmpty) {
                     return 'Enter your email !';
                   }
                   if (!val.trim().contains('@')) {
@@ -51,7 +51,7 @@ class SignUpView extends StatelessWidget {
                   }
                   return null;
                 },
-                bodyColor: Colors.grey[200],
+                bodyColor: Colors.grey[200] as Color,
                 hintTxt: 'Email',
                 icon: Icon(Icons.mail),
               ),
@@ -61,7 +61,7 @@ class SignUpView extends StatelessWidget {
               CustomTextField(
                 onChanged: (val) => authController.password = val,
                 valid: (val) {
-                  if (val.isEmpty) {
+                  if (val!.isEmpty) {
                     return 'Enter your password !';
                   }
                   if (val.length < 6) {
@@ -70,7 +70,7 @@ class SignUpView extends StatelessWidget {
                   return null;
                 },
                 obscure: true,
-                bodyColor: Colors.grey[200],
+                bodyColor: Colors.grey[200] as Color,
                 hintTxt: 'Password',
                 icon: Icon(Icons.lock_open),
               ),
@@ -91,8 +91,8 @@ class SignUpView extends StatelessWidget {
                           padding: EdgeInsets.all(15),
                         ),
                         onPressed: () {
-                          _key.currentState.save();
-                          if (_key.currentState.validate()) {
+                          _key.currentState!.save();
+                          if (_key.currentState!.validate()) {
                             authController.signUp();
                           }
                         },
@@ -120,7 +120,7 @@ class SignUpView extends StatelessWidget {
                       child: CustomText(
                         txt: "Sign in here. ",
                         fSize: 16,
-                        txtColor:priColor,
+                        txtColor: priColor,
                       )),
                 ],
               ),

@@ -10,7 +10,7 @@ class HomeViewModel extends GetxController {
   final GlobalKey<ScaffoldState> homeScaffoldKey = GlobalKey<ScaffoldState>();
   String currentItem = 'dash';
   LocalStorageData _localStorageData = Get.find<LocalStorageData>();
-  UserModel savedUser;
+  UserModel? savedUser;
   onInit() {
     getSavedUser();
     super.onInit();
@@ -28,7 +28,7 @@ class HomeViewModel extends GetxController {
 
   handleClickItem(int i) {
     if (Get.currentRoute != items[i]['route'])
-      locator<NavigationService>().navigateTo(items[i]['route']);
+      locator<NavigationService>().navigateTo(items[i]['route']as String);
   }
 
   getCurrentItem(String val) {

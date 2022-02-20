@@ -5,15 +5,15 @@ class CardItem extends StatelessWidget {
   final String subtitle;
   final String title;
   final String value;
-  final Color color1;
-  final Color color2;
+  final Color? color1;
+  final Color? color2;
 
   CardItem({
-    @required this.title,
-    @required this.value,
-    @required this.color1,
-    @required this.color2,
-    @required this.subtitle,
+    required this.title,
+    required this.value,
+    this.color1,
+    this.color2,
+    required this.subtitle,
   });
 
   @override
@@ -23,16 +23,20 @@ class CardItem extends StatelessWidget {
       child: Container(
         height: 80,
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            gradient: LinearGradient(
-                colors: [color1 ?? Colors.green, color2 ?? Colors.blue],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey[300], offset: Offset(0, 3), blurRadius: 16)
-            ]),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          gradient: LinearGradient(
+              colors: [color1 ?? Colors.green, color2 ?? Colors.blue],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[300] as Color,
+              offset: Offset(0, 3),
+              blurRadius: 16,
+            )
+          ],
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
