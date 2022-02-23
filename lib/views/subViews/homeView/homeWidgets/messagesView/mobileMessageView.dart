@@ -9,7 +9,7 @@ class MoblieMessageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<MessageViewModel>(
         builder: (messageController) =>
-            messageController.indexOfShownMessage == null &&
+            messageController.indexOfShownMessage == -1 &&
                     messageController.toUser == null
                 ? MessagesHeader()
                 : MessageBodyView());

@@ -12,19 +12,19 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeViewModel>(builder: (homeController) {
       String currentItem = homeController.currentItem;
-      UserModel me = homeController.savedUser as UserModel;
+      UserModel? me = homeController.savedUser;
       List<MessageModel> headerMessages = [];
-      int indexOfShownMessage = 0;
+      int indexOfShownMessage;
       MessageModel currentMessage;
       UserModel? notMe, toUser;
       if (currentItem == 'chat') {
         toUser = Get.find<MessageViewModel>().toUser;
         headerMessages = Get.find<MessageViewModel>().headerMessages;
-        indexOfShownMessage =
-            Get.find<MessageViewModel>().indexOfShownMessage ?? 0;
+        indexOfShownMessage = Get.find<MessageViewModel>().indexOfShownMessage;
         if (headerMessages.isNotEmpty) {
-          currentMessage = headerMessages[indexOfShownMessage];
-          notMe = me.id == currentMessage.to!.id
+          currentMessage = headerMessages[
+              indexOfShownMessage != -1 ? indexOfShownMessage : 0];
+          notMe = me?.id == currentMessage.to?.id
               ? currentMessage.from
               : currentMessage.to;
         }

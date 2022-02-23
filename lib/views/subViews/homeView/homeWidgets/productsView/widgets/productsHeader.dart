@@ -71,10 +71,16 @@ class ProductsHeader extends StatelessWidget {
                       strokeWidth: 1,
                       child: productController.pickedImage != null
                           ? Image.memory(
-                              productController.pickedImage as Uint8List)
+                              productController.pickedImage as Uint8List,
+                              height: 50,
+                              width: 50,
+                            )
                           : productController.oldImage != null
                               ? Image.network(
-                                  productController.oldImage as String)
+                                  productController.oldImage as String,
+                                  height: 50,
+                                  width: 50,
+                                )
                               : Icon(Icons.upload),
                     ),
                   ),
@@ -400,11 +406,11 @@ class ProductsHeader extends StatelessWidget {
                                   trending: productController.isTrend,
                                 ),
                                 cat,
-                                productController.pickedImage as Uint8List);
+                                productController.pickedImage);
                           } else {
                             productController.editProd(
                                 productController.oldProdId as String,
-                                productController.pickedImage as Uint8List,
+                                productController.pickedImage ,
                                 ProductModel(
                                   classification: {
                                     'cat-id': categories[catIndex].id,

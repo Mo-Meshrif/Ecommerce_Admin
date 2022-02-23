@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import '/../../../responsive.dart';
 import '/core/viewModel/productViewModel.dart';
 import '/model/productModel.dart';
@@ -97,49 +96,51 @@ class ProductBody extends StatelessWidget {
                                                         .editProd(
                                                             prod.id as String,
                                                             productController
-                                                                    .rePickedImage
-                                                                as Uint8List,
+                                                                .rePickedImage,
                                                             ProductModel(
-                                                                prodName: productController
-                                                                    .reProdName,
-                                                                imgUrl:
-                                                                    prod.imgUrl,
-                                                                season:
+                                                              prodName:
+                                                                  productController
+                                                                      .reProdName,
+                                                              imgUrl:
+                                                                  prod.imgUrl,
+                                                              season:
+                                                                  productController
+                                                                      .season,
+                                                              color: productController
+                                                                  .reSelectedColors,
+                                                              size: productController
+                                                                  .reSelectedSizes,
+                                                              price: productController
+                                                                  .reProdPrice,
+                                                              createdAt:
+                                                                  Timestamp
+                                                                      .now(),
+                                                              brand: productController
+                                                                  .reBrandName,
+                                                              condition:
+                                                                  productController
+                                                                      .reProdCondition,
+                                                              sku: productController
+                                                                  .reProdSku,
+                                                              material:
+                                                                  productController
+                                                                      .reMaterialType,
+                                                              trending:
+                                                                  productController
+                                                                      .reTrend,
+                                                              classification: {
+                                                                'cat-id':
                                                                     productController
-                                                                        .season,
-                                                                color: productController
-                                                                    .reSelectedColors,
-                                                                size: productController
-                                                                    .reSelectedSizes,
-                                                                price: productController
-                                                                    .reProdPrice,
-                                                                createdAt:
-                                                                    Timestamp
-                                                                        .now(),
-                                                                brand: productController
-                                                                    .reBrandName,
-                                                                condition: productController
-                                                                    .reProdCondition,
-                                                                sku: productController
-                                                                    .reProdSku,
-                                                                material:
+                                                                        .currentCato!
+                                                                        .id,
+                                                                'category':
                                                                     productController
-                                                                        .reMaterialType,
-                                                                trending:
+                                                                        .reMainSubCat,
+                                                                'sub-cat':
                                                                     productController
-                                                                        .reTrend,
-                                                                classification: {
-                                                                  'cat-id':
-                                                                      productController
-                                                                          .currentCato!
-                                                                          .id,
-                                                                  'category':
-                                                                      productController
-                                                                          .reMainSubCat,
-                                                                  'sub-cat':
-                                                                      productController
-                                                                          .reSubCat
-                                                                }),
+                                                                        .reSubCat
+                                                              },
+                                                            ),
                                                             ctx),
                                                     child: CircleAvatar(
                                                       child: Icon(Icons.check),

@@ -23,7 +23,8 @@ class MessageViewModel extends GetxController {
       : searchVal == ''
           ? _headerMessages
           : [];
-  int? indexOfShownMessage = -1, orderNumber;
+  int indexOfShownMessage = -1;
+  int? orderNumber;
 
   onInit() {
     getLastMessages();
@@ -132,9 +133,9 @@ class MessageViewModel extends GetxController {
     });
   }
 
-  getIndexOfShownMessage(int? i) {
+  getIndexOfShownMessage(int i) {
     indexOfShownMessage = i;
-    if (indexOfShownMessage == null) {
+    if (indexOfShownMessage == -1) {
       toUser = null;
     }
     update();
@@ -154,7 +155,7 @@ class MessageViewModel extends GetxController {
                 .startsWith(val.toLowerCase()))
         .toList();
     if (_searchdMessages.isNotEmpty) {
-      indexOfShownMessage = null;
+      indexOfShownMessage = -1;
     }
     update();
   }

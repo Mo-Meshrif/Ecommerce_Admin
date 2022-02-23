@@ -153,7 +153,7 @@ class DashboardView extends StatelessWidget {
                                                 ),
                                                 trailing: CustomText(
                                                   txt:
-                                                      '\$ ${topCustomers[i].totalPrice}',
+                                                      '\$ ${topCustomers[i].totalPrice?.toStringAsFixed(2)}',
                                                   txtColor:
                                                       Colors.green.shade800,
                                                   fWeight: FontWeight.bold,

@@ -29,7 +29,7 @@ class AppBarLeading extends StatelessWidget {
                     Get.find<CategoryViewModel>().getMobileViewStatus(false);
                     break;
                   case 'chat':
-                    Get.find<MessageViewModel>().getIndexOfShownMessage(null);
+                    Get.find<MessageViewModel>().getIndexOfShownMessage(-1);
                     break;
                   case 'order':
                     Get.find<OrderViewModel>().getMobileViewStatus(false);

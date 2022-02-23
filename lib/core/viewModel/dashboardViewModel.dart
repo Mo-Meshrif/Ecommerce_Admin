@@ -19,14 +19,14 @@ class DashboardViewModel extends GetxController {
     super.onInit();
   }
 
-  double getTotalRevenuePerThisMonth(List<OrderModel> orders) {
+  double getTotalRevenuePerThisMonth(List<OrderModel>? orders) {
     double totalRevenue = 0;
-    orders.forEach((order) {
+    orders?.forEach((order) {
       if (order.createdAt!.toDate().month == _dateTime.month) {
         totalRevenue += double.parse(order.totalPrice as String);
       }
     });
-    return totalRevenue;
+    return totalRevenue.toPrecision(2);
   }
 
   getTotalProductsOnStore() {
@@ -39,9 +39,9 @@ class DashboardViewModel extends GetxController {
     });
   }
 
-  int getTotalOrdersPerThisMonth(List<OrderModel> orders) {
+  int getTotalOrdersPerThisMonth(List<OrderModel>? orders) {
     List<OrderModel> tempList = [];
-    orders.forEach((order) {
+    orders?.forEach((order) {
       if (order.createdAt!.toDate().month == _dateTime.month) {
         tempList.add(order);
       }
@@ -49,9 +49,9 @@ class DashboardViewModel extends GetxController {
     return tempList.length;
   }
 
-  List<SalesModel> getTotalRevenuePerMonths(List<OrderModel> orders) {
+  List<SalesModel> getTotalRevenuePerMonths(List<OrderModel>? orders) {
     List<SalesModel> tempList = [];
-    orders.forEach((order) {
+    orders?.forEach((order) {
       if (order.createdAt!.toDate().month <= _dateTime.month) {
         String month = DateFormat("MMMM").format(order.createdAt!.toDate());
         double revenue = double.parse(order.totalPrice as String);
@@ -66,9 +66,9 @@ class DashboardViewModel extends GetxController {
     return tempList;
   }
 
-  List<TopCustomerModel> getTopCustomers(List<OrderModel> orders) {
+  List<TopCustomerModel> getTopCustomers(List<OrderModel>? orders) {
     List<TopCustomerModel> tempList = [];
-    orders.forEach((order) {
+    orders?.forEach((order) {
       UserModel user = _authViewModel.users
           .firstWhere((user) => user.id == order.customerId);
       int index =
@@ -88,6 +88,6 @@ class DashboardViewModel extends GetxController {
       }
     });
     tempList.sort((a, b) => a.ordersNum!.compareTo(b.ordersNum as int));
-    return tempList;
+    return tempList.reversed.toList();
   }
 }

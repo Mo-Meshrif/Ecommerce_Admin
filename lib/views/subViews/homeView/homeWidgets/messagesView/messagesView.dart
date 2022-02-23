@@ -12,37 +12,38 @@ class MessagesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MessageViewModel>(
-        init: MessageViewModel(),
-        builder: (messageController) => messageController.isLoading.value
-            ? Center(child: CircularProgressIndicator())
-            : messageController.headerMessages.isEmpty &&
-                    messageController.toUser == null
-                ? Center(
-                    child: CustomText(
-                      txt: 'No messages yet !',
-                      fSize: 20,
+      init: MessageViewModel(),
+      builder: (messageController) => messageController.isLoading.value
+          ? Center(child: CircularProgressIndicator())
+          : messageController.headerMessages.isEmpty &&
+                  messageController.toUser == null
+              ? Center(
+                  child: CustomText(
+                    txt: 'No messages yet !',
+                    fSize: 20,
+                  ),
+                )
+              : Responsive.isMobile(context)
+                  ? WillPopScope(
+                      onWillPop: () async =>
+                          Get.find<HomeViewModel>().currentItem == 'dash'
+                              ? true
+                              : false,
+                      child: MoblieMessageView(),
+                    )
+                  : Row(
+                      children: [
+                        LimitedBox(
+                          maxWidth: 300,
+                          child: MessagesHeader(),
+                        ),
+                        VerticalDivider(
+                          color: Colors.grey,
+                          thickness: 0.5,
+                        ),
+                        Expanded(child: MessageBodyView())
+                      ],
                     ),
-                  )
-                : Responsive.isMobile(context)
-                    ? WillPopScope(
-                        onWillPop: () async =>
-                            Get.find<HomeViewModel>().currentItem == 'dash'
-                                ? true
-                                : false,
-                        child: MoblieMessageView(),
-                      )
-                    : Row(
-                        children: [
-                          LimitedBox(
-                            maxWidth: 300,
-                            child: MessagesHeader(),
-                          ),
-                          VerticalDivider(
-                            color: Colors.grey,
-                            thickness: 0.5,
-                          ),
-                          Expanded(child: MessageBodyView())
-                        ],
-                      ));
+    );
   }
 }

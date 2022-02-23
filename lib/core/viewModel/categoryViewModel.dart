@@ -61,9 +61,7 @@ class CategoryViewModel extends GetxController {
       if (subCategories['s']![index] != '') {
         mainSubCounter += 1;
         subCategories['s']!.add('');
-        if (!isEdit) {
-          subCounter.putIfAbsent('s' + (index + 1).toString(), () => [1]);
-        }
+        subCounter.putIfAbsent('s' + (index + 1).toString(), () => [1]);
       }
     } else {
       mainSubCounter -= 1;
@@ -77,12 +75,12 @@ class CategoryViewModel extends GetxController {
   changeSubCounter(bool isEdit, int mainCatoIndex, String tag, int index) {
     if (tag == 'add') {
       subCounter['s' + mainCatoIndex.toString()]?.add(1);
-      subCategories['s' + mainCatoIndex.toString()]!.add('');
+      subCategories['s' + mainCatoIndex.toString()]?.add('');
     } else {
       subCounter['s' + mainCatoIndex.toString()]?.removeLast();
       if (subCategories.containsKey('s' + mainCatoIndex.toString())) {
         if (subCategories['s' + mainCatoIndex.toString()]!.length > index) {
-          subCategories['s' + mainCatoIndex.toString()]!.removeAt(index);
+          subCategories['s' + mainCatoIndex.toString()]?.removeAt(index);
         }
       }
     }
@@ -109,20 +107,26 @@ class CategoryViewModel extends GetxController {
   }
 
   addSubCategory(bool isEdit, int mainCatoIndex, String sub, int subCatoIndex) {
+    List<int> currentCounter =
+        subCounter['s' + mainCatoIndex.toString()] as List<int>;
+    List<String>? currentCat = subCategories['s' + mainCatoIndex.toString()];
     if (sub == '') {
-      subCategories['s' + mainCatoIndex.toString()]!.removeAt(subCatoIndex);
+      currentCat!.removeAt(subCatoIndex);
+      if (currentCounter.length > 1) {
+        currentCounter.removeLast();
+      } else {
+        currentCat.add(sub);
+      }
     } else {
       if (subCategories.containsKey('s' + mainCatoIndex.toString())) {
-        if (subCategories['s' + mainCatoIndex.toString()]!.length - 1 >=
-            subCatoIndex) {
-          subCategories['s' + mainCatoIndex.toString()]!.removeAt(subCatoIndex);
-          subCategories['s' + mainCatoIndex.toString()]!
-              .insert(subCatoIndex, sub);
+        if (currentCat!.length - 1 >= subCatoIndex) {
+          currentCat.removeAt(subCatoIndex);
+          currentCat.insert(subCatoIndex, sub);
         } else {
-          subCategories['s' + mainCatoIndex.toString()]!.add(sub);
+          currentCat.add(sub);
         }
       } else {
-        subCategories['s' + mainCatoIndex.toString()] = [sub];
+        currentCat = [sub];
       }
     }
     update();

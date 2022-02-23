@@ -13,9 +13,9 @@ class MessageBodyView extends StatelessWidget {
   Widget build(BuildContext context) =>
       GetBuilder<MessageViewModel>(builder: (messageController) {
         UserModel? notMe = messageController.toUser;
-        UserModel me = messageController.homeViewModel.savedUser as UserModel;
+        UserModel? me = messageController.homeViewModel.savedUser ;
         List<MessageModel> headerMessages = messageController.headerMessages;
-        int indexOfShownMessage = messageController.indexOfShownMessage as int;
+        int indexOfShownMessage = messageController.indexOfShownMessage ;
         MessageModel currentMessage;
         UserModel? to;
         UserModel? from;
@@ -35,7 +35,7 @@ class MessageBodyView extends StatelessWidget {
                       ? Expanded(
                           child: LowerBodyView(
                             notMe: notMe,
-                            me: me,
+                            me: me!,
                           ),
                         )
                       : Padding(padding: EdgeInsets.zero),
@@ -43,8 +43,8 @@ class MessageBodyView extends StatelessWidget {
               )
             : to != null
                 ? LowerBodyView(
-                    notMe: me.id == to.id ? from as UserModel : to,
-                    me: me,
+                    notMe: me?.id == to.id ? from as UserModel : to,
+                    me: me!,
                   )
                 : messageController.headerMessages.isEmpty
                     ? Padding(padding: EdgeInsets.zero)
